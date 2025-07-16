@@ -202,7 +202,7 @@ npm run build
 
 ### Deployment
 
-The app is deployed on Vercel and can be accessed at: [Your Vercel URL]
+The app is deployed on Vercel and can be accessed at: [https://meet-6ad6dc6h5-sourav-das-projects-4a10d1d8.vercel.app/]
 
 ## Development
 
