@@ -10,6 +10,11 @@ The Meet app is designed to help users discover events happening in their area. 
 
 ### User Stories
 
+#### Feature 1: Filter Events by City
+**As a** user,  
+**I should be able to** filter events by city  
+**So that** I can see only events happening in cities that interest me and find relevant events in my area.
+
 #### Feature 2: Show/Hide Event Details
 **As a** user,  
 **I should be able to** show and hide event details  
@@ -36,6 +41,31 @@ The Meet app is designed to help users discover events happening in their area. 
 **So that** I can quickly understand event patterns and trends in my area.
 
 ### Scenarios (Gherkin Syntax)
+
+#### Feature 1: Filter Events by City
+
+**Scenario 1:** When user hasn't searched for a city, show upcoming events from all cities
+```gherkin
+Given the user has opened the app
+When the user hasn't searched for a city
+Then upcoming events from all cities should be displayed
+```
+
+**Scenario 2:** User should see a list of suggestions when they search for a city
+```gherkin
+Given the user is on the main events page
+When the user starts typing in the city search box
+Then a list of city suggestions should be displayed
+And the suggestions should match what the user has typed
+```
+
+**Scenario 3:** User can select a city from the suggested list
+```gherkin
+Given the user sees a list of city suggestions
+When the user clicks on a city from the suggested list
+Then the city should be selected
+And events should be filtered to show only events from that city
+```
 
 #### Feature 2: Show/Hide Event Details
 
@@ -165,11 +195,84 @@ And the user should be able to drill down into specific data
 ## Technology Stack
 
 - **Frontend:** React, Vite
-- **Deployment:** Vercel
+- **Backend:** AWS Lambda (Serverless Functions)
+- **API:** Google Calendar API
+- **Authentication:** Google OAuth 2.0
+- **Deployment:** Vercel (Frontend), AWS Lambda (Backend)
 - **Version Control:** Git, GitHub
 - **Testing:** Jest (for unit/integration testing)
 - **PWA Features:** Service Workers, Web App Manifest
 - **Data Visualization:** Recharts or similar charting library
+
+## Serverless Architecture
+
+This Meet app uses serverless architecture powered by AWS Lambda functions to handle authentication and API requests. The serverless approach offers several advantages:
+
+### How Serverless Functions Are Used
+
+The Meet app implements serverless functions for:
+
+1. **OAuth Authentication**: Lambda functions handle the Google OAuth 2.0 flow to authenticate users and obtain access tokens
+2. **API Gateway**: Serverless functions act as a bridge between the React frontend and the Google Calendar API
+3. **Token Management**: Secure handling of authentication tokens without maintaining a persistent server
+
+### Benefits of Serverless for Meet App
+
+- **Cost Efficiency**: Pay only when functions execute, no idle server costs
+- **Automatic Scaling**: Handles traffic spikes without manual intervention  
+- **Reduced Maintenance**: No server infrastructure to manage or update
+- **Fast Deployment**: Quick deployment of individual functions
+- **Security**: Built-in security features and automatic updates
+
+### Architecture Overview
+
+```
+┌─────────────────┐    HTTPS     ┌──────────────────┐    HTTPS    ┌─────────────────────┐
+│                 │ ──────────>  │                  │ ─────────>  │                     │
+│  React Frontend │              │  AWS API Gateway │             │  Google Calendar    │
+│   (Vercel)      │ <──────────  │   + Lambda       │ <─────────  │       API           │
+│                 │              │   Functions      │             │                     │
+└─────────────────┘              └──────────────────┘             └─────────────────────┘
+                                          │
+                                          │ OAuth 2.0
+                                          ▼
+                                 ┌──────────────────┐
+                                 │                  │
+                                 │ Google OAuth 2.0 │
+                                 │ Authentication   │
+                                 │    Server        │
+                                 └──────────────────┘
+```
+
+**Data Flow:**
+1. User requests events from React app
+2. React app calls AWS API Gateway
+3. Lambda function initiates OAuth flow with Google
+4. User authenticates with Google OAuth
+5. Google returns access token to Lambda
+6. Lambda uses token to fetch events from Google Calendar API
+7. Events are returned to React app for display
+
+The application follows a serverless-first approach where the React frontend communicates with AWS Lambda functions that handle authentication and data retrieval from the Google Calendar API.
+
+## Project Structure
+
+```
+meet/
+├── auth-server/              # AWS Lambda functions for authentication
+│   ├── handler.js           # Lambda function handlers
+│   ├── serverless.yml       # Serverless configuration
+│   ├── package.json         # Auth server dependencies
+│   └── .gitignore          # Auth server gitignore
+├── src/                     # React application source code
+│   ├── App.jsx             # Main App component
+│   ├── main.jsx            # Application entry point
+│   └── assets/             # Static assets
+├── public/                  # Public assets
+├── package.json            # Frontend dependencies
+├── vite.config.js          # Vite configuration
+└── README.md               # Project documentation
+```
 
 ## Getting Started
 
@@ -202,7 +305,27 @@ npm run build
 
 ### Deployment
 
-The app is deployed on Vercel and can be accessed at: [https://meet-6ad6dc6h5-sourav-das-projects-4a10d1d8.vercel.app/]
+#### Frontend Deployment
+The frontend is deployed on Vercel and can be accessed at: [https://meet-pi-weld.vercel.app/]
+
+#### Backend Deployment (Auth Server)
+The serverless backend is deployed using AWS Lambda:
+
+1. Configure AWS credentials:
+```bash
+aws configure
+```
+
+2. Deploy the auth server:
+```bash
+cd auth-server
+serverless deploy
+```
+
+3. The deployment will provide API Gateway endpoints for:
+   - `GET /api/get-auth-url` - Get Google OAuth URL
+   - `GET /api/token/{code}` - Exchange code for access token
+   - `GET /api/get-events/{access_token}` - Fetch calendar events
 
 ## Development
 
@@ -210,6 +333,49 @@ The app is deployed on Vercel and can be accessed at: [https://meet-6ad6dc6h5-so
 - `npm run build` - Build for production
 - `npm run preview` - Preview production build locally
 - `npm run lint` - Run ESLint
+
+## Serverless Architecture
+
+The Meet app utilizes a serverless architecture to provide scalable, cost-effective event management functionality. Below is the system architecture diagram:
+
+```
+┌─────────────────┐    ┌──────────────────┐    ┌─────────────────┐
+│                 │    │                  │    │                 │
+│   React PWA     │◄──►│   Amazon API     │◄──►│   AWS Lambda    │
+│   (Frontend)    │    │   Gateway        │    │   Functions     │
+│                 │    │                  │    │                 │
+└─────────────────┘    └──────────────────┘    └─────────────────┘
+         │                        │                       │
+         │                        │                       │
+         ▼                        ▼                       ▼
+┌─────────────────┐    ┌──────────────────┐    ┌─────────────────┐
+│                 │    │                  │    │                 │
+│   Service       │    │   CloudWatch     │    │   Google        │
+│   Worker        │    │   Logs &         │    │   Calendar      │
+│   (Cache)       │    │   Monitoring     │    │   API           │
+│                 │    │                  │    │                 │
+└─────────────────┘    └──────────────────┘    └─────────────────┘
+```
+
+### Architecture Components
+
+1. **React PWA Frontend**: The client-side application built with React and Vite
+2. **Amazon API Gateway**: RESTful API endpoints that trigger Lambda functions
+3. **AWS Lambda Functions**:
+   - `getAuthURL`: Generates Google OAuth authorization URLs
+   - `getAccessToken`: Exchanges authorization codes for access tokens
+   - `getCalendarEvents`: Fetches events from Google Calendar API
+4. **Google Calendar API**: External API for accessing calendar data
+5. **CloudWatch**: Monitoring and logging for Lambda functions
+6. **Service Worker**: Handles offline functionality and caching
+
+### Benefits of Serverless Architecture
+
+- **Automatic Scaling**: Functions scale automatically based on demand
+- **Cost Efficiency**: Pay only for actual execution time
+- **High Availability**: Built-in redundancy and fault tolerance
+- **Security**: Secure OAuth flow without exposing credentials to client
+- **Performance**: Low latency through global edge locations
 
 ## Contributing
 

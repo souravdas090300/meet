@@ -23,5 +23,18 @@
     "eslint-plugin-react-refresh": "^0.4.20",
     "globals": "^16.3.0",
     "vite": "^7.0.4"
-  }
+  },
+  "description": "A React-based progressive web application for event management and discovery. This app allows users to find and view events in their city, with offline functionality and data visualization features.",
+  "main": "eslint.config.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/souravdas090300/meet.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/souravdas090300/meet/issues"
+  },
+  "homepage": "https://github.com/souravdas090300/meet#readme"
 }
