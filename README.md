@@ -31,7 +31,7 @@ As a user, I should be able to filter events by city so that I can see relevant 
 - Users can search for events by city name  
 - Auto-suggestions appear while typing  
 - Events are filtered by selected city  
-- All cities' events are shown when no filter is applied  
+- All cities’ events are shown when no filter is applied  
 
 ---
 
@@ -67,7 +67,7 @@ As a user, I want visualizations to understand trends and categories of events.
 ```gherkin
 Scenario: Show events from all cities when no search
 Given the user opens the app
-When the user hasn't searched for a city
+When the user hasn’t searched for a city
 Then show events from all cities
 
 Scenario: Auto-suggestions when typing city
@@ -302,4 +302,11 @@ API Endpoints:
 1. Fork the repo  
 2. Create a new feature branch  
 3. Commit and push your changes  
-4. Open a pull request 🚀
+4. Open a pull request 🚀  
+
+---
+
+## 📄 License
+
+MIT © [Sourav Das]
+
