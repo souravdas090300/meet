@@ -1,34 +1,70 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import { useState, useEffect } from 'react'
+import CitySearch from './components/CitySearch'
+import EventList from './components/EventList'
+import NumberOfEvents from './components/NumberOfEvents'
+import EventChart from './components/EventChart'
+import { extractLocations, getEvents } from './api'
 import './App.css'
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [allLocations, setAllLocations] = useState([])
+  const [currentNOE, setCurrentNOE] = useState(32)
+  const [events, setEvents] = useState([])
+  const [currentCity, setCurrentCity] = useState("See all cities")
+  const [infoAlert, setInfoAlert] = useState("")
+  const [errorAlert, setErrorAlert] = useState("")
+  const [warningAlert, setWarningAlert] = useState("")
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const allEvents = await getEvents()
+      const filteredEvents = currentCity === "See all cities" ? 
+        allEvents : 
+        allEvents.filter(event => event.location === currentCity)
+      setEvents(filteredEvents.slice(0, currentNOE))
+      setAllLocations(extractLocations(allEvents))
+    }
+
+    if (navigator.onLine) {
+      setWarningAlert("")
+    } else {
+      setWarningAlert("You are offline. Events displayed may not be up to date.")
+    }
+    fetchData()
+  }, [currentCity, currentNOE])
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    <div className="App">
+      <div className="alerts-container">
+        {infoAlert.length ? <div className="alert info-alert">{infoAlert}</div> : null}
+        {errorAlert.length ? <div className="alert error-alert">{errorAlert}</div> : null}
+        {warningAlert.length ? <div className="alert warning-alert">{warningAlert}</div> : null}
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
+      
+      <header className="app-header">
+        <h1>Meet App</h1>
+        <p>Find events in your city</p>
+      </header>
+
+      <div className="app-controls">
+        <CitySearch 
+          allLocations={allLocations} 
+          setCurrentCity={setCurrentCity}
+          setInfoAlert={setInfoAlert}
+        />
+        <NumberOfEvents 
+          setCurrentNOE={setCurrentNOE}
+          setErrorAlert={setErrorAlert}
+          currentNOE={currentNOE}
+        />
       </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+
+      <div className="charts-container">
+        <EventChart events={events} />
+      </div>
+
+      <EventList events={events} />
+    </div>
   )
 }
 

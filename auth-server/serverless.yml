@@ -8,9 +8,9 @@ provider:
   region: us-east-1
   timeout: 30
   environment:
-    CLIENT_ID: "your-google-oauth-client-id.apps.googleusercontent.com"
-    CLIENT_SECRET: "your-google-oauth-client-secret"
-    CALENDAR_ID: "fullstackwebdev@careerfoundry.com"
+    CLIENT_ID: ${file(config.json):CLIENT_ID}
+    CLIENT_SECRET: ${file(config.json):CLIENT_SECRET}
+    CALENDAR_ID: ${file(config.json):CALENDAR_ID}
 
 functions:
   getAuthURL:
