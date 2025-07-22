@@ -18,28 +18,35 @@ export const extractLocations = (events) => {
 // ...existing code...
 
 export const getEvents = async () => {
+  // Always return mock data for localhost
   if (window.location.href.startsWith('http://localhost')) {
     return mockData;
   }
 
+  // If offline, check localStorage first
   if (!navigator.onLine) {
     const events = localStorage.getItem("lastEvents");
-    return events?JSON.parse(events):[];
+    return events ? JSON.parse(events) : mockData;
   }
 
-  const token = await getAccessToken();
+  try {
+    const token = await getAccessToken();
 
-  if (token) {
-    removeQuery();
-    const url = `https://ym392rf9u2.execute-api.eu-central-1.amazonaws.com/dev/api/get-events/${token}`;
-    const result = await fetch(url);
-    const { events } = await result.json();
-    if (events) {
-      localStorage.setItem("lastEvents", JSON.stringify(events));
-      return events;
+    if (token) {
+      removeQuery();
+      const url = `https://ym392rf9u2.execute-api.eu-central-1.amazonaws.com/dev/api/get-events/${token}`;
+      const result = await fetch(url);
+      const { events } = await result.json();
+      if (events) {
+        localStorage.setItem("lastEvents", JSON.stringify(events));
+        return events;
+      }
     }
+  } catch (error) {
+    console.log('Error fetching events from API, falling back to mock data:', error);
   }
 
+  // Fallback to mock data in all cases
   return mockData;
 };
 
