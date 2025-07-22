@@ -68,6 +68,12 @@ input[type="number"] {
   background-color: #bcdcdb;
 }
 
+#event-list {
+  margin: 20px 0;
+  padding: 0;
+  list-style: none;
+}
+
 .event {
   padding: 10px 10px 35px;
   margin-bottom: 10px;
@@ -75,6 +81,18 @@ input[type="number"] {
   border: 1px solid #ccc;
   border-radius: 4px;
   position: relative;
+  background-color: #f9f9f9;
+}
+
+.event h1 {
+  font-size: 18px;
+  margin: 0 0 10px 0;
+  color: #333;
+}
+
+.event p {
+  margin: 5px 0;
+  color: #666;
 }
 
 .details-btn {
@@ -85,4 +103,49 @@ input[type="number"] {
   border-radius: 4px;
   outline: none;
   cursor: pointer;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  font-size: 12px;
+}
+
+.details-btn:hover {
+  background-color: #0056b3;
+}
+
+.details {
+  margin-top: 15px;
+  padding-top: 10px;
+  border-top: 1px solid #ddd;
+}
+
+.details h2 {
+  font-size: 16px;
+  margin: 0 0 10px 0;
+  color: #333;
+}
+
+.details a {
+  color: #007bff;
+  text-decoration: none;
+  display: block;
+  margin-bottom: 10px;
+}
+
+.details a:hover {
+  text-decoration: underline;
+}
+
+.app-header h1 {
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.app-header p {
+  color: #666;
+  margin-bottom: 20px;
+}
+
+.charts-container {
+  margin: 20px 0;
 }
