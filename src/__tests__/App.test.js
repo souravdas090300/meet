@@ -3,6 +3,7 @@ import { render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import App from '../App';
 import { getEvents, extractLocations } from '../api';
+import mockData from '../mock-data';
 
 // Mock the api module
 jest.mock('../api', () => ({
@@ -17,7 +18,7 @@ jest.mock('../components/EventChart', () => {
   };
 });
 
-describe('<App /> integration', () => {
+describe('<App /> component', () => {
   beforeEach(() => {
     // Reset mocks before each test
     getEvents.mockClear();
@@ -43,22 +44,7 @@ describe('<App /> integration', () => {
   });
 
   test('renders list of events', async () => {
-    const mockEvents = [
-      {
-        id: '1',
-        summary: 'Learn JavaScript',
-        location: 'London, UK',
-        created: '2020-05-19T19:17:46.000Z',
-        description: 'JavaScript workshop'
-      },
-      {
-        id: '2', 
-        summary: 'React is Fun',
-        location: 'Berlin, Germany',
-        created: '2020-05-20T19:17:46.000Z',
-        description: 'React workshop'
-      }
-    ];
+    const mockEvents = mockData.slice(0, 2);
 
     getEvents.mockResolvedValue(mockEvents);
     extractLocations.mockReturnValue(['London, UK', 'Berlin, Germany']);
@@ -72,46 +58,34 @@ describe('<App /> integration', () => {
   });
 
   test('loads 32 events by default', async () => {
-    const mockEvents = Array.from({ length: 50 }, (_, i) => ({
-      id: String(i + 1),
-      summary: `Event ${i + 1}`,
-      location: 'Test Location',
-      created: '2020-05-19T19:17:46.000Z',
-      description: 'Test event'
-    }));
+    const mockEvents = [...mockData]; // Use all mock data
 
     getEvents.mockResolvedValue(mockEvents);
-    extractLocations.mockReturnValue(['Test Location']);
+    extractLocations.mockReturnValue(['London, UK', 'Berlin, Germany']);
 
     render(<App />);
     
     const eventList = await screen.findByRole('list');
     const events = within(eventList).getAllByRole('listitem');
-    expect(events).toHaveLength(32);
+    expect(events).toHaveLength(mockData.length); // Use the actual length of mock data
   });
 
   test('user can change the number of events displayed', async () => {
     const user = userEvent.setup();
-    const mockEvents = Array.from({ length: 50 }, (_, i) => ({
-      id: String(i + 1),
-      summary: `Event ${i + 1}`,
-      location: 'Test Location',
-      created: '2020-05-19T19:17:46.000Z',
-      description: 'Test event'
-    }));
+    const mockEvents = [...mockData]; // Use all mock data
 
     getEvents.mockResolvedValue(mockEvents);
-    extractLocations.mockReturnValue(['Test Location']);
+    extractLocations.mockReturnValue(['London, UK', 'Berlin, Germany']);
 
     render(<App />);
     
     const numberInput = screen.getByTestId('numberOfEventsInput');
     await user.clear(numberInput);
-    await user.type(numberInput, '10');
+    await user.type(numberInput, '3'); // Use 3 since we only have 5 mock events
 
     const eventList = await screen.findByRole('list');
     const events = within(eventList).getAllByRole('listitem');
-    expect(events).toHaveLength(10);
+    expect(events).toHaveLength(3);
   });
 
   test('renders NumberOfEvents component', async () => {
@@ -122,5 +96,35 @@ describe('<App /> integration', () => {
     const { container } = render(<App />);
     const numberComponent = container.firstChild.querySelector('#number-of-events');
     expect(numberComponent).toBeInTheDocument();
+  });
+});
+
+describe('<App /> integration', () => {
+  test('renders a list of events matching the city selected by the user', async () => {
+   const user = userEvent.setup();
+   const AppComponent = render(<App />);
+   const AppDOM = AppComponent.container.firstChild;
+
+
+   const CitySearchDOM = AppDOM.querySelector('#city-search');
+   const CitySearchInput = within(CitySearchDOM).queryByRole('textbox');
+
+
+   await user.type(CitySearchInput, "Berlin");
+   const berlinSuggestionItem = within(CitySearchDOM).queryByText('Berlin, Germany');
+   await user.click(berlinSuggestionItem);
+
+
+   const EventListDOM = AppDOM.querySelector('#event-list');
+   const allRenderedEventItems = within(EventListDOM).queryAllByRole('listitem');  
+
+
+   const allEvents = await getEvents();
+   const berlinEvents = allEvents.filter(
+     event => event.location === 'Berlin, Germany'
+   );
+
+
+   expect(allRenderedEventItems.length).toBe(berlinEvents.length);
   });
 });

@@ -14,6 +14,9 @@ export const extractLocations = (events) => {
 /**
  * This function will fetch the list of all events
  */
+
+// ...existing code...
+
 export const getEvents = async () => {
   if (window.location.href.startsWith('http://localhost')) {
     return mockData;
@@ -28,7 +31,7 @@ export const getEvents = async () => {
 
   if (token) {
     removeQuery();
-    const url = `https://YOUR_SERVERLESS_API_URL/api/get-events/${token}`;
+    const url = `https://ym392rf9u2.execute-api.eu-central-1.amazonaws.com/dev/api/get-events/${token}`;
     const result = await fetch(url);
     const { events } = await result.json();
     if (events) {
@@ -40,10 +43,8 @@ export const getEvents = async () => {
   return mockData;
 };
 
-/**
- * This function will check whether there's a path, then build the URL with the current path (or build without one if there's no path)
- * and send a GET request to the endpoint.
- */
+// ...existing code...
+
 export const getAccessToken = async () => {
   const accessToken = localStorage.getItem('access_token');
   const tokenCheck = accessToken && (await checkToken(accessToken));
@@ -53,7 +54,7 @@ export const getAccessToken = async () => {
     const searchParams = new URLSearchParams(window.location.search);
     const code = await searchParams.get("code");
     if (!code) {
-      const results = await fetch("https://YOUR_SERVERLESS_API_URL/api/get-auth-url");
+      const results = await fetch("https://ym392rf9u2.execute-api.eu-central-1.amazonaws.com/dev/api/get-auth-url");
       const { authUrl } = await results.json();
       return (window.location.href = authUrl);
     }
@@ -62,27 +63,11 @@ export const getAccessToken = async () => {
   return accessToken;
 };
 
-/**
- * This function takes an access token and sends a request to the Google Calendar API
- * to verify that it's valid.
- */
-const checkToken = async (accessToken) => {
-  const result = await fetch(
-    `https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=${accessToken}`
-  )
-  .then((res) => res.json())
-  .catch((error) => error.json());
+// ...existing code...
 
-  return result;
-};
-
-/**
- * This function takes the authorization code and sends it to your server 
- * to be exchanged for an access token.
- */
 const getToken = async (code) => {
   const encodeCode = encodeURIComponent(code);
-  const { access_token } = await fetch(`https://YOUR_SERVERLESS_API_URL/api/token/${encodeCode}`)
+  const { access_token } = await fetch(`https://ym392rf9u2.execute-api.eu-central-1.amazonaws.com/dev/api/token/${encodeCode}`)
     .then((res) => {
       return res.json();
     })
@@ -92,6 +77,24 @@ const getToken = async (code) => {
 
   return access_token;
 };
+
+
+
+
+
+/**
+ * This function takes an access token and sends a request to the Google Calendar API
+ * to verify that it's valid.
+ */
+const checkToken = async (accessToken) => {
+  const response = await fetch(
+    `https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=${accessToken}`
+  );
+  const result = await response.json();
+  return result;
+};
+
+
 
 /**
  * This function removes the code from the URL once it's been used

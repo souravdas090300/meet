@@ -2,15 +2,9 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import Event from '../components/Event';
+import mockData from '../mock-data';
 
-const mockEvent = {
-  id: '1',
-  summary: 'Learn JavaScript',
-  created: '2020-05-19T19:17:46.000Z',
-  location: 'London, UK',
-  htmlLink: 'https://example.com',
-  description: 'JavaScript workshop for beginners'
-};
+const mockEvent = mockData[0]; // Use the first event from mock data
 
 describe('<Event /> component', () => {
   test('renders event element', () => {

@@ -1,30 +1,10 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import EventChart from '../components/EventChart';
+import mockData from '../mock-data';
 
-// Mock data for testing
-const mockEvents = [
-  {
-    id: '1',
-    location: 'London, UK',
-    summary: 'Learn JavaScript'
-  },
-  {
-    id: '2',
-    location: 'Berlin, Germany',
-    summary: 'React is Fun'
-  },
-  {
-    id: '3',
-    location: 'London, UK',
-    summary: 'Node.js Workshop'
-  },
-  {
-    id: '4',
-    location: 'New York, USA',
-    summary: 'Angular Fundamentals'
-  }
-];
+// Use mock data for testing
+const mockEvents = mockData.slice(0, 4); // Use first 4 events from mock data
 
 // Mock recharts components to avoid issues with rendering in tests
 jest.mock('recharts', () => ({
