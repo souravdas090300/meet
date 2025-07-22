@@ -248,6 +248,25 @@ cd meet
 npm install
 ```
 
+### Configuration
+
+1. Copy the example configuration files:
+```bash
+cp config.json.example config.json
+cp auth-server/config.json.example auth-server/config.json
+```
+
+2. Edit `config.json` and `auth-server/config.json` with your Google OAuth credentials:
+```json
+{
+  "CLIENT_ID": "your-google-oauth-client-id-here",
+  "CLIENT_SECRET": "your-google-oauth-client-secret-here", 
+  "CALENDAR_ID": "your-calendar-id-here"
+}
+```
+
+**⚠️ Important**: Never commit `config.json` files to version control as they contain sensitive credentials.
+
 ### Development
 
 ```bash
