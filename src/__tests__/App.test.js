@@ -127,4 +127,27 @@ describe('<App /> integration', () => {
 
    expect(allRenderedEventItems.length).toBe(berlinEvents.length);
   });
+
+  test('user can change the number of events displayed', async () => {
+    const user = userEvent.setup();
+    const mockEvents = [...mockData]; // Use all mock data
+
+    getEvents.mockResolvedValue(mockEvents);
+    extractLocations.mockReturnValue(['London, UK', 'Berlin, Germany']);
+
+    const AppComponent = render(<App />);
+    const AppDOM = AppComponent.container.firstChild;
+
+    const NumberOfEventsDOM = AppDOM.querySelector('#number-of-events');
+    const NumberOfEventsInput = within(NumberOfEventsDOM).queryByRole('textbox');
+
+    // Clear the default value (32) and type new number
+    await user.clear(NumberOfEventsInput);
+    await user.type(NumberOfEventsInput, "3");
+
+    const EventListDOM = AppDOM.querySelector('#event-list');
+    const allRenderedEventItems = within(EventListDOM).queryAllByRole('listitem');
+
+    expect(allRenderedEventItems.length).toBe(3);
+  });
 });
