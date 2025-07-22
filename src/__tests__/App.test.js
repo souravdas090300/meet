@@ -1,12 +1,47 @@
+import React from 'react';
 import { render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import App from '../App';
-import { getEvents } from '../api';
+import { getEvents, extractLocations } from '../api';
 
 // Mock the api module
-jest.mock('../api');
+jest.mock('../api', () => ({
+  getEvents: jest.fn(),
+  extractLocations: jest.fn()
+}));
+
+// Mock the EventChart component to avoid recharts issues in tests
+jest.mock('../components/EventChart', () => {
+  return function EventChart() {
+    return <div data-testid="event-chart">Event Chart</div>;
+  };
+});
 
 describe('<App /> integration', () => {
+  beforeEach(() => {
+    // Reset mocks before each test
+    getEvents.mockClear();
+    extractLocations.mockClear();
+    
+    // Mock localStorage
+    const localStorageMock = {
+      getItem: jest.fn(),
+      setItem: jest.fn(),
+      removeItem: jest.fn(),
+      clear: jest.fn(),
+    };
+    Object.defineProperty(window, 'localStorage', {
+      value: localStorageMock,
+      writable: true,
+    });
+    
+    // Mock navigator.onLine
+    Object.defineProperty(navigator, 'onLine', {
+      value: true,
+      writable: true,
+    });
+  });
+
   test('renders list of events', async () => {
     const mockEvents = [
       {
@@ -26,6 +61,7 @@ describe('<App /> integration', () => {
     ];
 
     getEvents.mockResolvedValue(mockEvents);
+    extractLocations.mockReturnValue(['London, UK', 'Berlin, Germany']);
 
     render(<App />);
     
@@ -45,6 +81,7 @@ describe('<App /> integration', () => {
     }));
 
     getEvents.mockResolvedValue(mockEvents);
+    extractLocations.mockReturnValue(['Test Location']);
 
     render(<App />);
     
@@ -64,6 +101,7 @@ describe('<App /> integration', () => {
     }));
 
     getEvents.mockResolvedValue(mockEvents);
+    extractLocations.mockReturnValue(['Test Location']);
 
     render(<App />);
     
@@ -74,5 +112,15 @@ describe('<App /> integration', () => {
     const eventList = await screen.findByRole('list');
     const events = within(eventList).getAllByRole('listitem');
     expect(events).toHaveLength(10);
+  });
+
+  test('renders NumberOfEvents component', async () => {
+    const mockEvents = [];
+    getEvents.mockResolvedValue(mockEvents);
+    extractLocations.mockReturnValue([]);
+
+    const { container } = render(<App />);
+    const numberComponent = container.firstChild.querySelector('#number-of-events');
+    expect(numberComponent).toBeInTheDocument();
   });
 });

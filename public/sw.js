@@ -7,7 +7,7 @@ const urlsToCache = [
   'https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap'
 ];
 
-const isOnline = () => {
+const IS_ONLINE = () => {
   return navigator.onLine;
 }
 

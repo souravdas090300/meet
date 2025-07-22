@@ -1,37 +1,37 @@
-import { useState, useEffect } from 'react'
-import CitySearch from './components/CitySearch'
-import EventList from './components/EventList'
-import NumberOfEvents from './components/NumberOfEvents'
-import EventChart from './components/EventChart'
-import { extractLocations, getEvents } from './api'
-import './App.css'
+import React, { useState, useEffect } from 'react';
+import CitySearch from './components/CitySearch';
+import EventList from './components/EventList';
+import NumberOfEvents from './components/NumberOfEvents';
+import EventChart from './components/EventChart';
+import { extractLocations, getEvents } from './api';
+import './App.css';
 
 function App() {
-  const [allLocations, setAllLocations] = useState([])
-  const [currentNOE, setCurrentNOE] = useState(32)
-  const [events, setEvents] = useState([])
-  const [currentCity, setCurrentCity] = useState("See all cities")
-  const [infoAlert, setInfoAlert] = useState("")
-  const [errorAlert, setErrorAlert] = useState("")
-  const [warningAlert, setWarningAlert] = useState("")
+  const [allLocations, setAllLocations] = useState([]);
+  const [currentNOE, setCurrentNOE] = useState(32);
+  const [events, setEvents] = useState([]);
+  const [currentCity, setCurrentCity] = useState("See all cities");
+  const [infoAlert, setInfoAlert] = useState("");
+  const [errorAlert, setErrorAlert] = useState("");
+  const [warningAlert, setWarningAlert] = useState("");
 
   useEffect(() => {
     const fetchData = async () => {
-      const allEvents = await getEvents()
+      const allEvents = await getEvents();
       const filteredEvents = currentCity === "See all cities" ? 
         allEvents : 
-        allEvents.filter(event => event.location === currentCity)
-      setEvents(filteredEvents.slice(0, currentNOE))
-      setAllLocations(extractLocations(allEvents))
-    }
+        allEvents.filter(event => event.location === currentCity);
+      setEvents(filteredEvents.slice(0, currentNOE));
+      setAllLocations(extractLocations(allEvents));
+    };
 
     if (navigator.onLine) {
-      setWarningAlert("")
+      setWarningAlert("");
     } else {
-      setWarningAlert("You are offline. Events displayed may not be up to date.")
+      setWarningAlert("You are offline. Events displayed may not be up to date.");
     }
-    fetchData()
-  }, [currentCity, currentNOE])
+    fetchData();
+  }, [currentCity, currentNOE]);
 
   return (
     <div className="App">
@@ -59,13 +59,14 @@ function App() {
         />
       </div>
 
+      {/* Feature 6: Display Charts Visualizing Event Details */}
       <div className="charts-container">
         <EventChart events={events} />
       </div>
 
       <EventList events={events} />
     </div>
-  )
+  );
 }
 
-export default App
+export default App;

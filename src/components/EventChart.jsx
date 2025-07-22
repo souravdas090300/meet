@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   ScatterChart,
   Scatter,
@@ -9,7 +9,9 @@ import {
   ResponsiveContainer,
   PieChart,
   Pie,
-  Cell
+  Cell,
+  BarChart,
+  Bar
 } from 'recharts';
 
 const EventChart = ({ events }) => {
@@ -18,12 +20,13 @@ const EventChart = ({ events }) => {
 
   useEffect(() => {
     const getData = () => {
+      // Feature 6, Scenario 1: Show a chart with the number of upcoming events in each city
       const locations = [...new Set(events.map((event) => event.location))];
       const data = locations.map((location) => {
-        const count = events.filter((event) => event.location === location).length
-        const city = location.split(', ').shift()
+        const count = events.filter((event) => event.location === location).length;
+        const city = location.split(', ').shift();
         return { city, count };
-      })
+      }).sort((a, b) => b.count - a.count); // Sort by count descending
       return data;
     };
 
@@ -44,10 +47,44 @@ const EventChart = ({ events }) => {
 
   return (
     <div className="charts-container">
+      {/* Feature 6, Scenario 1: Chart showing number of upcoming events in each city */}
       <div className="chart">
-        <h2>Events by City</h2>
+        <h2>Number of Upcoming Events by City</h2>
+        <ResponsiveContainer width="100%" height={400}>
+          <BarChart
+            data={data}
+            margin={{
+              top: 20,
+              right: 30,
+              left: 20,
+              bottom: 5,
+            }}
+          >
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis 
+              dataKey="city" 
+              angle={-45}
+              textAnchor="end"
+              height={100}
+              fontSize={12}
+            />
+            <YAxis 
+              label={{ value: 'Number of Events', angle: -90, position: 'insideLeft' }}
+            />
+            <Tooltip 
+              formatter={(value) => [value, 'Number of Events']}
+              labelFormatter={(label) => `City: ${label}`}
+            />
+            <Bar dataKey="count" fill="#8884d8" />
+          </BarChart>
+        </ResponsiveContainer>
+      </div>
+
+      <div className="chart">
+        <h2>Events Distribution (Scatter Plot)</h2>
         <ResponsiveContainer width="100%" height={400}>
           <ScatterChart
+            data={data}
             margin={{
               top: 20,
               right: 20,
