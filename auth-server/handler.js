@@ -1,14 +1,9 @@
-'use strict';
+const { google } = require('googleapis');
 
-const { google } = require("googleapis");
-const calendar = google.calendar("v3");
-const SCOPES = ["https://www.googleapis.com/auth/calendar.events.public.readonly"];
-
-// Get environment variables
+const SCOPES = ['https://www.googleapis.com/auth/calendar.readonly'];
 const { CLIENT_SECRET, CLIENT_ID, CALENDAR_ID } = process.env;
-
 const redirect_uris = [
-  "https://meet-pi-weld.vercel.app/"
+  'https://souravdas090300.github.io/meet/',
 ];
 
 const oAuth2Client = new google.auth.OAuth2(
@@ -18,16 +13,16 @@ const oAuth2Client = new google.auth.OAuth2(
 );
 
 /**
- * The first function called in the OAuth process, this will return a URL that users
- * can visit to authenticate with the Google Calendar service and request access to
- * their calendar events.
+ * STEP 1
+ * The first step in the OAuth process is to generate a URL so users can log in with Google and be authorized to see your calendar.
+ * After logging in, they'll receive a code as a URL parameter.
  */
 module.exports.getAuthURL = async () => {
   /**
-   * Scopes array is passed to the `scope` option. 
+   * Scopes array passed to the `scope` option.
    */
   const authUrl = oAuth2Client.generateAuthUrl({
-    access_type: "offline",
+    access_type: 'offline',
     scope: SCOPES,
   });
 
@@ -44,8 +39,10 @@ module.exports.getAuthURL = async () => {
 };
 
 /**
- * After users visit the Auth URL and grant access, they'll be redirected back to your
- * application with a code as a URL parameter. This code is then exchanged for an access token.
+ * STEP 2
+ * Receive the callback from Google's OAuth 2.0 server.
+ * If the code is present, trade it for access token with a "callback" after the exchange.
+ * The callback in this case is an arrow function with the results as parameters: "error" and "response"
  */
 module.exports.getAccessToken = async (event) => {
   // Decode authorization code extracted from the URL query
@@ -53,8 +50,8 @@ module.exports.getAccessToken = async (event) => {
 
   return new Promise((resolve, reject) => {
     /**
-     * Exchange authorization code for access token with a "callback" after the exchange,
-     * The callback in this case is an arrow function with the results as parameters: "error" and "response"
+     *  Exchange authorization code for access token with a "callback" after the exchange,
+     *  The callback in this case is an arrow function with the results as parameters: "error" and "response"
      */
 
     oAuth2Client.getToken(code, (error, response) => {
@@ -65,7 +62,7 @@ module.exports.getAccessToken = async (event) => {
     });
   })
     .then((results) => {
-      // Respond with OAuth token 
+      // Respond with OAuth token
       return {
         statusCode: 200,
         headers: {
@@ -89,33 +86,37 @@ module.exports.getAccessToken = async (event) => {
 };
 
 /**
- * The final function will get calendar events from the Google Calendar API for users that
- * have been authorized and have a valid access token.
+ * STEP 3
+ * Get calendar events using the access token
  */
 module.exports.getCalendarEvents = async (event) => {
+  // Decode access token extracted from the URL query
   const access_token = decodeURIComponent(`${event.pathParameters.access_token}`);
-
   oAuth2Client.setCredentials({ access_token });
 
   return new Promise((resolve, reject) => {
+    // Create calendar API client
+    const calendar = google.calendar({ version: 'v3', auth: oAuth2Client });
+
     calendar.events.list(
       {
         calendarId: CALENDAR_ID,
         auth: oAuth2Client,
-        timeMin: (new Date()).toISOString(),
+        timeMin: new Date().toISOString(),
         singleEvents: true,
-        orderBy: "startTime",
+        orderBy: 'startTime',
       },
       (error, response) => {
         if (error) {
-          return reject(error);
+          reject(error);
+        } else {
+          resolve(response);
         }
-        return resolve(response);
       }
     );
   })
     .then((results) => {
-      // Respond with OAuth token 
+      // Respond with calendar events
       return {
         statusCode: 200,
         headers: {
