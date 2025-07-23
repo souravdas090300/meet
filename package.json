@@ -9,7 +9,9 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "test": "jest",
-    "test:watch": "jest --watch"
+    "test:watch": "jest --watch",
+    "deploy": "npm run build && gh-pages -d dist",
+    "predeploy": "npm run build"
   },
   "dependencies": {
     "@testing-library/user-event": "^14.6.1",
@@ -31,6 +33,7 @@
     "eslint": "^9.30.1",
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-react-refresh": "^0.4.20",
+    "gh-pages": "^6.3.0",
     "globals": "^16.3.0",
     "identity-obj-proxy": "^3.0.0",
     "jest": "^30.0.5",
@@ -49,5 +52,5 @@
   "bugs": {
     "url": "https://github.com/souravdas090300/meet/issues"
   },
-  "homepage": "https://github.com/souravdas090300/meet#readme"
+  "homepage": "https://souravdas090300.github.io/meet/"
 }

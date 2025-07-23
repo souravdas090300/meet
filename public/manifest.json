@@ -1,6 +1,11 @@
 {
-  "short_name": "Meet",
   "name": "Meet App",
+  "short_name": "Meet",
+  "start_url": "/meet/",
+  "display": "standalone",
+  "theme_color": "#000000",
+  "background_color": "#ffffff",
+  "description": "A React-based progressive web application for event management and discovery",
   "icons": [
     {
       "src": "vite.svg",
@@ -17,10 +22,5 @@
       "type": "image/svg+xml",
       "sizes": "512x512"
     }
-  ],
-  "start_url": ".",
-  "display": "standalone",
-  "theme_color": "#000000",
-  "background_color": "#ffffff",
-  "description": "A React-based progressive web application for event management and discovery"
+  ]
 }
