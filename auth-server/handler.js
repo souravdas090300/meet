@@ -1,7 +1,5 @@
-const { google } = require("googleapis");
-
-const oauth2 = google.oauth2("v2");
-const calendar = google.calendar("v3");
+const https = require("https");
+const { URLSearchParams } = require("url");
 
 // Use environment variables for sensitive information
 const CLIENT_ID = process.env.CLIENT_ID;
@@ -9,34 +7,78 @@ const CLIENT_SECRET = process.env.CLIENT_SECRET;
 const CALENDAR_ID = process.env.CALENDAR_ID;
 const REDIRECT_URI = "https://souravdas090300.github.io/meet/";
 
-const oAuth2Client = new google.auth.OAuth2(
-  CLIENT_ID,
-  CLIENT_SECRET,
-  REDIRECT_URI
-);
+// Helper function to make HTTPS requests
+function makeRequest(options, postData = null) {
+  return new Promise((resolve, reject) => {
+    const req = https.request(options, (res) => {
+      let data = "";
+      res.on("data", (chunk) => {
+        data += chunk;
+      });
+      res.on("end", () => {
+        try {
+          const parsedData = JSON.parse(data);
+          resolve(parsedData);
+        } catch (error) {
+          resolve(data);
+        }
+      });
+    });
+
+    req.on("error", (error) => {
+      reject(error);
+    });
+
+    if (postData) {
+      req.write(postData);
+    }
+    req.end();
+  });
+}
 
 /**
  * GET /api/get-auth-url
  * Generate authorization URL for OAuth2 flow
  */
 module.exports.getAuthURL = async () => {
-  // Scopes we're asking permission for
-  const authUrl = oAuth2Client.generateAuthUrl({
-    access_type: "offline",
-    scope: ["https://www.googleapis.com/auth/calendar.readonly"],
-  });
+  try {
+    const scopes = [
+      "https://www.googleapis.com/auth/calendar.readonly"
+    ];
 
-  return {
-    statusCode: 200,
-    headers: {
-      'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Headers': 'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token',
-      'Access-Control-Allow-Methods': 'GET,OPTIONS',
-    },
-    body: JSON.stringify({
-      authUrl: authUrl,
-    }),
-  };
+    const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?` +
+      `access_type=offline&` +
+      `scope=${encodeURIComponent(scopes.join(" "))}&` +
+      `response_type=code&` +
+      `client_id=${CLIENT_ID}&` +
+      `redirect_uri=${encodeURIComponent(REDIRECT_URI)}`;
+
+    return {
+      statusCode: 200,
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Headers': 'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token',
+        'Access-Control-Allow-Methods': 'GET,OPTIONS',
+      },
+      body: JSON.stringify({
+        authUrl: authUrl,
+      }),
+    };
+  } catch (error) {
+    console.error("Error:", error);
+    return {
+      statusCode: 500,
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Headers': 'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token',
+        'Access-Control-Allow-Methods': 'GET,OPTIONS',
+      },
+      body: JSON.stringify({
+        error: "Internal server error",
+        message: error.message
+      }),
+    };
+  }
 };
 
 /**
@@ -44,46 +86,54 @@ module.exports.getAuthURL = async () => {
  * Exchange authorization code for access token
  */
 module.exports.getAccessToken = async (event) => {
- // Decode authorization code extracted from the URL query
- const code = decodeURIComponent(`${event.pathParameters.code}`);
+  try {
+    const code = decodeURIComponent(event.pathParameters.code);
 
- return new Promise((resolve, reject) => {
-   /**
-    *  Exchange authorization code for access token with a "callback" after the exchange,
-    *  The callback in this case is an arrow function with the results as parameters: "error" and "response"
-    */
+    const postData = new URLSearchParams({
+      client_id: CLIENT_ID,
+      client_secret: CLIENT_SECRET,
+      code: code,
+      grant_type: "authorization_code",
+      redirect_uri: REDIRECT_URI,
+    }).toString();
 
-   oAuth2Client.getToken(code, (error, response) => {
-     if (error) {
-       return reject(error);
-     }
-     return resolve(response);
-   });
- })
-   .then((results) => {
-     // Respond with OAuth token
-     return {
-       statusCode: 200,
-       headers: {
-         'Access-Control-Allow-Origin': '*',
-         'Access-Control-Allow-Headers': 'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token',
-         'Access-Control-Allow-Methods': 'GET,OPTIONS',
-       },
-       body: JSON.stringify(results),
-     };
-   })
-   .catch((error) => {
-     // Handle error
-     return {
-       statusCode: 500,
-       headers: {
-         'Access-Control-Allow-Origin': '*',
-         'Access-Control-Allow-Headers': 'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token',
-         'Access-Control-Allow-Methods': 'GET,OPTIONS',
-       },
-       body: JSON.stringify(error),
-     };
-   });
+    const options = {
+      hostname: "oauth2.googleapis.com",
+      port: 443,
+      path: "/token",
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+        "Content-Length": Buffer.byteLength(postData),
+      },
+    };
+
+    const tokenData = await makeRequest(options, postData);
+
+    return {
+      statusCode: 200,
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Headers': 'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token',
+        'Access-Control-Allow-Methods': 'GET,OPTIONS',
+      },
+      body: JSON.stringify(tokenData),
+    };
+  } catch (error) {
+    console.error("Error:", error);
+    return {
+      statusCode: 500,
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Headers': 'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token',
+        'Access-Control-Allow-Methods': 'GET,OPTIONS',
+      },
+      body: JSON.stringify({
+        error: "Internal server error",
+        message: error.message
+      }),
+    };
+  }
 };
 
 /**
@@ -91,50 +141,43 @@ module.exports.getAccessToken = async (event) => {
  * Get calendar events using the access token
  */
 module.exports.getCalendarEvents = async (event) => {
-  const access_token = decodeURIComponent(
-    `${event.pathParameters.access_token}`
-  );
+  try {
+    const access_token = decodeURIComponent(event.pathParameters.access_token);
 
-  oAuth2Client.setCredentials({ access_token });
-
-  return new Promise((resolve, reject) => {
-    calendar.events.list(
-      {
-        calendarId: CALENDAR_ID,
-        auth: oAuth2Client,
-        timeMin: new Date().toISOString(),
-        singleEvents: true,
-        orderBy: "startTime",
+    const options = {
+      hostname: "www.googleapis.com",
+      port: 443,
+      path: `/calendar/v3/calendars/${encodeURIComponent(CALENDAR_ID)}/events?timeMin=${encodeURIComponent(new Date().toISOString())}&singleEvents=true&orderBy=startTime`,
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${access_token}`,
       },
-      (error, response) => {
-        if (error) {
-          reject(error);
-        } else {
-          resolve(response);
-        }
-      }
-    );
-  })
-    .then((results) => {
-      return {
-        statusCode: 200,
-        headers: {
-          'Access-Control-Allow-Origin': '*',
-          'Access-Control-Allow-Headers': 'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token',
-          'Access-Control-Allow-Methods': 'GET,OPTIONS',
-        },
-        body: JSON.stringify({ events: results.data.items }),
-      };
-    })
-    .catch((error) => {
-      return {
-        statusCode: 500,
-        headers: {
-          'Access-Control-Allow-Origin': '*',
-          'Access-Control-Allow-Headers': 'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token',
-          'Access-Control-Allow-Methods': 'GET,OPTIONS',
-        },
-        body: JSON.stringify(error),
-      };
-    });
+    };
+
+    const eventsData = await makeRequest(options);
+
+    return {
+      statusCode: 200,
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Headers': 'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token',
+        'Access-Control-Allow-Methods': 'GET,OPTIONS',
+      },
+      body: JSON.stringify({ events: eventsData.items }),
+    };
+  } catch (error) {
+    console.error("Error:", error);
+    return {
+      statusCode: 500,
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Headers': 'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token',
+        'Access-Control-Allow-Methods': 'GET,OPTIONS',
+      },
+      body: JSON.stringify({
+        error: "Internal server error",
+        message: error.message
+      }),
+    };
+  }
 };
