@@ -1,9 +1,8 @@
 const CACHE_NAME = 'meet-app-v1';
 const urlsToCache = [
-  '/',
-  '/static/js/bundle.js',
-  '/static/css/main.css',
-  '/manifest.json',
+  '/meet/',
+  '/meet/assets/',
+  '/meet/manifest.json',
   'https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap'
 ];
 
@@ -53,7 +52,7 @@ self.addEventListener('fetch', (event) => {
       }).catch(() => {
         // If both cache and network fail, show offline page for navigation requests
         if (event.request.destination === 'document') {
-          return caches.match('/');
+          return caches.match('/meet/');
         }
       })
   );
