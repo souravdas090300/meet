@@ -10,11 +10,13 @@
     "preview": "vite preview",
     "test": "jest",
     "test:watch": "jest --watch",
-    "deploy": "npm run build && gh-pages -d dist",
-    "predeploy": "npm run build"
+    "predeploy": "npm run build && cp public/404.html dist/ && cp -r public/meet dist/",
+    "deploy": "gh-pages -d dist -b gh-pages",
+    "serve:prod": "serve dist -p 3000"
   },
   "dependencies": {
     "@testing-library/user-event": "^14.6.1",
+    "@vitejs/plugin-react": "^4.7.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "recharts": "^3.1.0"
@@ -38,7 +40,8 @@
     "identity-obj-proxy": "^3.0.0",
     "jest": "^30.0.5",
     "jest-environment-jsdom": "^30.0.5",
-    "vite": "^7.0.4"
+    "serve": "^14.2.4",
+    "vite": "^7.0.5"
   },
   "description": "A React-based progressive web application for event management and discovery. This app allows users to find and view events in their city, with offline functionality and data visualization features.",
   "main": "eslint.config.js",
