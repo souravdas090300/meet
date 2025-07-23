@@ -1,4 +1,8 @@
+<<<<<<< Updated upstream
 import React, { useState } from "react";
+=======
+import React, { useState } from 'react';
+>>>>>>> Stashed changes
 
 const Event = ({ event }) => {
   const [showDetails, setShowDetails] = useState(false);
@@ -8,10 +12,17 @@ const Event = ({ event }) => {
       <h1>{event.summary}</h1>
       <p>{event.created}</p>
       <p>{event.location}</p>
+<<<<<<< Updated upstream
       <button
         className="details-btn"
         onClick={() => {
           showDetails ? setShowDetails(false) : setShowDetails(true);
+=======
+      <button 
+        className="details-btn"
+        onClick={() => {
+          setShowDetails(!showDetails);
+>>>>>>> Stashed changes
         }}
       >
         {showDetails ? "Hide Details" : "Show Details"}

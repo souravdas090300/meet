@@ -162,8 +162,8 @@
 
     // Step 3: Fetch Calendar Events
     getEventsButton.addEventListener('click', async () => {
-      const tokenText = tokenResult.textContent;
-      if (!tokenText.includes('access_token')) {
+      const tokenText = tokenResult.textContent || tokenResult.innerText;
+      if (!tokenText || !tokenText.includes('access_token')) {
         eventsResult.innerHTML = '<p class="error">Please complete Step 2 first</p>';
         return;
       }
@@ -172,13 +172,34 @@
       
       try {
         // Extract access token from the displayed result
-        const tokenData = JSON.parse(tokenText.split('<pre>')[1].split('</pre>')[0]);
+        let tokenData;
+        try {
+          // Try to parse JSON from <pre> tag
+          const preMatch = tokenText.match(/{[\s\S]*}/);
+          if (preMatch) {
+            tokenData = JSON.parse(preMatch[0]);
+          } else {
+            throw new Error('Could not find JSON data in token result');
+          }
+        } catch (parseError) {
+          throw new Error('Could not parse token data: ' + parseError.message);
+        }
+        
+        if (!tokenData.access_token) {
+          throw new Error('No access token found in response');
+        }
+        
         const encodedToken = encodeURIComponent(tokenData.access_token);
         
         const response = await fetch(`${config.apiBaseUrl}${config.endpoints.events}/${encodedToken}`);
+        
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
         const data = await response.json();
         
-        if (data.events) {
+        if (data.events && Array.isArray(data.events)) {
           let eventsHTML = '<h3>Upcoming Events:</h3><ul>';
           data.events.forEach(event => {
             eventsHTML += `
@@ -196,6 +217,7 @@
         }
       } catch (error) {
         eventsResult.innerHTML = `<p class="error">Error: ${error.message}</p>`;
+        console.error('Events fetch error:', error);
       }
     });
   </script>

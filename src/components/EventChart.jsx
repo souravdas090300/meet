@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+<<<<<<< Updated upstream
 import {
   ScatterChart,
   Scatter,
@@ -97,16 +98,80 @@ const EventChart = ({ events }) => {
             <YAxis type="number" dataKey="count" name="Number of events" />
             <Tooltip cursor={{ strokeDasharray: '3 3' }} />
             <Scatter data={data} fill="#8884d8" />
+=======
+import { PieChart, Pie, Cell, ResponsiveContainer, ScatterChart, Scatter, XAxis, YAxis, CartesianGrid, Tooltip } from 'recharts';
+
+const EventChart = ({ events }) => {
+  const [cityData, setCityData] = useState([]);
+  const [techData, setTechData] = useState([]);
+
+  useEffect(() => {
+    const getCityData = () => {
+      // Safely extract unique locations and handle undefined/null values
+      const uniqueLocations = [...new Set(events
+        .filter(event => event && event.location && typeof event.location === 'string') // Filter out invalid events
+        .map(event => event.location))];
+        
+      return uniqueLocations.map(location => {
+        const count = events.filter(event => 
+          event && event.location === location
+        ).length;
+        
+        // Safely split location and get city name
+        const city = location && typeof location === 'string' ? 
+          location.split(", ").shift() : 
+          'Unknown Location';
+          
+        return { city, count };
+      }).sort((a, b) => b.count - a.count);
+    };
+
+    const getTechData = () => {
+      const technologies = ["JavaScript", "React", "Node.js", "jQuery", "Angular"];
+      return technologies.map(tech => {
+        const count = events.filter(event => 
+          event && event.summary && event.summary.includes(tech)
+        ).length;
+        return { name: tech, value: count };
+      }).filter(item => item.value > 0);
+    };
+
+    setCityData(getCityData());
+    setTechData(getTechData());
+  }, [events]);
+
+  const colors = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#8884D8"];
+
+  return (
+    <div className="charts-container">
+      <div className="chart">
+        <h2>Number of Upcoming Events by City</h2>
+        <ResponsiveContainer width="100%" height={400}>
+          <ScatterChart>
+            <CartesianGrid />
+            <XAxis type="category" dataKey="city" name="City" />
+            <YAxis type="number" dataKey="count" name="Events" />
+            <Tooltip cursor={{ strokeDasharray: '3 3' }} />
+            <Scatter data={cityData} fill="#8884d8" />
+>>>>>>> Stashed changes
           </ScatterChart>
         </ResponsiveContainer>
       </div>
 
       <div className="chart">
+<<<<<<< Updated upstream
         <h2>Events by Genre</h2>
         <ResponsiveContainer width="100%" height={400}>
           <PieChart>
             <Pie
               data={pieData}
+=======
+        <h2>Events by Technology</h2>
+        <ResponsiveContainer width="100%" height={400}>
+          <PieChart>
+            <Pie
+              data={techData}
+>>>>>>> Stashed changes
               cx="50%"
               cy="50%"
               labelLine={false}
@@ -115,8 +180,13 @@ const EventChart = ({ events }) => {
               fill="#8884d8"
               dataKey="value"
             >
+<<<<<<< Updated upstream
               {pieData.map((entry, index) => (
                 <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+=======
+              {techData.map((entry, index) => (
+                <Cell key={`cell-${index}`} fill={colors[index % colors.length]} />
+>>>>>>> Stashed changes
               ))}
             </Pie>
             <Tooltip />
