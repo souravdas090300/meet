@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const NumberOfEvents = ({ setCurrentNOE, setErrorAlert, currentNOE }) => {
+const NumberOfEvents = ({ setCurrentNOE, setErrorAlert, currentNOE = 32 }) => {
   const [numberOfEvents, setNumberOfEvents] = useState(currentNOE);
 
   const handleInputChanged = (event) => {
@@ -12,9 +12,13 @@ const NumberOfEvents = ({ setCurrentNOE, setErrorAlert, currentNOE }) => {
       errorText = "Only positive numbers are allowed"
     } else {
       errorText = "";
-      setCurrentNOE(value);
+      if (setCurrentNOE) {
+        setCurrentNOE(value);
+      }
     }
-    setErrorAlert(errorText);
+    if (setErrorAlert) {
+      setErrorAlert(errorText);
+    }
   };
 
   return (

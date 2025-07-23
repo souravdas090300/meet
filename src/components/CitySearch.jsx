@@ -24,15 +24,21 @@ const CitySearch = ({ allLocations, setCurrentCity, setInfoAlert }) => {
     } else {
       infoText = ""
     }
-    setInfoAlert(infoText);
+    if (setInfoAlert) {
+      setInfoAlert(infoText);
+    }
   };
 
   const handleItemClicked = (event) => {
     const value = event.target.textContent;
     setQuery(value);
     setShowSuggestions(false);
-    setCurrentCity(value);
-    setInfoAlert("")
+    if (setCurrentCity) {
+      setCurrentCity(value);
+    }
+    if (setInfoAlert) {
+      setInfoAlert("");
+    }
   };
 
   return (
