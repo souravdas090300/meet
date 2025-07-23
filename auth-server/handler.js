@@ -30,7 +30,8 @@ module.exports.getAuthURL = async () => {
     statusCode: 200,
     headers: {
       'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Credentials': true,
+      'Access-Control-Allow-Headers': 'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token',
+      'Access-Control-Allow-Methods': 'GET,OPTIONS',
     },
     body: JSON.stringify({
       authUrl: authUrl,
@@ -65,7 +66,8 @@ module.exports.getAccessToken = async (event) => {
        statusCode: 200,
        headers: {
          'Access-Control-Allow-Origin': '*',
-         'Access-Control-Allow-Credentials': true,
+         'Access-Control-Allow-Headers': 'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token',
+         'Access-Control-Allow-Methods': 'GET,OPTIONS',
        },
        body: JSON.stringify(results),
      };
@@ -76,7 +78,8 @@ module.exports.getAccessToken = async (event) => {
        statusCode: 500,
        headers: {
          'Access-Control-Allow-Origin': '*',
-         'Access-Control-Allow-Credentials': true,
+         'Access-Control-Allow-Headers': 'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token',
+         'Access-Control-Allow-Methods': 'GET,OPTIONS',
        },
        body: JSON.stringify(error),
      };
@@ -117,7 +120,8 @@ module.exports.getCalendarEvents = async (event) => {
         statusCode: 200,
         headers: {
           'Access-Control-Allow-Origin': '*',
-          'Access-Control-Allow-Credentials': true,
+          'Access-Control-Allow-Headers': 'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token',
+          'Access-Control-Allow-Methods': 'GET,OPTIONS',
         },
         body: JSON.stringify({ events: results.data.items }),
       };
@@ -127,7 +131,8 @@ module.exports.getCalendarEvents = async (event) => {
         statusCode: 500,
         headers: {
           'Access-Control-Allow-Origin': '*',
-          'Access-Control-Allow-Credentials': true,
+          'Access-Control-Allow-Headers': 'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token',
+          'Access-Control-Allow-Methods': 'GET,OPTIONS',
         },
         body: JSON.stringify(error),
       };
