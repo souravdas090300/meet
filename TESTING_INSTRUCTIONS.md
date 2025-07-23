@@ -25,8 +25,8 @@
 6. You should receive an access token in the response
 
 ## Endpoints Being Tested
-- GET Auth URL: https://ym392rf9u2.execute-api.eu-central-1.amazonaws.com/api/get-auth-url
-- Get Token: https://ym392rf9u2.execute-api.eu-central-1.amazonaws.com/api/token/{code}
+- GET Auth URL: https://pkpsfh72t5.execute-api.eu-central-1.amazonaws.com/dev/api/get-auth-url
+- Get Token: https://pkpsfh72t5.execute-api.eu-central-1.amazonaws.com/dev/api/token/{code}
 
 ## Troubleshooting
 - If you get CORS errors, check the browser console

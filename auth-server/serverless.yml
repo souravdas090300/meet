@@ -1,14 +1,11 @@
 service: auth-server
 
 package:
-  patterns:
-    - '!node_modules/**'
-    - '!.git/**'
-    - '!*.md'
-    - '!.env*'
-    - '!coverage/**'
-    - 'handler.js'
-    - 'config.json'
+  include:
+    - handler.js
+    - config.json
+  exclude:
+    - "**"
 
 provider:
   name: aws

@@ -15,5 +15,8 @@
     "express": "^5.1.0",
     "googleapis": "^118.0.0",
     "serverless": "^3.40.0"
+  },
+  "devDependencies": {
+    "serverless-bundle": "^6.3.1"
   }
 }
