@@ -34,7 +34,7 @@ export const getEvents = async () => {
 
     if (token) {
       removeQuery();
-      const url = `https://ym392rf9u2.execute-api.eu-central-1.amazonaws.com/dev/api/get-events/${token}`;
+      const url = `https://cors-anywhere.herokuapp.com/https://ym392rf9u2.execute-api.eu-central-1.amazonaws.com/dev/api/get-events/${token}`;
       const result = await fetch(url);
       const { events } = await result.json();
       if (events) {
@@ -61,7 +61,7 @@ export const getAccessToken = async () => {
     const searchParams = new URLSearchParams(window.location.search);
     const code = await searchParams.get("code");
     if (!code) {
-      const results = await fetch("https://ym392rf9u2.execute-api.eu-central-1.amazonaws.com/dev/api/get-auth-url");
+      const results = await fetch("https://cors-anywhere.herokuapp.com/https://ym392rf9u2.execute-api.eu-central-1.amazonaws.com/dev/api/get-auth-url");
       const { authUrl } = await results.json();
       return (window.location.href = authUrl);
     }
@@ -74,7 +74,7 @@ export const getAccessToken = async () => {
 
 const getToken = async (code) => {
   const encodeCode = encodeURIComponent(code);
-  const { access_token } = await fetch(`https://ym392rf9u2.execute-api.eu-central-1.amazonaws.com/dev/api/token/${encodeCode}`)
+  const { access_token } = await fetch(`https://cors-anywhere.herokuapp.com/https://ym392rf9u2.execute-api.eu-central-1.amazonaws.com/dev/api/token/${encodeCode}`)
     .then((res) => {
       return res.json();
     })
