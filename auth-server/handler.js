@@ -1,14 +1,54 @@
+const { google } = require("googleapis");
+
+const oauth2 = google.oauth2("v2");
+
+// Use environment variables for sensitive information
+const CLIENT_ID = process.env.CLIENT_ID;
+const CLIENT_SECRET = process.env.CLIENT_SECRET;
+const REDIRECT_URI = "https://souravdas090300.github.io/meet/";
+
+const oAuth2Client = new google.auth.OAuth2(
+  CLIENT_ID,
+  CLIENT_SECRET,
+  REDIRECT_URI
+);
+
+/**
+ * GET /api/get-auth-url
+ * Generate authorization URL for OAuth2 flow
+ */
+module.exports.getAuthURL = async () => {
+  // Scopes we're asking permission for
+  const authUrl = oAuth2Client.generateAuthUrl({
+    access_type: "offline",
+    scope: ["https://www.googleapis.com/auth/calendar.readonly"],
+  });
+
+  return {
+    statusCode: 200,
+    headers: {
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Credentials': true,
+    },
+    body: JSON.stringify({
+      authUrl: authUrl,
+    }),
+  };
+};
+
+/**
+ * GET /api/token/{code}
+ * Exchange authorization code for access token
+ */
 module.exports.getAccessToken = async (event) => {
  // Decode authorization code extracted from the URL query
  const code = decodeURIComponent(`${event.pathParameters.code}`);
 
-
  return new Promise((resolve, reject) => {
    /**
-    *  Exchange authorization code for access token with a “callback” after the exchange,
-    *  The callback in this case is an arrow function with the results as parameters: “error” and “response”
+    *  Exchange authorization code for access token with a "callback" after the exchange,
+    *  The callback in this case is an arrow function with the results as parameters: "error" and "response"
     */
-
 
    oAuth2Client.getToken(code, (error, response) => {
      if (error) {
@@ -32,6 +72,10 @@ module.exports.getAccessToken = async (event) => {
      // Handle error
      return {
        statusCode: 500,
+       headers: {
+         'Access-Control-Allow-Origin': '*',
+         'Access-Control-Allow-Credentials': true,
+       },
        body: JSON.stringify(error),
      };
    });
