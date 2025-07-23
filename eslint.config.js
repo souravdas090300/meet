@@ -26,9 +26,9 @@ export default defineConfig([
       'no-unused-vars': ['error', { varsIgnorePattern: '^[A-Z_]' }],
     },
   },
-  // Specific configuration for test files
+  // Specific configuration for test files and setupTests.js
   {
-    files: ['**/*.test.{js,jsx}', '**/__tests__/**/*.{js,jsx}'],
+    files: ['**/*.test.{js,jsx}', '**/__tests__/**/*.{js,jsx}', '**/setupTests.js'],
     languageOptions: {
       globals: {
         ...globals.browser,
