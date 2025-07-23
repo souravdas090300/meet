@@ -3,6 +3,7 @@ const { google } = require('googleapis');
 const SCOPES = ['https://www.googleapis.com/auth/calendar.readonly'];
 const { CLIENT_SECRET, CLIENT_ID, CALENDAR_ID } = process.env;
 const redirect_uris = [
+  'https://souravdas090300.github.io/meet/',
   'https://meet-pi-weld.vercel.app/',
 ];
 

@@ -1,5 +1,0 @@
-{
-  "CLIENT_ID": "your-google-oauth-client-id-here",
-  "CLIENT_SECRET": "your-google-oauth-client-secret-here",
-  "CALENDAR_ID": "your-calendar-id-here"
-}
