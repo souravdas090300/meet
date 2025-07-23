@@ -1,0 +1,8 @@
+{
+  "name": "Meet App",
+  "short_name": "Meet",
+  "start_url": "/meet/",
+  "display": "standalone",
+  "theme_color": "#ffffff",
+  "background_color": "#ffffff"
+}
