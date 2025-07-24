@@ -5,7 +5,7 @@ const { URLSearchParams } = require("url");
 const CLIENT_ID = process.env.CLIENT_ID;
 const CLIENT_SECRET = process.env.CLIENT_SECRET;
 const CALENDAR_ID = process.env.CALENDAR_ID;
-const REDIRECT_URI = "https://souravdas090300.github.io/meet/";
+const REDIRECT_URI = "https://souravdas090300.github.io/meet/oauth-redirect.html";
 
 // Helper function to make HTTPS requests
 function makeRequest(options, postData = null) {
