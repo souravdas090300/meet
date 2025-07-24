@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OAuth Redirect Handler</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        .container {
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        .success {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        .code-box {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            padding: 15px;
+            border-radius: 6px;
+            font-family: 'Courier New', monospace;
+            word-break: break-all;
+            margin: 15px 0;
+            position: relative;
+        }
+        .copy-btn {
+            background: #007cba;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 10px 0;
+        }
+        .copy-btn:hover {
+            background: #005a87;
+        }
+        .instructions {
+            background: #e7f3ff;
+            border-left: 4px solid #007cba;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        .error {
+            background: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎉 OAuth Authorization Complete!</h1>
+        
+        <div id="content">
+            <!-- Content will be injected by JavaScript -->
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const authCode = urlParams.get('code');
+            const error = urlParams.get('error');
+            const contentDiv = document.getElementById('content');
+            
+            if (error) {
+                contentDiv.innerHTML = `
+                    <div class="error">
+                        <h3>❌ Authorization Failed</h3>
+                        <p><strong>Error:</strong> ${error}</p>
+                        <p><strong>Description:</strong> ${urlParams.get('error_description') || 'Unknown error occurred'}</p>
+                        <p>Please try the authorization process again.</p>
+                        <a href="http://127.0.0.1:8082/test-auth-server.html" target="_blank" style="color: #721c24; text-decoration: underline;">Go back to test page</a>
+                    </div>
+                `;
+            } else if (authCode) {
+                contentDiv.innerHTML = `
+                    <div class="success">
+                        <h3>✅ Authorization Successful!</h3>
+                        <p>Google has successfully authorized your application and provided an authorization code.</p>
+                    </div>
+                    
+                    <h3>📋 Your Authorization Code:</h3>
+                    <div class="code-box" id="codeBox">${authCode}</div>
+                    <button class="copy-btn" onclick="copyCode()">📋 Copy Code</button>
+                    
+                    <div class="instructions">
+                        <h4>🚀 Next Steps:</h4>
+                        <ol>
+                            <li><strong>Copy the authorization code</strong> using the button above</li>
+                            <li><strong>Go back to your test page:</strong> <a href="http://127.0.0.1:8082/test-auth-server.html" target="_blank">http://127.0.0.1:8082/test-auth-server.html</a></li>
+                            <li><strong>Paste the code</strong> in the "Step 2: Exchange Authorization Code for Token" input field</li>
+                            <li><strong>Click "Exchange Code for Token"</strong> to get your access token</li>
+                            <li><strong>Proceed to Step 3</strong> to fetch calendar events</li>
+                        </ol>
+                    </div>
+                    
+                    <div style="background: #fff3cd; border: 1px solid #ffeaa7; padding: 15px; border-radius: 6px; margin: 20px 0;">
+                        <strong>⚠️ Important:</strong> This authorization code can only be used once. If you need to test again, you'll need to generate a new authorization code.
+                    </div>
+                `;
+                
+                // Auto-select the code for easy copying
+                setTimeout(() => {
+                    const codeBox = document.getElementById('codeBox');
+                    if (codeBox && window.getSelection && document.createRange) {
+                        const range = document.createRange();
+                        range.selectNodeContents(codeBox);
+                        const selection = window.getSelection();
+                        selection.removeAllRanges();
+                        selection.addRange(range);
+                    }
+                }, 500);
+                
+            } else {
+                contentDiv.innerHTML = `
+                    <div class="error">
+                        <h3>❌ Invalid Redirect</h3>
+                        <p>This page should only be accessed after completing Google OAuth authorization.</p>
+                        <p>No authorization code was found in the URL parameters.</p>
+                        <a href="http://127.0.0.1:8082/test-auth-server.html" target="_blank" style="color: #721c24; text-decoration: underline;">Go to test page</a>
+                    </div>
+                `;
+            }
+        });
+        
+        function copyCode() {
+            const codeBox = document.getElementById('codeBox');
+            const code = codeBox.textContent;
+            
+            // Try to use the modern clipboard API
+            if (navigator.clipboard && window.isSecureContext) {
+                navigator.clipboard.writeText(code).then(() => {
+                    showCopySuccess();
+                }).catch(() => {
+                    fallbackCopy(code);
+                });
+            } else {
+                fallbackCopy(code);
+            }
+        }
+        
+        function fallbackCopy(text) {
+            const textArea = document.createElement('textarea');
+            textArea.value = text;
+            textArea.style.position = 'fixed';
+            textArea.style.left = '-999999px';
+            textArea.style.top = '-999999px';
+            document.body.appendChild(textArea);
+            textArea.focus();
+            textArea.select();
+            
+            try {
+                document.execCommand('copy');
+                showCopySuccess();
+            } catch (err) {
+                console.error('Failed to copy: ', err);
+                alert('Failed to copy code. Please select and copy manually.');
+            }
+            
+            document.body.removeChild(textArea);
+        }
+        
+        function showCopySuccess() {
+            const btn = document.querySelector('.copy-btn');
+            const originalText = btn.textContent;
+            btn.textContent = '✅ Copied!';
+            btn.style.background = '#28a745';
+            
+            setTimeout(() => {
+                btn.textContent = originalText;
+                btn.style.background = '#007cba';
+            }, 2000);
+        }
+    </script>
+</body>
+</html>
