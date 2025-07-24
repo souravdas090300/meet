@@ -101,6 +101,51 @@
       }
     };
 
+    // Auto-extract authorization code from URL on page load
+    window.addEventListener('load', function() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const authCode = urlParams.get('code');
+      
+      if (authCode) {
+        // Show a success message
+        const successDiv = document.createElement('div');
+        successDiv.style.cssText = 'background: #d4edda; border: 1px solid #c3e6cb; color: #155724; padding: 15px; margin: 20px 0; border-radius: 4px; font-weight: bold;';
+        successDiv.innerHTML = `
+          <h3>✅ Authorization Successful!</h3>
+          <p>Google has redirected you back with an authorization code.</p>
+          <p><strong>Authorization Code:</strong></p>
+          <div style="background: #f8f9fa; padding: 10px; border-radius: 4px; font-family: monospace; word-break: break-all; margin: 10px 0;">${authCode}</div>
+          <p><strong>Instructions:</strong></p>
+          <ol>
+            <li>Copy the authorization code above</li>
+            <li>Go back to your test page: <a href="http://127.0.0.1:8082/test-auth-server.html" target="_blank">http://127.0.0.1:8082/test-auth-server.html</a></li>
+            <li>Paste the code in Step 2 and click "Exchange Code for Token"</li>
+          </ol>
+        `;
+        
+        // Insert at the top of the page
+        document.body.insertBefore(successDiv, document.body.firstChild);
+        
+        // Auto-fill the code input if it exists
+        const codeInput = document.getElementById('code');
+        if (codeInput) {
+          codeInput.value = authCode;
+        }
+        
+        // Auto-select the code for easy copying
+        if (window.getSelection && document.createRange) {
+          const range = document.createRange();
+          const codeElement = successDiv.querySelector('div[style*="font-family: monospace"]');
+          if (codeElement) {
+            range.selectNodeContents(codeElement);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+          }
+        }
+      }
+    });
+
     // DOM Elements
     const getAuthUrlButton = document.getElementById('getAuthUrlButton');
     const authUrlResult = document.getElementById('authUrlResult');
