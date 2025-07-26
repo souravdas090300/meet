@@ -3,7 +3,10 @@
   "builds": [
     {
       "src": "package.json",
-      "use": "@vercel/static-build"
+      "use": "@vercel/static-build",
+      "config": {
+        "distDir": "build"
+      }
     }
   ],
   "routes": [
@@ -15,8 +18,16 @@
       }
     },
     {
-      "src": "/meet/(.*)", 
+      "src": "/meet/manifest.json",
+      "dest": "/meet/manifest.json"
+    },
+    {
+      "src": "/meet/(.*)",
       "dest": "/meet/index.html"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/index.html"
     }
   ]
 }
