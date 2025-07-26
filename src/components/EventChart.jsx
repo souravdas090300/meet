@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { PieChart, Pie, Cell, ResponsiveContainer, ScatterChart, Scatter, XAxis, YAxis, CartesianGrid, Tooltip } from 'recharts';
+import { PieChart, Pie, Cell, ResponsiveContainer, ScatterChart, Scatter, XAxis, YAxis, CartesianGrid, Tooltip, BarChart, Bar } from 'recharts';
 
 const EventChart = ({ events }) => {
   const [cityData, setCityData] = useState([]);
@@ -41,11 +41,34 @@ const EventChart = ({ events }) => {
 
   return (
     <div className="charts-container">
-      {/* Scatter chart showing number of events by city */}
+      {/* Bar chart showing number of events by city */}
       <div className="chart">
-        <h2>Events by City</h2>
+        <h2>Number of Upcoming Events by City</h2>
+        <ResponsiveContainer width="100%" height={400}>
+          <BarChart
+            data={cityData}
+            margin={{
+              top: 20,
+              right: 20,
+              bottom: 20,
+              left: 20,
+            }}
+          >
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis dataKey="city" />
+            <YAxis />
+            <Tooltip />
+            <Bar dataKey="count" fill="#8884d8" />
+          </BarChart>
+        </ResponsiveContainer>
+      </div>
+
+      {/* Scatter plot showing events distribution */}
+      <div className="chart">
+        <h2>Events Distribution (Scatter Plot)</h2>
         <ResponsiveContainer width="100%" height={400}>
           <ScatterChart
+            data={cityData}
             margin={{
               top: 20,
               right: 20,
@@ -63,30 +86,28 @@ const EventChart = ({ events }) => {
       </div>
 
       {/* Pie chart showing distribution of technologies */}
-      {techData.length > 0 && (
-        <div className="chart">
-          <h2>Event Technologies</h2>
-          <ResponsiveContainer width="100%" height={400}>
-            <PieChart>
-              <Pie
-                data={techData}
-                cx="50%"
-                cy="50%"
-                labelLine={false}
-                label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
-                outerRadius={80}
-                fill="#8884d8"
-                dataKey="value"
-              >
-                {techData.map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                ))}
-              </Pie>
-              <Tooltip />
-            </PieChart>
-          </ResponsiveContainer>
-        </div>
-      )}
+      <div className="chart">
+        <h2>Events by Genre</h2>
+        <ResponsiveContainer width="100%" height={400}>
+          <PieChart>
+            <Pie
+              data={techData}
+              cx="50%"
+              cy="50%"
+              labelLine={false}
+              label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+              outerRadius={80}
+              fill="#8884d8"
+              dataKey="value"
+            >
+              {techData.map((entry, index) => (
+                <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+              ))}
+            </Pie>
+            <Tooltip />
+          </PieChart>
+        </ResponsiveContainer>
+      </div>
     </div>
   );
 };

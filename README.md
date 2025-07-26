@@ -6,7 +6,7 @@ A **React-based Progressive Web Application (PWA)** for event management and dis
 
 ## 📌 Project Overview
 
-Meet is designed to help users discover local events. Built using **React**, **AWS Lambda (Serverless Functions)**, and the **Google Calendar API**, the app provides a fast, reliable, and interactive experience with PWA capabilities.
+Meet is designed to help users discover local events. Built using **React** and **mock data**, the app provides a fast, reliable, and interactive experience with PWA capabilities.
 
 ---
 
@@ -166,10 +166,8 @@ Then clicking chart elements gives detailed insights
 | Area           | Tech                            |
 |----------------|----------------------------------|
 | Frontend       | React, Vite                     |
-| Backend        | AWS Lambda (Serverless)         |
-| API            | Google Calendar API             |
-| Auth           | Google OAuth 2.0                |
-| Deployment     | Vercel (Frontend), AWS Lambda   |
+| Data Source    | Mock Data                       |
+| Deployment     | Vercel                          |
 | Version Control| Git, GitHub                     |
 | Testing        | Jest                            |
 | PWA Features   | Service Worker, Web App Manifest|
@@ -177,38 +175,13 @@ Then clicking chart elements gives detailed insights
 
 ---
 
-## ☁️ Serverless Architecture
-
-This app uses **AWS Lambda** to run backend logic without managing servers.
-
-### ✅ How Serverless is Used
-
-- **OAuth Authentication**: Google sign-in via Lambda  
-- **API Gateway**: Connects frontend to backend securely  
-- **Token Management**: Secures and stores auth tokens  
-
-### 📈 Benefits
-
-- No idle server costs  
-- Auto-scaling for traffic spikes  
-- Minimal maintenance  
-- Secure by design  
-
----
-
-## 📊 System Architecture Diagram
+## 📊 System Architecture
 
 ```
 React Frontend (Vercel)
        │
        ▼
-AWS API Gateway ──────────────┐
-       │                      │
-       ▼                      ▼
-AWS Lambda            Google Calendar API
-       │
-       ▼
-Google OAuth 2.0
+Mock Data (Local)
 ```
 
 ---
@@ -217,9 +190,6 @@ Google OAuth 2.0
 
 ```
 meet/
-├── auth-server/            # AWS Lambda functions
-│   ├── handler.js
-│   ├── serverless.yml
 │   └── package.json
 ├── src/                    # React app source
 │   ├── App.jsx
@@ -248,24 +218,7 @@ cd meet
 npm install
 ```
 
-### Configuration
-
-1. Copy the example configuration files:
-```bash
-cp config.json.example config.json
-cp auth-server/config.json.example auth-server/config.json
-```
-
-2. Edit `config.json` and `auth-server/config.json` with your Google OAuth credentials:
-```json
-{
-  "CLIENT_ID": "your-google-oauth-client-id-here",
-  "CLIENT_SECRET": "your-google-oauth-client-secret-here", 
-  "CALENDAR_ID": "your-calendar-id-here"
-}
-```
-
-**⚠️ Important**: Never commit `config.json` files to version control as they contain sensitive credentials.
+The app is ready to use with mock data - no additional configuration needed.
 
 ### Development
 
@@ -287,21 +240,7 @@ npm run build
 
 > Live: [https://meet-pi-weld.vercel.app/](https://meet-pi-weld.vercel.app/)
 
----
-
-### Backend (AWS Lambda)
-
-```bash
-aws configure
-cd auth-server
-serverless deploy
-```
-
-API Endpoints:
-
-- `GET /api/get-auth-url` – Google sign-in URL  
-- `GET /api/token/{code}` – Exchange code for token  
-- `GET /api/get-events/{access_token}` – Fetch events  
+The app uses mock data and doesn't require backend deployment.
 
 ---
 

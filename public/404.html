@@ -4,83 +4,85 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Meet App - Page Not Found</title>
-    <link rel="manifest" href="/meet/manifest.json">
+    <meta name="theme-color" content="#764ba2">
+    <link rel="manifest" href="/manifest.json">
+    <link rel="icon" href="/favicon.ico">
     <style>
+        :root {
+            --primary: #764ba2;
+            --secondary: #667eea;
+        }
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             margin: 0;
             padding: 0;
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, var(--secondary) 0%, var(--primary) 100%);
             color: white;
         }
         .container {
             text-align: center;
             padding: 2rem;
             max-width: 600px;
-            margin: 0 auto;
         }
         h1 {
-            font-size: 4rem;
+            font-size: clamp(3rem, 10vw, 4rem);
             margin: 0;
-            opacity: 0.9;
-        }
-        h2 {
-            font-size: 1.5rem;
-            margin: 1rem 0;
-            opacity: 0.8;
-        }
-        p {
-            font-size: 1.1rem;
-            margin: 1rem 0;
-            opacity: 0.7;
         }
         .home-link {
             display: inline-block;
             margin-top: 2rem;
-            padding: 12px 24px;
-            background: rgba(255, 255, 255, 0.2);
+            padding: 0.75rem 1.5rem;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
             color: white;
             text-decoration: none;
-            border-radius: 6px;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            transition: all 0.3s ease;
+            border-radius: 50px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: transform 0.2s, background 0.2s;
         }
         .home-link:hover {
-            background: rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.25);
             transform: translateY(-2px);
         }
-    </style>
-    <script>
-        // Enhanced SPA redirection
-        document.addEventListener('DOMContentLoaded', () => {
-            const path = window.location.pathname.replace('/meet', '');
-            const search = window.location.search;
-            
-            if (path && !path.startsWith('/meet')) {
-                const redirectUrl = `/meet/${path}${search}`;
-                if (navigator.onLine) {
-                    window.location.replace(redirectUrl);
-                } else {
-                    document.querySelector('.container').innerHTML += `
-                        <p class="offline-message">
-                            You're offline. The requested page will load when you're back online.
-                        </p>
-                    `;
-                }
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --primary: #8a63c2;
+                --secondary: #7a8fea;
             }
-        });
-    </script>
+        }
+    </style>
 </head>
 <body>
     <div class="container">
         <h1>404</h1>
-        <h2>Page Not Found</h2>
-        <p>The page you're looking for doesn't exist or may have been moved.</p>
-        <a href="/meet/" class="home-link">Go to Meet App Home</a>
+        <p>We couldn't find that page</p>
+        <a href="/" class="home-link">Return Home</a>
     </div>
+
+    <script>
+        // Register service worker if available
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js')
+                    .catch(err => console.log('SW registration failed: ', err));
+            });
+        }
+
+        // SPA-style redirection
+        const currentPath = window.location.pathname;
+        if (currentPath.includes('/meet/')) {
+            const cleanPath = currentPath.replace('/meet', '');
+            if (cleanPath && cleanPath !== '/') {
+                const possibleRoutes = ['/meet', '/auth', '/schedule'];
+                if (possibleRoutes.some(route => cleanPath.startsWith(route))) {
+                    window.location.pathname = cleanPath;
+                }
+            }
+        }
+    </script>
 </body>
 </html>

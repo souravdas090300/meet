@@ -1,22 +1,18 @@
 {
   "name": "auth-server",
   "version": "1.0.0",
-  "description": "",
+  "description": "Authentication server for Meet app",
   "main": "handler.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
+  "dependencies": {
+    "googleapis": "^118.0.0"
+  },
   "author": "",
   "license": "ISC",
-  "type": "commonjs",
-  "dependencies": {
-    "cors": "^2.8.5",
-    "express": "^5.1.0",
-    "googleapis": "^118.0.0",
-    "serverless": "^3.40.0"
-  },
   "devDependencies": {
-    "serverless-bundle": "^6.3.1"
+    "serverless": "^4.17.2",
+    "serverless-offline": "^14.4.0"
   }
 }
