@@ -6,14 +6,19 @@ const CitySearch = ({ allLocations, setCurrentCity, setInfoAlert }) => {
   const [suggestions, setSuggestions] = useState([]);
 
   useEffect(() => {
-    setSuggestions(allLocations);
+    if (allLocations && Array.isArray(allLocations)) {
+      setSuggestions(allLocations);
+    } else {
+      setSuggestions([]);
+    }
   }, [allLocations]);
 
   const handleInputChanged = (event) => {
     const value = event.target.value;
-    const filteredLocations = allLocations ? 
+    const filteredLocations = (allLocations && Array.isArray(allLocations)) ? 
       allLocations.filter((location) => {
-        return location.toUpperCase().indexOf(value.toUpperCase()) > -1;
+        return location && typeof location === 'string' && 
+               location.toUpperCase().indexOf(value.toUpperCase()) > -1;
       }) : [];
 
     setQuery(value);
@@ -49,7 +54,8 @@ const CitySearch = ({ allLocations, setCurrentCity, setInfoAlert }) => {
       />
       {showSuggestions ? (
         <ul className="suggestions">
-          {suggestions.map((suggestion) => {
+          {suggestions && suggestions.length > 0 && suggestions.map((suggestion) => {
+            if (!suggestion || typeof suggestion !== 'string') return null;
             return (
               <li onClick={handleItemClicked} key={suggestion}>
                 {suggestion}

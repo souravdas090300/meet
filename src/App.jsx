@@ -25,9 +25,16 @@ function App() {
         }
 
         const allEvents = await getEvents();
+        
+        // Ensure allEvents is an array and has valid data
+        if (!allEvents || !Array.isArray(allEvents)) {
+          setErrorAlert('Invalid data received. Please try again later.');
+          return;
+        }
+
         const filteredEvents = currentCity === "See all cities" ? 
           allEvents : 
-          allEvents.filter(event => event.location === currentCity);
+          allEvents.filter(event => event && event.location === currentCity);
         
         setEvents(filteredEvents.slice(0, currentNOE));
         setAllLocations(extractLocations(allEvents));
@@ -67,7 +74,7 @@ function App() {
       </div>
 
       <div className="charts-container">
-        <EventChart events={events} />
+        {events && events.length > 0 && <EventChart events={events} />}
       </div>
       
       <EventList events={events} />
