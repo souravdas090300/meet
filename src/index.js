@@ -12,11 +12,11 @@ ReactDOM.createRoot(document.getElementById('root')).render(
 // Service Worker Registration for PWA
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
-    const swUrl = `${process.env.PUBLIC_URL}/sw.js`;
+    const swUrl = '/meet/sw.js';
     
-    navigator.serviceWorker.register(swUrl)
-      .then(() => {
-        console.log('Service Worker successfully registered');
+    navigator.serviceWorker.register(swUrl, { scope: '/meet/' })
+      .then((registration) => {
+        console.log('Service Worker successfully registered with scope:', registration.scope);
       })
       .catch(error => {
         console.error('Error during service worker registration:', error);
