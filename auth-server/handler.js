@@ -55,7 +55,7 @@ module.exports.getAccessToken = async (event) => {
   try {
     const code = decodeURIComponent(event.pathParameters.code);
     
-    const { tokens } = await oAuth2Client.getAccessToken(code);
+    const { tokens } = await oAuth2Client.getToken(code);
     
     return {
       statusCode: 200,
