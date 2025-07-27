@@ -162,7 +162,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/auth-server/dev/1753589528671-2025-07-27T04:12:08.671Z/auth-server.zip"
+          "S3Key": "serverless/auth-server/dev/1753590817661-2025-07-27T04:33:37.661Z/auth-server.zip"
         },
         "Handler": "handler.getAuthURL",
         "Runtime": "nodejs18.x",
@@ -282,7 +282,7 @@
         "GetAuthURLLambdaPermissionApiGateway"
       ]
     },
-    "ApiGatewayDeployment1753589519600": {
+    "ApiGatewayDeployment1753590809292": {
       "Type": "AWS::ApiGateway::Deployment",
       "Properties": {
         "RestApiId": {
