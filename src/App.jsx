@@ -1,3 +1,15 @@
+import React from 'react';
+
+
+function App() {
+  return (
+    <div>
+    </div>
+  );
+}
+
+
+
 import React, { useState, useEffect } from 'react';
 import CitySearch from './components/CitySearch';
 import EventList from './components/EventList';

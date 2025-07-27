@@ -17,7 +17,20 @@ const oAuth2Client = new google.auth.OAuth2(
   redirect_uris[0]
 );
 
-module.exports.getAuthURL = async () => {
+module.exports.getAuthURL = async (event) => {
+  // Handle preflight OPTIONS request
+  if (event.httpMethod === 'OPTIONS') {
+    return {
+      statusCode: 200,
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Headers": "Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token",
+        "Access-Control-Allow-Methods": "GET,OPTIONS"
+      },
+      body: ""
+    };
+  }
+
   try {
     const authUrl = oAuth2Client.generateAuthUrl({
       access_type: "offline",
@@ -52,6 +65,19 @@ module.exports.getAuthURL = async () => {
 };
 
 module.exports.getAccessToken = async (event) => {
+  // Handle preflight OPTIONS request
+  if (event.httpMethod === 'OPTIONS') {
+    return {
+      statusCode: 200,
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Headers": "Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token",
+        "Access-Control-Allow-Methods": "GET,OPTIONS"
+      },
+      body: ""
+    };
+  }
+
   try {
     const code = decodeURIComponent(event.pathParameters.code);
     
@@ -76,6 +102,61 @@ module.exports.getAccessToken = async (event) => {
       },
       body: JSON.stringify({
         error: "Failed to exchange code for token",
+        details: error.message
+      })
+    };
+  }
+};
+
+module.exports.getCalendarEvents = async (event) => {
+  // Handle preflight OPTIONS request
+  if (event.httpMethod === 'OPTIONS') {
+    return {
+      statusCode: 200,
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Headers": "Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token",
+        "Access-Control-Allow-Methods": "GET,OPTIONS"
+      },
+      body: ""
+    };
+  }
+
+  try {
+    const access_token = decodeURIComponent(event.pathParameters.access_token);
+    
+    oAuth2Client.setCredentials({ access_token });
+
+    const events = await calendar.events.list({
+      calendarId: CALENDAR_ID,
+      auth: oAuth2Client,
+      timeMin: (new Date()).toISOString(),
+      maxResults: 32,
+      singleEvents: true,
+      orderBy: "startTime",
+    });
+
+    return {
+      statusCode: 200,
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Credentials": true,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        events: events.data.items
+      })
+    };
+  } catch (error) {
+    console.error("Calendar events error:", error);
+    return {
+      statusCode: 500,
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        error: "Failed to fetch calendar events",
         details: error.message
       })
     };
