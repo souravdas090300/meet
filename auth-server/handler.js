@@ -50,3 +50,34 @@ module.exports.getAuthURL = async () => {
     };
   }
 };
+
+module.exports.getAccessToken = async (event) => {
+  try {
+    const code = decodeURIComponent(event.pathParameters.code);
+    
+    const { tokens } = await oAuth2Client.getAccessToken(code);
+    
+    return {
+      statusCode: 200,
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Credentials": true,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(tokens)
+    };
+  } catch (error) {
+    console.error("Token exchange error:", error);
+    return {
+      statusCode: 500,
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        error: "Failed to exchange code for token",
+        details: error.message
+      })
+    };
+  }
+};
