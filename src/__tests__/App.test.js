@@ -1,13 +1,50 @@
 import React from 'react';
-import { render, screen, within } from '@testing-library/react';
+import { render, screen, within, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import App from '../App.jsx';
 import NumberOfEvents from '../components/NumberOfEvents';
 import Event from '../components/Event';
 import CitySearch from '../components/CitySearch';
 import EventList from '../components/EventList';
 import mockData from '../mock-data';
+import { getEvents, extractLocations } from '../api';
+
+// Mock the API functions
+jest.mock('../api');
 
 describe('<App /> component tests', () => {
+  test('loads 32 events by default', async () => {
+    // Create mock events array - if mockData has less than 32, create 32 mock events
+    const mockEvents = mockData.length >= 32 ? 
+      [...mockData] : 
+      [...Array(35)].map((_, index) => ({
+        id: `event-${index}`,
+        summary: `Event ${index + 1}`,
+        location: 'Test Location',
+        created: new Date().toISOString(),
+        start: { dateTime: new Date().toISOString() }
+      }));
+
+    getEvents.mockResolvedValue(mockEvents);
+    extractLocations.mockReturnValue(['London, UK', 'Berlin, Germany']);
+
+    render(<App />);
+
+    // Wait for the event list to load
+    const eventList = await screen.findByRole('list');
+    await waitFor(() => {
+      const events = within(eventList).getAllByRole('listitem');
+      
+      if (mockEvents.length >= 32) {
+        // If there are 32 or more events, should render exactly 32 by default
+        expect(events).toHaveLength(32);
+      } else {
+        // If there are fewer than 32 events, render all available events
+        expect(events).toHaveLength(mockEvents.length);
+      }
+    });
+  });
+
   test('renders NumberOfEvents component', () => {
     const mockSetCurrentNOE = jest.fn();
     const mockSetErrorAlert = jest.fn();
