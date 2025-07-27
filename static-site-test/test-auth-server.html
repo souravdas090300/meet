@@ -1,104 +1,203 @@
 <!DOCTYPE html>
 <html lang="en">
- <head>
-   <meta charset="utf-8" />
-   <meta http-equiv="x-ua-compatible" content="ie=edge" />
-   <meta name="viewport" content="width=device-width, initial-scale=1" />
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="x-ua-compatible" content="ie=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Test Auth Server</title>
+  <style>
+    #container {
+      max-width: 500px;
+      margin: 0 auto;
+      padding: 20px;
+      font-family: Arial, sans-serif;
+    }
+    button {
+      padding: 8px 16px;
+      background: #2d3748;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #4a5568;
+    }
+    input {
+      padding: 8px;
+      width: 100%;
+      margin: 8px 0;
+      box-sizing: border-box;
+    }
+    #authURL {
+      display: block;
+      margin: 10px 0;
+      word-break: break-all;
+      color: #3182ce;
+    }
+    .error {
+      color: #e53e3e;
+    }
+    .success {
+      color: #38a169;
+    }
+    .hidden {
+      display: none;
+    }
+  </style>
+</head>
 
+<body>
+  <main id="container">
+    <h1>OAuth2 Test Client</h1>
+    
+    <!-- Step 1: Get Auth URL -->
+    <section>
+      <h2>Step 1: Get Authorization URL</h2>
+      <button id="getAuthUrlButton">Generate OAuth URL</button>
+      <p id="resultStatus" class="hidden"></p>
+      <a id="authURL" href="#" target="_blank" class="hidden">Authorization URL</a>
+      <p id="resultError" class="error hidden"></p>
+    </section>
 
-   <title>Test Auth Server</title>
- </head>
+    <!-- Step 2: Exchange Code for Token -->
+    <section>
+      <h2>Step 2: Exchange Code for Token</h2>
+      <label>
+        Authorization Code:
+        <input id="code" type="text" placeholder="Paste your authorization code here" />
+      </label>
+      <button id="getToken">Get Access Token</button>
+      <pre id="tokenResponse" class="hidden"></pre>
+      <p id="tokenError" class="error hidden"></p>
+    </section>
+  </main>
 
+  <script>
+    // API Configuration
+    const API_CONFIG = {
+      baseUrl: "https://pkpsfh72t5.execute-api.eu-central-1.amazonaws.com/dev",
+      endpoints: {
+        authUrl: "/api/get-auth-url",
+        token: "/api/get-auth-token"
+      }
+    };
 
- <body>
-   <style>
-     #container {
-       max-width: 500px;
-     }
-     h4 {
-       margin-top: 25px;
-     }
-   </style>
+    // DOM Elements
+    const elements = {
+      authUrlButton: document.getElementById("getAuthUrlButton"),
+      codeInput: document.getElementById("code"),
+      tokenButton: document.getElementById("getToken"),
+      resultStatus: document.getElementById("resultStatus"),
+      authLink: document.getElementById("authURL"),
+      resultError: document.getElementById("resultError"),
+      tokenResponse: document.getElementById("tokenResponse"),
+      tokenError: document.getElementById("tokenError")
+    };
 
+    // Helper Functions
+    function showElement(el, show = true) {
+      el.classList.toggle("hidden", !show);
+    }
 
-   <main id="container">
-     <h1>OAuth2 Test</h1>
-     <h4><b>Step 1:</b> Get the OAuth URL</h4>
-     <p>Click the button below to get your OAuth URL.</p>
-     <button id="getAuthUrlButton">Get OAuth URL</button>
-     <p id="result"></p>
-     <a id="authURL" href target="_blank">Click to authorize</a>
-     <!-- STEP 2 -- MAKE SURE STEP 1 WORKS BEFORE MOVING ON-->
+    function resetUI() {
+      showElement(elements.resultError, false);
+      showElement(elements.tokenError, false);
+    }
 
+    async function makeApiRequest(url, method = "GET", body = null) {
+      const headers = {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      };
 
-     <h4>Step 2: Get your code and exchange for an access token</h4>
-     <p>
-       After you’re redirected back to your Meet app on GitHub, copy the code
-       from the URI.
-     </p>
-     <br />
-     <label
-       >Code input
-       <input id="code" type="text" value="" />
-     </label>
-     <button id="getToken">Get Token</button>
-     <p id="accessToken"></p>
-   </main>
-   <script type="text/javascript">
-     // --------------------- STEP 1
-     const getAuthUrlButton = document.getElementById("getAuthUrlButton");
-     const resultElement = document.getElementById("result");
-     const resultLink = document.getElementById("authURL");
-     // Replace this with your own endpoint
-     const getAuthURL =
-       "https://pkpsfh72t5.execute-api.eu-central-1.amazonaws.com/dev/api/get-auth-url";
+      const config = {
+        method,
+        headers,
+        mode: 'cors'
+      };
 
+      if (body) {
+        config.body = JSON.stringify(body);
+      }
 
-     getAuthUrlButton.onclick = function () {
-       fetch(getAuthURL)
-         .then(function (response) {
-           return response.json();
-         })
-         .then(function (json) {
-           const result = JSON.stringify(json);
-           // we get the value of authUrl
-           const { authUrl } = JSON.parse(result);
-           // then add it to the html
-           resultElement.innerText = result;
-           resultLink.href = authUrl;
-         });
-     };
-     // --------------------- END OF STEP 1
+      const response = await fetch(url, config);
 
+      if (!response.ok) {
+        let errorMsg;
+        try {
+          const errorData = await response.json();
+          errorMsg = errorData.message || response.statusText;
+        } catch {
+          errorMsg = await response.text();
+        }
+        throw new Error(`API Error (${response.status}): ${errorMsg}`);
+      }
 
-     // --------------------- STEP 2
-     const codeValue = document.getElementById("code");
-     const getAccessToken = document.getElementById("getToken");
-     const accessTokenElement = document.getElementById("accessToken");
-     const getToken =
-       "YOUR_LAMBDA_GET_TOKEN_ENDPOINT";
+      return response.json();
+    }
 
+    // Event Handlers
+    elements.authUrlButton.addEventListener("click", async () => {
+      resetUI();
+      showElement(elements.resultStatus);
+      elements.resultStatus.textContent = "Requesting authorization URL...";
+      elements.resultStatus.className = "";
 
-     getAccessToken.onclick = function () {
-       let code = codeValue.value;
+      try {
+        const data = await makeApiRequest(
+          `${API_CONFIG.baseUrl}${API_CONFIG.endpoints.authUrl}`
+        );
 
+        if (!data.authUrl) {
+          throw new Error("No authorization URL returned from server");
+        }
 
-       // if the authorization code is not URL-encoded, then URL-encode it.
-       if (decodeURIComponent(code) === code) {
-         code = encodeURIComponent(codeValue.value);
-       }
-       const getTokenRequest = getToken +  "/" + code;
-       fetch(getTokenRequest)
-         .then(function (response) {
-           return response.json();
-         })
-         .then(function (json) {
-           accessTokenElement.innerText = JSON.stringify(json);
-         });
-     };
-     // --------------------- END OF STEP 2
+        elements.authLink.href = data.authUrl;
+        elements.authLink.textContent = data.authUrl;
+        showElement(elements.authLink);
+        
+        elements.resultStatus.textContent = "Success! Click the URL above to authorize.";
+        elements.resultStatus.className = "success";
+      } catch (error) {
+        console.error("Authorization URL Error:", error);
+        elements.resultError.textContent = error.message;
+        showElement(elements.resultError);
+        elements.resultStatus.className = "error";
+      }
+    });
 
+    elements.tokenButton.addEventListener("click", async () => {
+      resetUI();
+      const code = elements.codeInput.value.trim();
 
-   </script>
- </body>
+      if (!code) {
+        elements.tokenError.textContent = "Please enter an authorization code";
+        showElement(elements.tokenError);
+        return;
+      }
+
+      showElement(elements.tokenResponse);
+      elements.tokenResponse.textContent = "Processing...";
+      elements.tokenResponse.className = "";
+
+      try {
+        const encodedCode = encodeURIComponent(code);
+        const data = await makeApiRequest(
+          `${API_CONFIG.baseUrl}${API_CONFIG.endpoints.token}/${encodedCode}`
+        );
+
+        elements.tokenResponse.textContent = JSON.stringify(data, null, 2);
+        elements.tokenResponse.className = "success";
+      } catch (error) {
+        console.error("Token Exchange Error:", error);
+        elements.tokenError.textContent = error.message;
+        showElement(elements.tokenError);
+        elements.tokenResponse.className = "error";
+      }
+    });
+  </script>
+</body>
 </html>
+
+
