@@ -8,12 +8,13 @@
       "name": "aws",
       "runtime": "nodejs18.x",
       "region": "eu-central-1",
-      "stage": "dev",
+      "timeout": 30,
       "environment": {
         "CLIENT_ID": "961599722416-tiplg88mr59klc33o1rp27vhp3goee8t.apps.googleusercontent.com",
         "CLIENT_SECRET": "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",
         "CALENDAR_ID": "fullstackwebdev@careerfoundry.com"
       },
+      "stage": "dev",
       "versionFunctions": true,
       "compiledCloudFormationTemplate": {
         "AWSTemplateFormatVersion": "2010-09-09",
@@ -92,12 +93,6 @@
             "Type": "AWS::Logs::LogGroup",
             "Properties": {
               "LogGroupName": "/aws/lambda/auth-server-dev-getAuthURL"
-            }
-          },
-          "OauthCallbackLogGroup": {
-            "Type": "AWS::Logs::LogGroup",
-            "Properties": {
-              "LogGroupName": "/aws/lambda/auth-server-dev-oauthCallback"
             }
           },
           "IamRoleLambdaExecution": {
@@ -185,13 +180,13 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/auth-server/dev/1753544480152-2025-07-26T15:41:20.152Z/auth-server.zip"
+                "S3Key": "serverless/auth-server/dev/1753589528671-2025-07-27T04:12:08.671Z/auth-server.zip"
               },
               "Handler": "handler.getAuthURL",
               "Runtime": "nodejs18.x",
               "FunctionName": "auth-server-dev-getAuthURL",
               "MemorySize": 1024,
-              "Timeout": 6,
+              "Timeout": 30,
               "Environment": {
                 "Variables": {
                   "CLIENT_ID": "961599722416-tiplg88mr59klc33o1rp27vhp3goee8t.apps.googleusercontent.com",
@@ -210,56 +205,14 @@
               "GetAuthURLLogGroup"
             ]
           },
-          "OauthCallbackLambdaFunction": {
-            "Type": "AWS::Lambda::Function",
-            "Properties": {
-              "Code": {
-                "S3Bucket": {
-                  "Ref": "ServerlessDeploymentBucket"
-                },
-                "S3Key": "serverless/auth-server/dev/1753544480152-2025-07-26T15:41:20.152Z/auth-server.zip"
-              },
-              "Handler": "handler.oauthCallback",
-              "Runtime": "nodejs18.x",
-              "FunctionName": "auth-server-dev-oauthCallback",
-              "MemorySize": 1024,
-              "Timeout": 6,
-              "Environment": {
-                "Variables": {
-                  "CLIENT_ID": "961599722416-tiplg88mr59klc33o1rp27vhp3goee8t.apps.googleusercontent.com",
-                  "CLIENT_SECRET": "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",
-                  "CALENDAR_ID": "fullstackwebdev@careerfoundry.com"
-                }
-              },
-              "Role": {
-                "Fn::GetAtt": [
-                  "IamRoleLambdaExecution",
-                  "Arn"
-                ]
-              }
-            },
-            "DependsOn": [
-              "OauthCallbackLogGroup"
-            ]
-          },
-          "GetAuthURLLambdaVersion65oCBgaZ38ZdYi695JiEtcAYKoI0kTDTAHr5VTUnVw": {
+          "GetAuthURLLambdaVersionS8ZZB0xTMzU7dS21qvgkdB3ABWT60gAnB7oouzqXk": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "GetAuthURLLambdaFunction"
               },
-              "CodeSha256": "hx60cEHHH8n/Va1cndGjLy3RL00WzxMlqBLOI4AvOD8="
-            }
-          },
-          "OauthCallbackLambdaVersionNNxDrvr8hhOr9xgVlK6UDqKSf1do0U7sg1bY2Iimtas": {
-            "Type": "AWS::Lambda::Version",
-            "DeletionPolicy": "Retain",
-            "Properties": {
-              "FunctionName": {
-                "Ref": "OauthCallbackLambdaFunction"
-              },
-              "CodeSha256": "hx60cEHHH8n/Va1cndGjLy3RL00WzxMlqBLOI4AvOD8="
+              "CodeSha256": "NHOfUstUSUWwZXH4fOOcMZIs4mYfD0lXvLHTZhTDFXs="
             }
           },
           "ApiGatewayRestApi": {
@@ -296,120 +249,6 @@
                 "Ref": "ApiGatewayResourceApi"
               },
               "PathPart": "get-auth-url",
-              "RestApiId": {
-                "Ref": "ApiGatewayRestApi"
-              }
-            }
-          },
-          "ApiGatewayResourceApiAuth": {
-            "Type": "AWS::ApiGateway::Resource",
-            "Properties": {
-              "ParentId": {
-                "Ref": "ApiGatewayResourceApi"
-              },
-              "PathPart": "auth",
-              "RestApiId": {
-                "Ref": "ApiGatewayRestApi"
-              }
-            }
-          },
-          "ApiGatewayResourceApiAuthCallback": {
-            "Type": "AWS::ApiGateway::Resource",
-            "Properties": {
-              "ParentId": {
-                "Ref": "ApiGatewayResourceApiAuth"
-              },
-              "PathPart": "callback",
-              "RestApiId": {
-                "Ref": "ApiGatewayRestApi"
-              }
-            }
-          },
-          "ApiGatewayMethodApiGetDashauthDashurlOptions": {
-            "Type": "AWS::ApiGateway::Method",
-            "Properties": {
-              "AuthorizationType": "NONE",
-              "HttpMethod": "OPTIONS",
-              "MethodResponses": [
-                {
-                  "StatusCode": "200",
-                  "ResponseParameters": {
-                    "method.response.header.Access-Control-Allow-Origin": true,
-                    "method.response.header.Access-Control-Allow-Headers": true,
-                    "method.response.header.Access-Control-Allow-Methods": true
-                  },
-                  "ResponseModels": {}
-                }
-              ],
-              "RequestParameters": {},
-              "Integration": {
-                "Type": "MOCK",
-                "RequestTemplates": {
-                  "application/json": "{statusCode:200}"
-                },
-                "ContentHandling": "CONVERT_TO_TEXT",
-                "IntegrationResponses": [
-                  {
-                    "StatusCode": "200",
-                    "ResponseParameters": {
-                      "method.response.header.Access-Control-Allow-Origin": "'*'",
-                      "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent,X-Amzn-Trace-Id'",
-                      "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,GET'"
-                    },
-                    "ResponseTemplates": {
-                      "application/json": ""
-                    }
-                  }
-                ]
-              },
-              "ResourceId": {
-                "Ref": "ApiGatewayResourceApiGetDashauthDashurl"
-              },
-              "RestApiId": {
-                "Ref": "ApiGatewayRestApi"
-              }
-            }
-          },
-          "ApiGatewayMethodApiAuthCallbackOptions": {
-            "Type": "AWS::ApiGateway::Method",
-            "Properties": {
-              "AuthorizationType": "NONE",
-              "HttpMethod": "OPTIONS",
-              "MethodResponses": [
-                {
-                  "StatusCode": "200",
-                  "ResponseParameters": {
-                    "method.response.header.Access-Control-Allow-Origin": true,
-                    "method.response.header.Access-Control-Allow-Headers": true,
-                    "method.response.header.Access-Control-Allow-Methods": true
-                  },
-                  "ResponseModels": {}
-                }
-              ],
-              "RequestParameters": {},
-              "Integration": {
-                "Type": "MOCK",
-                "RequestTemplates": {
-                  "application/json": "{statusCode:200}"
-                },
-                "ContentHandling": "CONVERT_TO_TEXT",
-                "IntegrationResponses": [
-                  {
-                    "StatusCode": "200",
-                    "ResponseParameters": {
-                      "method.response.header.Access-Control-Allow-Origin": "'*'",
-                      "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent,X-Amzn-Trace-Id'",
-                      "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,GET'"
-                    },
-                    "ResponseTemplates": {
-                      "application/json": ""
-                    }
-                  }
-                ]
-              },
-              "ResourceId": {
-                "Ref": "ApiGatewayResourceApiAuthCallback"
-              },
               "RestApiId": {
                 "Ref": "ApiGatewayRestApi"
               }
@@ -461,53 +300,7 @@
               "GetAuthURLLambdaPermissionApiGateway"
             ]
           },
-          "ApiGatewayMethodApiAuthCallbackGet": {
-            "Type": "AWS::ApiGateway::Method",
-            "Properties": {
-              "HttpMethod": "GET",
-              "RequestParameters": {},
-              "ResourceId": {
-                "Ref": "ApiGatewayResourceApiAuthCallback"
-              },
-              "RestApiId": {
-                "Ref": "ApiGatewayRestApi"
-              },
-              "ApiKeyRequired": false,
-              "AuthorizationType": "NONE",
-              "Integration": {
-                "IntegrationHttpMethod": "POST",
-                "Type": "AWS_PROXY",
-                "Uri": {
-                  "Fn::Join": [
-                    "",
-                    [
-                      "arn:",
-                      {
-                        "Ref": "AWS::Partition"
-                      },
-                      ":apigateway:",
-                      {
-                        "Ref": "AWS::Region"
-                      },
-                      ":lambda:path/2015-03-31/functions/",
-                      {
-                        "Fn::GetAtt": [
-                          "OauthCallbackLambdaFunction",
-                          "Arn"
-                        ]
-                      },
-                      "/invocations"
-                    ]
-                  ]
-                }
-              },
-              "MethodResponses": []
-            },
-            "DependsOn": [
-              "OauthCallbackLambdaPermissionApiGateway"
-            ]
-          },
-          "ApiGatewayDeployment1753544473012": {
+          "ApiGatewayDeployment1753589519600": {
             "Type": "AWS::ApiGateway::Deployment",
             "Properties": {
               "RestApiId": {
@@ -516,10 +309,7 @@
               "StageName": "dev"
             },
             "DependsOn": [
-              "ApiGatewayMethodApiGetDashauthDashurlOptions",
-              "ApiGatewayMethodApiAuthCallbackOptions",
-              "ApiGatewayMethodApiGetDashauthDashurlGet",
-              "ApiGatewayMethodApiAuthCallbackGet"
+              "ApiGatewayMethodApiGetDashauthDashurlGet"
             ]
           },
           "GetAuthURLLambdaPermissionApiGateway": {
@@ -528,43 +318,6 @@
               "FunctionName": {
                 "Fn::GetAtt": [
                   "GetAuthURLLambdaFunction",
-                  "Arn"
-                ]
-              },
-              "Action": "lambda:InvokeFunction",
-              "Principal": "apigateway.amazonaws.com",
-              "SourceArn": {
-                "Fn::Join": [
-                  "",
-                  [
-                    "arn:",
-                    {
-                      "Ref": "AWS::Partition"
-                    },
-                    ":execute-api:",
-                    {
-                      "Ref": "AWS::Region"
-                    },
-                    ":",
-                    {
-                      "Ref": "AWS::AccountId"
-                    },
-                    ":",
-                    {
-                      "Ref": "ApiGatewayRestApi"
-                    },
-                    "/*/*"
-                  ]
-                ]
-              }
-            }
-          },
-          "OauthCallbackLambdaPermissionApiGateway": {
-            "Type": "AWS::Lambda::Permission",
-            "Properties": {
-              "FunctionName": {
-                "Fn::GetAtt": [
-                  "OauthCallbackLambdaFunction",
                   "Arn"
                 ]
               },
@@ -609,19 +362,10 @@
           "GetAuthURLLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "GetAuthURLLambdaVersion65oCBgaZ38ZdYi695JiEtcAYKoI0kTDTAHr5VTUnVw"
+              "Ref": "GetAuthURLLambdaVersionS8ZZB0xTMzU7dS21qvgkdB3ABWT60gAnB7oouzqXk"
             },
             "Export": {
               "Name": "sls-auth-server-dev-GetAuthURLLambdaFunctionQualifiedArn"
-            }
-          },
-          "OauthCallbackLambdaFunctionQualifiedArn": {
-            "Description": "Current Lambda function version",
-            "Value": {
-              "Ref": "OauthCallbackLambdaVersionNNxDrvr8hhOr9xgVlK6UDqKSf1do0U7sg1bY2Iimtas"
-            },
-            "Export": {
-              "Name": "sls-auth-server-dev-OauthCallbackLambdaFunctionQualifiedArn"
             }
           },
           "ServiceEndpoint": {
@@ -736,9 +480,6 @@
       },
       "vpc": {}
     },
-    "plugins": [
-      "serverless-offline"
-    ],
     "pluginsData": {},
     "functions": {
       "getAuthURL": {
@@ -748,23 +489,6 @@
             "http": {
               "path": "api/get-auth-url",
               "method": "get",
-              "cors": {
-                "origin": "*",
-                "methods": [
-                  "OPTIONS",
-                  "GET"
-                ],
-                "headers": [
-                  "Content-Type",
-                  "X-Amz-Date",
-                  "Authorization",
-                  "X-Api-Key",
-                  "X-Amz-Security-Token",
-                  "X-Amz-User-Agent",
-                  "X-Amzn-Trace-Id"
-                ],
-                "allowCredentials": false
-              },
               "integration": "AWS_PROXY"
             }
           }
@@ -772,72 +496,21 @@
         "name": "auth-server-dev-getAuthURL",
         "package": {},
         "memory": 1024,
-        "timeout": 6,
+        "timeout": 30,
         "runtime": "nodejs18.x",
         "vpc": {},
-        "versionLogicalId": "GetAuthURLLambdaVersion65oCBgaZ38ZdYi695JiEtcAYKoI0kTDTAHr5VTUnVw"
-      },
-      "oauthCallback": {
-        "handler": "handler.oauthCallback",
-        "events": [
-          {
-            "http": {
-              "path": "api/auth/callback",
-              "method": "get",
-              "cors": {
-                "origin": "*",
-                "methods": [
-                  "OPTIONS",
-                  "GET"
-                ],
-                "headers": [
-                  "Content-Type",
-                  "X-Amz-Date",
-                  "Authorization",
-                  "X-Api-Key",
-                  "X-Amz-Security-Token",
-                  "X-Amz-User-Agent",
-                  "X-Amzn-Trace-Id"
-                ],
-                "allowCredentials": false
-              },
-              "integration": "AWS_PROXY"
-            }
-          }
-        ],
-        "name": "auth-server-dev-oauthCallback",
-        "package": {},
-        "memory": 1024,
-        "timeout": 6,
-        "runtime": "nodejs18.x",
-        "vpc": {},
-        "versionLogicalId": "OauthCallbackLambdaVersionNNxDrvr8hhOr9xgVlK6UDqKSf1do0U7sg1bY2Iimtas"
+        "versionLogicalId": "GetAuthURLLambdaVersionS8ZZB0xTMzU7dS21qvgkdB3ABWT60gAnB7oouzqXk"
       }
     },
     "configValidationMode": "warn",
     "serviceFilename": "serverless.yml",
     "initialServerlessConfig": {
       "service": "auth-server",
-      "frameworkVersion": "3",
       "provider": {
         "$ref": "$[\"service\"][\"provider\"]"
       },
       "functions": {
         "$ref": "$[\"service\"][\"functions\"]"
-      },
-      "plugins": {
-        "$ref": "$[\"service\"][\"plugins\"]"
-      },
-      "package": {
-        "exclude": [
-          "config.json",
-          "node_modules/**",
-          ".gitignore",
-          ".git/**"
-        ],
-        "artifactsS3KeyDirname": "serverless/auth-server/dev/code-artifacts",
-        "artifact": "C:\\Users\\dasau\\meet\\auth-server\\.serverless\\auth-server.zip",
-        "artifactDirectoryName": "serverless/auth-server/dev/1753544480152-2025-07-26T15:41:20.152Z"
       }
     },
     "layers": {},
@@ -845,7 +518,7 @@
     "artifact": "C:\\Users\\dasau\\meet\\auth-server\\.serverless\\auth-server.zip"
   },
   "package": {
-    "artifactDirectoryName": "serverless/auth-server/dev/1753544480152-2025-07-26T15:41:20.152Z",
+    "artifactDirectoryName": "serverless/auth-server/dev/1753589528671-2025-07-27T04:12:08.671Z",
     "artifact": "auth-server.zip"
   }
 }
