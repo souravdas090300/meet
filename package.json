@@ -14,6 +14,7 @@
     "@babel/preset-react": "^7.27.1",
     "@testing-library/jest-dom": "^6.6.4",
     "@testing-library/react": "^16.3.0",
+    "@testing-library/user-event": "^14.6.1",
     "@vitejs/plugin-react-swc": "^3.5.0",
     "babel-jest": "^30.0.5",
     "identity-obj-proxy": "^3.0.0",
@@ -26,7 +27,9 @@
     "build": "vite build",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
-    "start": "vite"
+    "start": "vite",
+    "test": "jest",
+    "test:watch": "jest --watch"
   },
   "browserslist": {
     "production": [

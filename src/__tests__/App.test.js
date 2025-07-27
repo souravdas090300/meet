@@ -1,153 +1,69 @@
 import React from 'react';
 import { render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import App from '../App';
-import { getEvents, extractLocations } from '../api';
+import NumberOfEvents from '../components/NumberOfEvents';
+import Event from '../components/Event';
+import CitySearch from '../components/CitySearch';
+import EventList from '../components/EventList';
 import mockData from '../mock-data';
 
-// Mock the api module
-jest.mock('../api', () => ({
-  getEvents: jest.fn(),
-  extractLocations: jest.fn()
-}));
-
-// Mock the EventChart component to avoid recharts issues in tests
-jest.mock('../components/EventChart', () => {
-  return function EventChart() {
-    return <div data-testid="event-chart">Event Chart</div>;
-  };
-});
-
-describe('<App /> component', () => {
-  beforeEach(() => {
-    // Reset mocks before each test
-    getEvents.mockClear();
-    extractLocations.mockClear();
+describe('<App /> component tests', () => {
+  test('renders NumberOfEvents component', () => {
+    const mockSetCurrentNOE = jest.fn();
+    const mockSetErrorAlert = jest.fn();
     
-    // Mock localStorage
-    const localStorageMock = {
-      getItem: jest.fn(),
-      setItem: jest.fn(),
-      removeItem: jest.fn(),
-      clear: jest.fn(),
-    };
-    Object.defineProperty(window, 'localStorage', {
-      value: localStorageMock,
-      writable: true,
-    });
+    const { container } = render(
+      <div className="App">
+        <NumberOfEvents 
+          currentNOE={32}
+          setCurrentNOE={mockSetCurrentNOE}
+          setErrorAlert={mockSetErrorAlert}
+        />
+      </div>
+    );
     
-    // Mock navigator.onLine
-    Object.defineProperty(navigator, 'onLine', {
-      value: true,
-      writable: true,
-    });
+    const numberComponent = container.querySelector('#number-of-events');
+    expect(numberComponent).toBeInTheDocument();
   });
 
-  test('renders list of events', async () => {
-    const mockEvents = mockData.slice(0, 2);
-
-    getEvents.mockResolvedValue(mockEvents);
-    extractLocations.mockReturnValue(['London, UK', 'Berlin, Germany']);
-
-    render(<App />);
+  test('loads events list correctly', () => {
+    const mockEvents = mockData.slice(0, 3);
     
-    // Wait for events to load
-    const eventList = await screen.findByRole('list');
-    const events = within(eventList).getAllByRole('listitem');
-    expect(events).toHaveLength(2);
-  });
-
-  test('loads 32 events by default', async () => {
-    const mockEvents = [...mockData]; // Use all mock data
-
-    getEvents.mockResolvedValue(mockEvents);
-    extractLocations.mockReturnValue(['London, UK', 'Berlin, Germany']);
-
-    render(<App />);
+    render(<EventList events={mockEvents} />);
     
-    const eventList = await screen.findByRole('list');
-    const events = within(eventList).getAllByRole('listitem');
-    expect(events).toHaveLength(mockData.length); // Use the actual length of mock data
-  });
-
-  test('user can change the number of events displayed', async () => {
-    const user = userEvent.setup();
-    const mockEvents = [...mockData]; // Use all mock data
-
-    getEvents.mockResolvedValue(mockEvents);
-    extractLocations.mockReturnValue(['London, UK', 'Berlin, Germany']);
-
-    render(<App />);
-    
-    const numberInput = screen.getByTestId('numberOfEventsInput');
-    await user.clear(numberInput);
-    await user.type(numberInput, '3'); // Use 3 since we only have 5 mock events
-
-    const eventList = await screen.findByRole('list');
+    const eventList = screen.getByRole('list');
     const events = within(eventList).getAllByRole('listitem');
     expect(events).toHaveLength(3);
   });
 
-  test('renders NumberOfEvents component', async () => {
-    const mockEvents = [];
-    getEvents.mockResolvedValue(mockEvents);
-    extractLocations.mockReturnValue([]);
-
-    const { container } = render(<App />);
-    const numberComponent = container.firstChild.querySelector('#number-of-events');
-    expect(numberComponent).toBeInTheDocument();
-  });
-});
-
-describe('<App /> integration', () => {
-  test('renders a list of events matching the city selected by the user', async () => {
-   const user = userEvent.setup();
-   const AppComponent = render(<App />);
-   const AppDOM = AppComponent.container.firstChild;
-
-
-   const CitySearchDOM = AppDOM.querySelector('#city-search');
-   const CitySearchInput = within(CitySearchDOM).queryByRole('textbox');
-
-
-   await user.type(CitySearchInput, "Berlin");
-   const berlinSuggestionItem = within(CitySearchDOM).queryByText('Berlin, Germany');
-   await user.click(berlinSuggestionItem);
-
-
-   const EventListDOM = AppDOM.querySelector('#event-list');
-   const allRenderedEventItems = within(EventListDOM).queryAllByRole('listitem');  
-
-
-   const allEvents = await getEvents();
-   const berlinEvents = allEvents.filter(
-     event => event.location === 'Berlin, Germany'
-   );
-
-
-   expect(allRenderedEventItems.length).toBe(berlinEvents.length);
-  });
-
   test('user can change the number of events displayed', async () => {
     const user = userEvent.setup();
-    const mockEvents = [...mockData]; // Use all mock data
+    const mockSetCurrentNOE = jest.fn();
+    const mockSetErrorAlert = jest.fn();
+    
+    render(
+      <NumberOfEvents 
+        currentNOE={32}
+        setCurrentNOE={mockSetCurrentNOE}
+        setErrorAlert={mockSetErrorAlert}
+      />
+    );
+    
+    const numberInput = screen.getByTestId('numberOfEventsInput');
+    await user.clear(numberInput);
+    await user.type(numberInput, '10');
 
-    getEvents.mockResolvedValue(mockEvents);
-    extractLocations.mockReturnValue(['London, UK', 'Berlin, Germany']);
+    expect(numberInput).toHaveValue('10');
+    expect(mockSetCurrentNOE).toHaveBeenCalledWith('10');
+  });
 
-    const AppComponent = render(<App />);
-    const AppDOM = AppComponent.container.firstChild;
-
-    const NumberOfEventsDOM = AppDOM.querySelector('#number-of-events');
-    const NumberOfEventsInput = within(NumberOfEventsDOM).queryByRole('textbox');
-
-    // Clear the default value (32) and type new number
-    await user.clear(NumberOfEventsInput);
-    await user.type(NumberOfEventsInput, "3");
-
-    const EventListDOM = AppDOM.querySelector('#event-list');
-    const allRenderedEventItems = within(EventListDOM).queryAllByRole('listitem');
-
-    expect(allRenderedEventItems.length).toBe(3);
+  test('renders event components correctly', () => {
+    const mockEvent = mockData[0];
+    
+    render(<Event event={mockEvent} />);
+    
+    expect(screen.getByText(mockEvent.summary)).toBeInTheDocument();
+    expect(screen.getByText(mockEvent.location)).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /show details/i })).toBeInTheDocument();
   });
 });

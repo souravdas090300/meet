@@ -51,58 +51,62 @@ const EventChart = ({ events }) => {
 
   return (
     <div className="charts-container">
-      {cityData && cityData.length > 0 && (
-        <>
-          {/* Bar chart showing number of events by city */}
-          <div className="chart">
-            <h2>Number of Upcoming Events by City</h2>
-            <ResponsiveContainer width="100%" height={400}>
-              <BarChart
-                data={cityData}
-                margin={{
-                  top: 20,
-                  right: 20,
-                  bottom: 20,
-                  left: 20,
-                }}
-              >
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="city" />
-                <YAxis />
-                <Tooltip />
-                <Bar dataKey="count" fill="#8884d8" />
-              </BarChart>
-            </ResponsiveContainer>
-          </div>
+      {/* Bar chart showing number of events by city */}
+      <div className="chart">
+        <h2>Number of Upcoming Events by City</h2>
+        {cityData && cityData.length > 0 ? (
+          <ResponsiveContainer width="100%" height={400}>
+            <BarChart
+              data={cityData}
+              margin={{
+                top: 20,
+                right: 20,
+                bottom: 20,
+                left: 20,
+              }}
+            >
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="city" />
+              <YAxis />
+              <Tooltip />
+              <Bar dataKey="count" fill="#8884d8" />
+            </BarChart>
+          </ResponsiveContainer>
+        ) : (
+          <p>No data available</p>
+        )}
+      </div>
 
-          {/* Scatter plot showing events distribution */}
-          <div className="chart">
-            <h2>Events Distribution (Scatter Plot)</h2>
-            <ResponsiveContainer width="100%" height={400}>
-              <ScatterChart
-                data={cityData}
-                margin={{
-                  top: 20,
-                  right: 20,
-                  bottom: 20,
-                  left: 20,
-                }}
-              >
-                <CartesianGrid />
-                <XAxis type="category" dataKey="city" name="City" />
-                <YAxis type="number" dataKey="count" name="Number of events" />
-                <Tooltip cursor={{ strokeDasharray: '3 3' }} />
-                <Scatter data={cityData} fill="#8884d8" />
-              </ScatterChart>
-            </ResponsiveContainer>
-          </div>
-        </>
-      )}
+      {/* Scatter plot showing events distribution */}
+      <div className="chart">
+        <h2>Events Distribution (Scatter Plot)</h2>
+        {cityData && cityData.length > 0 ? (
+          <ResponsiveContainer width="100%" height={400}>
+            <ScatterChart
+              data={cityData}
+              margin={{
+                top: 20,
+                right: 20,
+                bottom: 20,
+                left: 20,
+              }}
+            >
+              <CartesianGrid />
+              <XAxis type="category" dataKey="city" name="City" />
+              <YAxis type="number" dataKey="count" name="Number of events" />
+              <Tooltip cursor={{ strokeDasharray: '3 3' }} />
+              <Scatter data={cityData} fill="#8884d8" />
+            </ScatterChart>
+          </ResponsiveContainer>
+        ) : (
+          <p>No data available</p>
+        )}
+      </div>
 
       {/* Pie chart showing distribution of technologies */}
-      {techData && techData.length > 0 && (
-        <div className="chart">
-          <h2>Events by Genre</h2>
+      <div className="chart">
+        <h2>Events by Genre</h2>
+        {techData && techData.length > 0 ? (
           <ResponsiveContainer width="100%" height={400}>
             <PieChart>
               <Pie
@@ -122,8 +126,10 @@ const EventChart = ({ events }) => {
               <Tooltip />
             </PieChart>
           </ResponsiveContainer>
-        </div>
-      )}
+        ) : (
+          <p>No data available</p>
+        )}
+      </div>
     </div>
   );
 };
