@@ -13,17 +13,15 @@ import { getEvents, extractLocations } from '../api';
 jest.mock('../api');
 
 describe('<App /> component tests', () => {
-  test('loads 32 events by default', async () => {
-    // Create mock events array - if mockData has less than 32, create 32 mock events
-    const mockEvents = mockData.length >= 32 ? 
-      [...mockData] : 
-      [...Array(35)].map((_, index) => ({
-        id: `event-${index}`,
-        summary: `Event ${index + 1}`,
-        location: 'Test Location',
-        created: new Date().toISOString(),
-        start: { dateTime: new Date().toISOString() }
-      }));
+  test('loads 32 events by default when mockEvents is 32 or bigger', async () => {
+    // Create mock events array with 35 events (more than 32)
+    const mockEvents = [...Array(35)].map((_, index) => ({
+      id: `event-${index}`,
+      summary: `Event ${index + 1}`,
+      location: 'Test Location',
+      created: new Date().toISOString(),
+      start: { dateTime: new Date().toISOString() }
+    }));
 
     getEvents.mockResolvedValue(mockEvents);
     extractLocations.mockReturnValue(['London, UK', 'Berlin, Germany']);
@@ -34,14 +32,26 @@ describe('<App /> component tests', () => {
     const eventList = await screen.findByRole('list');
     await waitFor(() => {
       const events = within(eventList).getAllByRole('listitem');
-      
-      if (mockEvents.length >= 32) {
-        // If there are 32 or more events, should render exactly 32 by default
-        expect(events).toHaveLength(32);
-      } else {
-        // If there are fewer than 32 events, render all available events
-        expect(events).toHaveLength(mockEvents.length);
-      }
+      // If there are 32 or more events, should render exactly 32 by default
+      expect(events).toHaveLength(32);
+    });
+  });
+
+  test('renders all events when mockEvents is less than 32', async () => {
+    // Use the actual mockData which has only 5 events (less than 32)
+    const mockEvents = [...mockData];
+
+    getEvents.mockResolvedValue(mockEvents);
+    extractLocations.mockReturnValue(['London, UK', 'Berlin, Germany']);
+
+    render(<App />);
+
+    // Wait for the event list to load
+    const eventList = await screen.findByRole('list');
+    await waitFor(() => {
+      const events = within(eventList).getAllByRole('listitem');
+      // If there are fewer than 32 events, render all available events
+      expect(events).toHaveLength(mockEvents.length); // Should be 5
     });
   });
 
