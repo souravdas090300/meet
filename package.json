@@ -34,7 +34,8 @@
     "test": "jest",
     "test:watch": "jest --watch",
     "test:e2e": "jest --config=jest.e2e.config.cjs",
-    "test:all": "npm run test && npm run test:e2e"
+    "test:all": "npm run test && npm run test:e2e",
+    "deploy": "npm run build && vercel --prod"
   },
   "browserslist": {
     "production": [
