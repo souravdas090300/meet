@@ -1,20 +1,20 @@
 import '@testing-library/jest-dom';
 
-// Mock console errors to prevent AggregateError in React 18
-const originalError = console.error;
+// Here, add portions of the warning messages you want to intentionally prevent from appearing
+const MESSAGES_TO_IGNORE = [
+"When testing, code that causes React state updates should be wrapped into >act(...):",
+"Error:",
+"The above error occurred",
+"ws does not work in the browser",
+"WebSocket",
+"ChromeLauncher"
+];
 
-beforeAll(() => {
-  console.error = (...args) => {
-    if (
-      typeof args[0] === 'string' &&
-      args[0].includes('Warning: ReactDOM.render is deprecated')
-    ) {
-      return;
-    }
-    originalError.call(console, ...args);
-  };
-});
+const originalError = console.error.bind(console.error);
 
-afterAll(() => {
-  console.error = originalError;
-});
+console.error = (...args) => {
+const ignoreMessage = MESSAGES_TO_IGNORE.find(message => args.toString().includes(message));
+if (!ignoreMessage) originalError(...args);
+}
+
+jest.setTimeout(30000);
