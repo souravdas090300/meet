@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, waitFor, within } from '@testing-library/react';
-import EventList from './EventList';
+import EventList from '../components/EventList';
 import mockData from '../mock-data';
 
 describe('<EventList /> component', () => {
