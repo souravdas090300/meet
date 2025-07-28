@@ -1,9 +1,47 @@
 import React from 'react';
-import { render, screen, within, waitFor, act } from '@testing-library/react';
+import { render, within, waitFor, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import CitySearch from '../components/CitySearch';
 import App from '../App';
+import mockData from '../mock-data';
 import { extractLocations, getEvents } from '../api';
+
+// Mock the API functions
+jest.mock('../api');
+
+describe('<CitySearch /> component', () => {
+  test('renders suggestions list when the app is rendered.', async () => {
+    // Mock the API functions
+    getEvents.mockResolvedValue(mockData);
+    const mockLocations = ['London, UK', 'Berlin, Germany', 'New York, NY'];
+    extractLocations.mockReturnValue(mockLocations);
+
+    const user = userEvent.setup();
+    
+    render(<App />);
+    
+    // Wait for the app to load and find the city search input
+    const cityTextBox = await screen.findByTestId('city-search-input');
+    
+    // Click on the textbox to trigger suggestions
+    await user.click(cityTextBox);
+    
+    // Wait for suggestions to appear and verify count
+    await waitFor(() => {
+      // Look specifically for suggestions within the city search component
+      const citySearchComponent = screen.getByTestId('city-search-input').closest('#city-search');
+      const suggestionListItems = within(citySearchComponent).queryAllByRole('listitem');
+      expect(suggestionListItems.length).toBe(mockLocations.length + 1);
+    });
+  });
+ // Same Code
+});
+
+
+describe('<CitySearch /> integration', () => {
+
+
+});
 
 
 const mockProps = {
@@ -70,30 +108,29 @@ describe('<CitySearch /> component', () => {
 });
 
 describe('<CitySearch /> integration', () => {
-// Note: This test is temporarily skipped due to React 18 AggregateError in testing environment
-// The functionality works correctly in production
-test.skip('renders suggestions list when the app is rendered.', async () => {
-  const user = userEvent.setup();
-  
-  // Wrap the render in act to handle React 18 strict mode
-  let AppComponent;
-  await act(async () => {
-    AppComponent = render(<App />);
+  test('renders suggestions list when the app is rendered.', async () => {
+    // Mock the API functions for the App component
+    getEvents.mockResolvedValue(mockData);
+    const mockLocations = ['London, UK', 'Berlin, Germany', 'New York, NY'];
+    extractLocations.mockReturnValue(mockLocations);
+
+    const user = userEvent.setup();
+    
+    render(<App />);
+    
+    // Wait for the app to load and find the city search input
+    const cityTextBox = await screen.findByTestId('city-search-input');
+    
+    // Click on the textbox to trigger suggestions
+    await user.click(cityTextBox);
+    
+    // Wait for suggestions to appear
+    await waitFor(() => {
+      // Look specifically for suggestions within the city search component
+      const citySearchComponent = screen.getByTestId('city-search-input').closest('#city-search');
+      const suggestions = within(citySearchComponent).queryAllByRole('listitem');
+      // Expect to have locations + "See all cities" option
+      expect(suggestions.length).toBe(mockLocations.length + 1);
+    });
   });
-  
-  const AppDOM = AppComponent.container.firstChild;
-
-  const CitySearchDOM = AppDOM.querySelector('#city-search');
-  const cityTextBox = within(CitySearchDOM).queryByRole('textbox');
-  await user.click(cityTextBox);
-
-  const allEvents = await getEvents();
-  const allLocations = extractLocations(allEvents);
-
-
-  await waitFor(() => {
-    const suggestionListItems = within(CitySearchDOM).queryAllByRole('listitem');
-    expect(suggestionListItems.length).toBe(allLocations.length + 1);
-   });
- });
 });

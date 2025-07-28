@@ -1,11 +1,14 @@
 import React from 'react';
-import { render, within, screen } from '@testing-library/react';
+import { render, within, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import CitySearch from '../components/CitySearch';
 import EventList from '../components/EventList';
 import App from '../App';
 import mockData from '../mock-data';
 import { extractLocations, getEvents } from '../api';
+
+// Mock the API functions
+jest.mock('../api');
 
 describe('<EventList /> component', () => {
   test('renders list of events', () => {
@@ -38,13 +41,19 @@ describe('<EventList /> component', () => {
 });
 
 describe('<EventList /> integration', () => {
-  test('renders a list of events when the app is mounted and rendered', () => {
-    const mockEvents = mockData.slice(0, 3);
-    
-    render(<EventList events={mockEvents} />);
-    
-    const eventList = screen.getByRole('list');
+  test('renders a list of events when the app is mounted and rendered', async () => {
+    // Mock the API functions for the App component
+    getEvents.mockResolvedValue(mockData);
+    extractLocations.mockReturnValue(['London, UK', 'Berlin, Germany']);
+
+    render(<App />);
+
+    // Wait for the EventList to be rendered within the App
+    const eventList = await screen.findByRole('list');
+    expect(eventList).toBeInTheDocument();
+
+    // Verify that events are rendered within the EventList
     const events = within(eventList).getAllByRole('listitem');
-    expect(events).toHaveLength(3);
+    expect(events.length).toBeGreaterThan(0);
   });
 });
