@@ -4,6 +4,7 @@
   "private": true,
   "type": "module",
   "dependencies": {
+    "atatus-spa": "^4.6.5",
     "googleapis": "^154.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

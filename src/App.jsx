@@ -4,6 +4,7 @@ import EventList from './components/EventList';
 import NumberOfEvents from './components/NumberOfEvents';
 import EventChart from './components/EventChart';
 import { getEvents, extractLocations } from './api';
+import { trackPageView, logAtatusEvent } from './utils/atatus-helpers';
 import './App.css';
 
 function App() {
