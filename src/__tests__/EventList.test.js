@@ -49,11 +49,14 @@ describe('<EventList /> integration', () => {
     render(<App />);
 
     // Wait for the EventList to be rendered within the App
-    const eventList = await screen.findByRole('list');
-    expect(eventList).toBeInTheDocument();
+    // Look specifically for the event list by its ID
+    await waitFor(() => {
+      const eventList = document.querySelector('#event-list');
+      expect(eventList).toBeInTheDocument();
 
-    // Verify that events are rendered within the EventList
-    const events = within(eventList).getAllByRole('listitem');
-    expect(events.length).toBeGreaterThan(0);
+      // Verify that events are rendered within the EventList
+      const events = within(eventList).getAllByRole('listitem');
+      expect(events.length).toBeGreaterThan(0);
+    });
   });
 });

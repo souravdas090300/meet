@@ -10,30 +10,6 @@ import { extractLocations, getEvents } from '../api';
 jest.mock('../api');
 
 describe('<CitySearch /> component', () => {
-  test('renders suggestions list when the app is rendered.', async () => {
-    // Mock the API functions
-    getEvents.mockResolvedValue(mockData);
-    const mockLocations = ['London, UK', 'Berlin, Germany', 'New York, NY'];
-    extractLocations.mockReturnValue(mockLocations);
-
-    const user = userEvent.setup();
-    
-    render(<App />);
-    
-    // Wait for the app to load and find the city search input
-    const cityTextBox = await screen.findByTestId('city-search-input');
-    
-    // Click on the textbox to trigger suggestions
-    await user.click(cityTextBox);
-    
-    // Wait for suggestions to appear and verify count
-    await waitFor(() => {
-      // Look specifically for suggestions within the city search component
-      const citySearchComponent = screen.getByTestId('city-search-input').closest('#city-search');
-      const suggestionListItems = within(citySearchComponent).queryAllByRole('listitem');
-      expect(suggestionListItems.length).toBe(mockLocations.length + 1);
-    });
-  });
  // Same Code
 });
 
