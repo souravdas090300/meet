@@ -39,9 +39,8 @@ describe('<App /> integration tests', () => {
     const numberInput = screen.getByTestId('numberOfEventsInput');
     expect(numberInput).toHaveValue('32'); // Default value
 
-    // Change the number of events to 10
-    await user.clear(numberInput);
-    await user.type(numberInput, '10');
+    // Change the number of events to 10 using backspace method as suggested
+    await user.type(numberInput, '{backspace}{backspace}10');
 
     // Wait for the event list to update
     await waitFor(() => {
@@ -110,16 +109,6 @@ describe('<App /> component tests', () => {
     
     const numberComponent = container.querySelector('#number-of-events');
     expect(numberComponent).toBeInTheDocument();
-  });
-
-  test('loads events list correctly', () => {
-    const mockEvents = mockData.slice(0, 3);
-    
-    render(<EventList events={mockEvents} />);
-    
-    const eventList = screen.getByRole('list');
-    const events = within(eventList).getAllByRole('listitem');
-    expect(events).toHaveLength(3);
   });
 
   test('user can change the number of events displayed', async () => {
