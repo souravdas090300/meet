@@ -42,6 +42,16 @@ function App() {
       } catch (error) {
         console.error('Error fetching events:', error);
         setErrorAlert('Failed to load events. Please try again later.');
+        
+        // Track error with Atatus
+        if (typeof logAtatusEvent === 'function') {
+          logAtatusEvent('API Error', 'error', {
+            errorMessage: error.message,
+            currentCity: currentCity,
+            numberOfEvents: currentNOE,
+            isOnline: navigator.onLine
+          });
+        }
       }
     };
 
