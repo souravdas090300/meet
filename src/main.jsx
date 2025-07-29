@@ -46,12 +46,8 @@ if ('serviceWorker' in navigator && import.meta.env.PROD) {
       .then((registration) => {
         console.log('✅ Service Worker successfully registered:', registration.scope);
         // Track successful service worker registration
-        if (typeof atatus !== 'undefined') {
-          atatus.addBreadcrumb({
-            message: 'Service Worker registered successfully',
-            category: 'navigation',
-            level: 'info'
-          });
+        if (typeof atatus !== 'undefined' && typeof atatus.leaveBreadcrumb === 'function') {
+          atatus.leaveBreadcrumb('Service Worker registered successfully', 'info');
         }
       })
       .catch(error => {
