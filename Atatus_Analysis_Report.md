@@ -248,6 +248,23 @@ The minified code shows your app structure:
 3. **Network Testing**: Test app with slow/limited network connections
 4. **API Error Handling**: Consider implementing retry logic for Google Calendar API calls
 
+### Issue 2: Vercel Deployment MIME Type Errors - ✅ **RESOLVED**
+- **Problem**: Vercel app failing with "Failed to load module script: Expected a JavaScript-or-Wasm module script but the server responded with a MIME type of 'text/html'"
+- **Root Cause Analysis**: 
+  - ✅ **IDENTIFIED**: Incorrect routing in `vercel.json` was serving HTML for all requests including JS/CSS files
+  - Base path configuration in `vite.config.js` was set to `/meet/` (for GitHub Pages) but Vercel needs `/`
+  - Over-aggressive catch-all route was intercepting asset requests
+- **Solution Applied**: 
+  1. ✅ **Fixed Vercel Routing**: Updated `vercel.json` to properly serve static assets before fallback to index.html
+  2. ✅ **Environment-Specific Base Path**: Modified `vite.config.js` to use `/` for Vercel and `/meet/` for GitHub Pages
+  3. ✅ **Asset Path Resolution**: Ensured proper routing for `/assets/*` and static file extensions
+  4. ✅ **Rebuilt and Deployed**: Pushed changes to trigger new Vercel deployment with correct paths
+- **Technical Details**: 
+  - **Old Route**: `"src": "/(.*)", "dest": "/index.html"` caught everything
+  - **New Route**: Added specific patterns for static files before catch-all
+  - **Base Path**: Now uses `process.env.VERCEL ? '/' : '/meet/'` for environment detection
+- **Verification**: ✅ **COMPLETE** - Vercel deployment successful, both GitHub Pages and Vercel now working correctly
+
 *Add more issues as they are identified and resolved*
 
 ## CI/CD Analysis
