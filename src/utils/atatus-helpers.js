@@ -1,29 +1,15 @@
 // utils/atatus-helpers.js
 import * as atatus from 'atatus-spa';
 
-// Helper function to get atatus instance safely
-const getAtatusInstance = () => {
-  // Try imported atatus first, then global window reference
-  return atatus || window.atatusInstance || null;
-};
-
-export const safeAddBreadcrumb = (message, level = 'info', data = {}) => {
-  try {
-    // Since atatus-spa might not have addBreadcrumb, just log to console
-    // This prevents the "$e.addBreadcrumb is not a function" error
-    console.log(`[Breadcrumb] ${level}: ${message}`, data);
-  } catch (error) {
-    console.error('Failed to add breadcrumb:', error);
-  }
-};
+// REMOVED: safeAddBreadcrumb function completely to fix "$e.addBreadcrumb is not a function" error
+// Breadcrumbs are not essential for the app functionality
 
 export const safeNotify = (error, options = {}) => {
   try {
-    const atatusInstance = getAtatusInstance();
-    if (atatusInstance && typeof atatusInstance.notify === 'function') {
-      atatusInstance.notify(error, options);
+    if (typeof atatus !== 'undefined' && atatus.notify) {
+      atatus.notify(error, options);
     } else {
-      console.error('Atatus Error (fallback):', error, options);
+      console.warn('Atatus not available for error:', error);
     }
   } catch (err) {
     console.error('Failed to notify Atatus:', err);
@@ -32,23 +18,19 @@ export const safeNotify = (error, options = {}) => {
 
 export const setAtatusUser = (user) => {
   try {
-    const atatusInstance = getAtatusInstance();
-    if (atatusInstance && typeof atatusInstance.setUser === 'function') {
-      atatusInstance.setUser(user);
-    } else {
-      console.log('User context (fallback):', user);
+    if (typeof atatus !== 'undefined' && atatus.setUser) {
+      atatus.setUser(user);
     }
   } catch (error) {
     console.error('Failed to set Atatus user:', error);
   }
 };
 
-// Additional helper functions for compatibility
+// Additional helper functions that are imported by other files
 export const logAtatusEvent = (eventName, severity = 'info', properties = {}) => {
   try {
-    const atatusInstance = getAtatusInstance();
-    if (atatusInstance && typeof atatusInstance.notify === 'function') {
-      atatusInstance.notify(new Error(`Custom Event: ${eventName}`), {
+    if (typeof atatus !== 'undefined' && atatus.notify) {
+      atatus.notify(new Error(`Custom Event: ${eventName}`), {
         severity: severity,
         customData: {
           eventType: 'custom',
@@ -66,11 +48,10 @@ export const logAtatusEvent = (eventName, severity = 'info', properties = {}) =>
 
 export const trackPageView = (pageName, additionalData = {}) => {
   try {
-    const atatusInstance = getAtatusInstance();
-    if (atatusInstance && typeof atatusInstance.setTag === 'function') {
-      atatusInstance.setTag('currentPage', pageName);
+    if (typeof atatus !== 'undefined' && atatus.setTag) {
+      atatus.setTag('currentPage', pageName);
       Object.entries(additionalData).forEach(([key, value]) => {
-        atatusInstance.setTag(key, value);
+        atatus.setTag(key, value);
       });
     } else {
       console.log(`[Page View] ${pageName}:`, additionalData);

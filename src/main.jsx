@@ -4,7 +4,7 @@ import App from './App.jsx';
 import ErrorBoundary from './components/ErrorBoundary.jsx';
 import './index.css';
 import * as atatus from 'atatus-spa';
-import { safeAddBreadcrumb, safeNotify, setAtatusUser } from './utils/atatus-helpers.js';
+import { safeNotify, setAtatusUser } from './utils/atatus-helpers.js';
 
 // Initialize Atatus with proper error handling
 let atatusInitialized = false;
@@ -65,11 +65,7 @@ if ('serviceWorker' in navigator && import.meta.env.PROD) {
     navigator.serviceWorker.register('/sw.js')
       .then((registration) => {
         console.log('✅ Service Worker registered:', registration.scope);
-        if (atatusInitialized) {
-          safeAddBreadcrumb('Service Worker registered', 'info', {
-            category: 'navigation'
-          });
-        }
+        // Removed safeAddBreadcrumb call to fix "$e.addBreadcrumb is not a function" error
       })
       .catch(error => {
         console.error('❌ Service Worker failed:', error);

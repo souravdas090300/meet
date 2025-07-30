@@ -1,22 +1,8 @@
 // utils/atatus-helpers.js
 import * as atatus from 'atatus-spa';
 
-export const safeAddBreadcrumb = (message, level = 'info', data = {}) => {
-  try {
-    if (typeof atatus !== 'undefined' && atatus.addBreadcrumb) {
-      atatus.addBreadcrumb({
-        message,
-        category: 'app',
-        level,
-        data
-      });
-    } else {
-      console.warn('Atatus not available for breadcrumb:', message);
-    }
-  } catch (error) {
-    console.error('Failed to add breadcrumb:', error);
-  }
-};
+// REMOVED: safeAddBreadcrumb function completely to fix "$e.addBreadcrumb is not a function" error
+// Breadcrumbs are not essential for the app functionality
 
 export const safeNotify = (error, options = {}) => {
   try {
