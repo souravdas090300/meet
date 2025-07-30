@@ -1,4 +1,6 @@
 // utils/atatus-helpers.js
+import * as atatus from 'atatus-spa';
+
 export const safeAddBreadcrumb = (message, level = 'info', data = {}) => {
   try {
     if (typeof atatus !== 'undefined' && atatus.addBreadcrumb) {

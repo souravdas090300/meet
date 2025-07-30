@@ -8,12 +8,16 @@ import { safeAddBreadcrumb, safeNotify, setAtatusUser } from './utils/atatus-hel
 
 // Initialize Atatus with proper error handling
 let atatusInitialized = false;
+window.atatusInitialized = false; // Make it globally available
+
 try {
   const licenseKey = import.meta.env.VITE_ATATUS_LICENSE_KEY || '93a094075aa3483186cf248030fdad97';
   
   if (licenseKey && licenseKey !== 'undefined' && typeof atatus.config === 'function') {
     atatus.config(licenseKey).install();
     atatusInitialized = true;
+    window.atatusInitialized = true;
+    window.atatusInstance = atatus; // Make atatus globally available
     console.log('✅ Atatus monitoring initialized successfully');
     
     // Set user context
@@ -29,6 +33,8 @@ try {
   }
 } catch (error) {
   console.error('❌ Failed to initialize Atatus:', error);
+  atatusInitialized = false;
+  window.atatusInitialized = false;
 }
 
 ReactDOM.createRoot(document.getElementById('root')).render(
@@ -60,10 +66,8 @@ if ('serviceWorker' in navigator && import.meta.env.PROD) {
       .then((registration) => {
         console.log('✅ Service Worker registered:', registration.scope);
         if (atatusInitialized) {
-          safeAddBreadcrumb({
-            message: 'Service Worker registered',
-            category: 'navigation',
-            level: 'info'
+          safeAddBreadcrumb('Service Worker registered', 'info', {
+            category: 'navigation'
           });
         }
       })
