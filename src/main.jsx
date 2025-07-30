@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App.jsx';
+import ErrorBoundary from './components/ErrorBoundary.jsx';
 import './index.css';
 import * as atatus from 'atatus-spa';
 import { safeAddBreadcrumb, safeNotify, setAtatusUser } from './utils/atatus-helpers.js';
@@ -8,16 +9,25 @@ import { safeAddBreadcrumb, safeNotify, setAtatusUser } from './utils/atatus-hel
 // Initialize Atatus with proper error handling
 let atatusInitialized = false;
 try {
-  atatus.config('93a094075aa3483186cf248030fdad97').install();
-  atatusInitialized = true;
-  console.log('✅ Atatus monitoring initialized successfully');
+  // Only initialize Atatus if license key is available
+  const licenseKey = import.meta.env.VITE_ATATUS_LICENSE_KEY || '93a094075aa3483186cf248030fdad97';
   
-  // Set user context for better tracking using safe helper
-  setAtatusUser({
-    id: 'anonymous-user',
-    email: 'anonymous@example.com',
-    name: 'Anonymous User'
-  });
+  if (licenseKey && licenseKey !== 'undefined' && typeof atatus.config === 'function') {
+    atatus.config(licenseKey).install();
+    atatusInitialized = true;
+    console.log('✅ Atatus monitoring initialized successfully');
+    
+    // Set user context for better tracking using safe helper
+    setTimeout(() => {
+      setAtatusUser({
+        id: 'anonymous-user',
+        email: 'anonymous@example.com',
+        name: 'Anonymous User'
+      });
+    }, 100);
+  } else {
+    console.warn('⚠️ Atatus license key not found or Atatus not available, skipping initialization');
+  }
   
 } catch (error) {
   console.error('❌ Failed to initialize Atatus:', error);
@@ -26,7 +36,9 @@ try {
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <App />
+    <ErrorBoundary>
+      <App />
+    </ErrorBoundary>
   </React.StrictMode>
 );
 
@@ -60,6 +72,7 @@ if ('serviceWorker' in navigator && import.meta.env.PROD) {
       })
       .catch(error => {
         console.error('❌ Service Worker registration failed:', error);
+        // Don't let service worker errors break the app
         // Track service worker registration errors
         if (atatusInitialized) {
           safeNotify(error, {
@@ -69,4 +82,6 @@ if ('serviceWorker' in navigator && import.meta.env.PROD) {
         }
       });
   });
+} else if (import.meta.env.PROD) {
+  console.log('Service Workers not supported in this browser');
 }
