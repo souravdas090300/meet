@@ -3,14 +3,17 @@ import ReactDOM from 'react-dom/client';
 import App from './App.jsx';
 import './index.css';
 import * as atatus from 'atatus-spa';
+import { safeAddBreadcrumb, safeNotify, setAtatusUser } from './utils/atatus-helpers.js';
 
 // Initialize Atatus with proper error handling
+let atatusInitialized = false;
 try {
   atatus.config('93a094075aa3483186cf248030fdad97').install();
+  atatusInitialized = true;
   console.log('✅ Atatus monitoring initialized successfully');
   
-  // Set user context for better tracking
-  atatus.setUser({
+  // Set user context for better tracking using safe helper
+  setAtatusUser({
     id: 'anonymous-user',
     email: 'anonymous@example.com',
     name: 'Anonymous User'
@@ -18,6 +21,7 @@ try {
   
 } catch (error) {
   console.error('❌ Failed to initialize Atatus:', error);
+  atatusInitialized = false;
 }
 
 ReactDOM.createRoot(document.getElementById('root')).render(
@@ -31,8 +35,12 @@ if (import.meta.env.DEV && window.location.hostname === 'localhost') {
   // Wait a bit for Atatus to initialize, then send a test error
   setTimeout(() => {
     try {
-      atatus.notify(new Error('Test Atatus Setup - This is a test error from development'));
-      console.log('🧪 Test error sent to Atatus dashboard');
+      if (atatusInitialized) {
+        safeNotify(new Error('Test Atatus Setup - This is a test error from development'));
+        console.log('🧪 Test error sent to Atatus dashboard');
+      } else {
+        console.warn('Atatus not properly initialized - skipping test error');
+      }
     } catch (error) {
       console.error('Failed to send test error:', error);
     }
@@ -46,15 +54,15 @@ if ('serviceWorker' in navigator && import.meta.env.PROD) {
       .then((registration) => {
         console.log('✅ Service Worker successfully registered:', registration.scope);
         // Track successful service worker registration
-        if (typeof atatus !== 'undefined' && typeof atatus.leaveBreadcrumb === 'function') {
-          atatus.leaveBreadcrumb('Service Worker registered successfully', 'info');
+        if (atatusInitialized) {
+          safeAddBreadcrumb('Service Worker registered successfully', 'info');
         }
       })
       .catch(error => {
         console.error('❌ Service Worker registration failed:', error);
         // Track service worker registration errors
-        if (typeof atatus !== 'undefined') {
-          atatus.notify(error, {
+        if (atatusInitialized) {
+          safeNotify(error, {
             context: 'Service Worker Registration',
             severity: 'warning'
           });
