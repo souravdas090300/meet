@@ -193,3 +193,21 @@ p {
 .event-link:hover {
   text-decoration: underline;
 }
+
+/* Alert Styles */
+.alerts-container {
+  margin-bottom: 20px;
+}
+
+.Alert {
+  margin: 10px 0;
+}
+
+.Alert p {
+  margin: 0;
+  border-radius: 7px;
+  padding: 10px;
+  text-align: center;
+  font-size: 12px;
+  font-weight: 500;
+}

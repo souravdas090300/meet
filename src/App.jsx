@@ -3,6 +3,7 @@ import CitySearch from './components/CitySearch';
 import EventList from './components/EventList';
 import NumberOfEvents from './components/NumberOfEvents';
 import EventChart from './components/EventChart';
+import { InfoAlert, ErrorAlert, WarningAlert } from './components/Alert';
 import { getEvents, extractLocations } from './api';
 import { trackPageView, logAtatusEvent } from './utils/atatus-helpers';
 import './App.css';
@@ -61,9 +62,9 @@ function App() {
   return (
     <div className="App">
       <div className="alerts-container">
-        {infoAlert && <div className="alert alert-info">{infoAlert}</div>}
-        {errorAlert && <div className="alert alert-error">{errorAlert}</div>}
-        {warningAlert && <div className="alert alert-warning">{warningAlert}</div>}
+        {infoAlert.length ? <InfoAlert text={infoAlert}/> : null}
+        {errorAlert.length ? <ErrorAlert text={errorAlert}/> : null}
+        {warningAlert.length ? <WarningAlert text={warningAlert}/> : null}
       </div>
       
       <header className="app-header">
