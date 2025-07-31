@@ -9,7 +9,7 @@ const isLocalhost = Boolean(
   export function register(config) {
     if (import.meta.env.PROD && 'serviceWorker' in navigator) {
         window.addEventListener('load', () => {
-          const swUrl = '/service-worker.js';
+          const swUrl = '/sw.js'; // Updated to point to the correct service worker file
     
           if (isLocalhost) {
             // Check if a service worker still exists or not.

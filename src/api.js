@@ -1,13 +1,3 @@
-const response = await fetch(url);
-const token = localStorage.getItem("token");
-const NProgress = require('nprogress'); 
-NProgress.start();
-   const result = await response.json();
-   if (result) {
-     NProgress.done();
-     localStorage.setItem("lastEvents", JSON.stringify(result.events));
-     return result.events;
-   } else return null;
 const EVENTS_API_URL = 'https://meet-pi-weld.vercel.app/api/events'; // Replace with your actual API endpoint
 
 // Mock data for development/fallback - Comprehensive event data
@@ -399,21 +389,32 @@ const mockEvents = [
   }
 ];
 
-
-if (!navigator.onLine) {
-   const events = localStorage.getItem("lastEvents");
-   NProgress.done();
-   return events?JSON.parse(events):[];
- }
-
 /**
- * Fetch events from API or return mock data
+ * Fetch events from API or return cached data when offline
  */
 export const getEvents = async () => {
-  try {
-    // For now, return mock data since we don't have the actual API endpoint
-    // In production, replace this with actual API call
+  // Check if user is offline and return cached events
+  if (!navigator.onLine) {
+    const cachedEvents = localStorage.getItem("lastEvents");
+    if (cachedEvents) {
+      console.log('Loading events from cache (offline mode)');
+      return JSON.parse(cachedEvents);
+    }
+    // If no cached events, return mock data as fallback
+    console.log('No cached events found, using mock data');
     return mockEvents;
+  }
+
+  try {
+    // For now, use mock data since we don't have the actual API endpoint
+    // In production, replace this with actual API call
+    const events = mockEvents;
+    
+    // Cache the events in localStorage for offline use
+    localStorage.setItem("lastEvents", JSON.stringify(events));
+    console.log('Events cached for offline use');
+    
+    return events;
     
     // Uncomment this when you have a real API:
     // const response = await fetch(EVENTS_API_URL);
@@ -421,10 +422,24 @@ export const getEvents = async () => {
     //   throw new Error(`HTTP error! status: ${response.status}`);
     // }
     // const data = await response.json();
-    // return data.events || data;
+    // const events = data.events || data;
+    // 
+    // // Cache the events in localStorage for offline use
+    // localStorage.setItem("lastEvents", JSON.stringify(events));
+    // 
+    // return events;
   } catch (error) {
     console.error('Error fetching events:', error);
-    // Return mock data as fallback
+    
+    // Try to return cached events if API fails
+    const cachedEvents = localStorage.getItem("lastEvents");
+    if (cachedEvents) {
+      console.log('API failed, loading events from cache');
+      return JSON.parse(cachedEvents);
+    }
+    
+    // Return mock data as final fallback
+    console.log('API failed and no cache available, using mock data');
     return mockEvents;
   }
 };

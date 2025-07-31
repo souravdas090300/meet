@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PWA Offline Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+            line-height: 1.6;
+        }
+        .status {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+        .online { background: #d4edda; color: #155724; }
+        .offline { background: #f8d7da; color: #721c24; }
+        .test-button {
+            background: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        .test-button:hover {
+            background: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <h1>PWA Offline Test</h1>
+    
+    <div id="status-indicator" class="status online">
+        🟢 Online - Connected to the internet
+    </div>
+    
+    <div>
+        <h2>Instructions:</h2>
+        <ol>
+            <li>First, make sure your Meet app is running and visit it in your browser</li>
+            <li>Load some events to cache them</li>
+            <li>Open browser DevTools (F12)</li>
+            <li>Go to Application tab → Service Workers</li>
+            <li>Check "Offline" checkbox to simulate offline mode</li>
+            <li>Go back to your Meet app and refresh the page</li>
+            <li>You should see cached events and a warning about being offline</li>
+        </ol>
+        
+        <button class="test-button" onclick="testLocalStorage()">Test LocalStorage</button>
+        <button class="test-button" onclick="testServiceWorker()">Test Service Worker</button>
+        <button class="test-button" onclick="simulateOffline()">Simulate Offline (DevTools)</button>
+    </div>
+    
+    <div id="test-results"></div>
+
+    <script>
+        function updateStatus() {
+            const indicator = document.getElementById('status-indicator');
+            if (navigator.onLine) {
+                indicator.className = 'status online';
+                indicator.textContent = '🟢 Online - Connected to the internet';
+            } else {
+                indicator.className = 'status offline';
+                indicator.textContent = '🔴 Offline - No internet connection';
+            }
+        }
+
+        function testLocalStorage() {
+            const results = document.getElementById('test-results');
+            try {
+                // Test localStorage functionality
+                const testData = { test: 'data', timestamp: Date.now() };
+                localStorage.setItem('test-events', JSON.stringify(testData));
+                const retrieved = JSON.parse(localStorage.getItem('test-events'));
+                
+                if (retrieved && retrieved.test === 'data') {
+                    results.innerHTML = '<div class="status online">✅ LocalStorage test passed!</div>';
+                } else {
+                    results.innerHTML = '<div class="status offline">❌ LocalStorage test failed!</div>';
+                }
+                
+                // Clean up
+                localStorage.removeItem('test-events');
+            } catch (error) {
+                results.innerHTML = `<div class="status offline">❌ LocalStorage error: ${error.message}</div>`;
+            }
+        }
+
+        function testServiceWorker() {
+            const results = document.getElementById('test-results');
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.getRegistrations().then(registrations => {
+                    if (registrations.length > 0) {
+                        results.innerHTML = '<div class="status online">✅ Service Worker is registered!</div>';
+                    } else {
+                        results.innerHTML = '<div class="status offline">❌ No Service Worker found!</div>';
+                    }
+                });
+            } else {
+                results.innerHTML = '<div class="status offline">❌ Service Worker not supported!</div>';
+            }
+        }
+
+        function simulateOffline() {
+            alert('To simulate offline mode:\\n\\n1. Open DevTools (F12)\\n2. Go to Application tab\\n3. Click "Service Workers" in the left panel\\n4. Check "Offline" checkbox\\n\\nThis will simulate offline mode for testing.');
+        }
+
+        // Listen for online/offline events
+        window.addEventListener('online', updateStatus);
+        window.addEventListener('offline', updateStatus);
+        
+        // Initial status update
+        updateStatus();
+    </script>
+</body>
+</html>

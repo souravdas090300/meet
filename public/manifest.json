@@ -47,8 +47,8 @@
   "start_url": "/meet/",
   "display": "standalone",
   "orientation": "portrait-primary",
-  "theme_color": "#000000",
-  "background_color": "#ffffff",
+  "theme_color": "#1976d2",
+  "background_color": "#fafafa",
   "categories": ["productivity", "social", "entertainment"],
   "lang": "en",
   "scope": "/meet/"
