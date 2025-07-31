@@ -5,6 +5,7 @@ import ErrorBoundary from './components/ErrorBoundary.jsx';
 import './index.css';
 import * as atatus from 'atatus-spa';
 import { safeNotify, setAtatusUser } from './utils/atatus-helpers.js';
+import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 
 // Initialize Atatus with proper error handling
 let atatusInitialized = false;
