@@ -1,72 +1,76 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 
-const CitySearch = ({ allLocations, setCurrentCity, setInfoAlert }) => {
+const CitySearch = ({ allLocations = [], setCurrentCity, setInfoAlert }) => {
   const [showSuggestions, setShowSuggestions] = useState(false);
-  const [query, setQuery] = useState("");
+  const [query, setQuery] = useState('');
   const [suggestions, setSuggestions] = useState([]);
-
-  useEffect(() => {
-    if (allLocations && Array.isArray(allLocations)) {
-      setSuggestions(allLocations);
-    } else {
-      setSuggestions([]);
-    }
-  }, [allLocations]);
 
   const handleInputChanged = (event) => {
     const value = event.target.value;
-    const filteredLocations = (allLocations && Array.isArray(allLocations)) ? 
-      allLocations.filter((location) => {
-        return location && typeof location === 'string' && 
-               location.toUpperCase().indexOf(value.toUpperCase()) > -1;
-      }) : [];
-
     setQuery(value);
-    setSuggestions(filteredLocations);
 
-    let infoText;
-    if (filteredLocations.length === 0) {
-      infoText = "We can not find the city you are looking for. Please try another city";
-    } else {
-      infoText = "";
+    if (value === '') {
+      setSuggestions([]);
+      setShowSuggestions(false);
+      setCurrentCity('See all cities');
+      setInfoAlert('');
+      return;
     }
-    setInfoAlert && setInfoAlert(infoText);
+
+    const filteredLocations = allLocations.filter((location) =>
+      location.toLowerCase().includes(value.toLowerCase())
+    );
+
+    setSuggestions(filteredLocations);
+    setShowSuggestions(true);
+
+    if (filteredLocations.length === 0) {
+      setInfoAlert('We cannot find the city you are looking for. Please try another city.');
+    } else {
+      setInfoAlert('');
+    }
   };
 
-  const handleItemClicked = (event) => {
-    const value = event.target.textContent;
-    setQuery(value);
+  const handleItemClicked = (suggestion) => {
+    setQuery(suggestion);
+    setCurrentCity(suggestion);
     setShowSuggestions(false);
-    setCurrentCity && setCurrentCity(value);
-    setInfoAlert && setInfoAlert("");
+    setSuggestions([]);
+    setInfoAlert('');
   };
 
   return (
-    <div id="city-search">
+    <div className="city-search">
+      <label htmlFor="city-search-input">Search for a city:</label>
       <input
+        id="city-search-input"
         type="text"
         className="city"
         placeholder="Search for a city"
         value={query}
-        onFocus={() => setShowSuggestions(true)}
         onChange={handleInputChanged}
-        data-testid="city-search-input"
+        onFocus={() => setShowSuggestions(true)}
       />
-      {showSuggestions ? (
+      {showSuggestions && (
         <ul className="suggestions">
-          {suggestions && suggestions.length > 0 && suggestions.map((suggestion) => {
-            if (!suggestion || typeof suggestion !== 'string') return null;
-            return (
-              <li onClick={handleItemClicked} key={suggestion}>
-                {suggestion}
-              </li>
-            );
-          })}
-          <li onClick={handleItemClicked} key="See all cities">
+          {suggestions.map((suggestion, index) => (
+            <li
+              key={index}
+              onClick={() => handleItemClicked(suggestion)}
+              className="suggestion-item"
+            >
+              {suggestion}
+            </li>
+          ))}
+          <li
+            key="See all cities"
+            onClick={() => handleItemClicked('See all cities')}
+            className="suggestion-item"
+          >
             <b>See all cities</b>
           </li>
         </ul>
-      ) : null}
+      )}
     </div>
   );
 };

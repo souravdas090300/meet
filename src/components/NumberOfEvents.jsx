@@ -1,31 +1,36 @@
-import React, { useState } from 'react';
+import React from 'react';
 
-const NumberOfEvents = ({ setCurrentNOE, setErrorAlert, currentNOE = 32 }) => {
-  const [numberValue, setNumberValue] = useState(currentNOE);
-
+const NumberOfEvents = ({ currentNOE, setCurrentNOE, setErrorAlert }) => {
   const handleInputChanged = (event) => {
-    const value = event.target.value;
-    setNumberValue(value);
-
-    let errorText;
-    if (isNaN(value) || value <= 0) {
-      errorText = "Only positive numbers are allowed";
-    } else {
-      errorText = "";
-      setCurrentNOE && setCurrentNOE(value);
+    let value = event.target.value;
+    
+    if (value === '') {
+      setErrorAlert('Please enter a number between 1 and 100');
+      return;
     }
-    setErrorAlert && setErrorAlert(errorText);
+
+    const numberValue = parseInt(value, 10);
+    
+    if (isNaN(numberValue) || numberValue < 1 || numberValue > 100) {
+      setErrorAlert('Please enter a number between 1 and 100');
+    } else {
+      setErrorAlert('');
+      setCurrentNOE(numberValue);
+    }
   };
 
   return (
-    <div id="number-of-events">
+    <div className="number-of-events">
+      <label htmlFor="number-of-events-input">Number of Events:</label>
       <input
-        type="text"
+        id="number-of-events-input"
+        type="number"
         className="number-of-events-input"
-        placeholder="Number of Events"
-        value={numberValue}
+        value={currentNOE}
         onChange={handleInputChanged}
-        data-testid="numberOfEventsInput"
+        min="1"
+        max="100"
+        placeholder="32"
       />
     </div>
   );
