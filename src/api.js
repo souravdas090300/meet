@@ -1,5 +1,14 @@
-// API functions for the Meet App
-const EVENTS_API_URL = 'https://your-api-endpoint.com/api/events'; // Replace with your actual API endpoint
+const response = await fetch(url);
+const token = localStorage.getItem("token");
+const NProgress = require('nprogress'); 
+NProgress.start();
+   const result = await response.json();
+   if (result) {
+     NProgress.done();
+     localStorage.setItem("lastEvents", JSON.stringify(result.events));
+     return result.events;
+   } else return null;
+const EVENTS_API_URL = 'https://meet-pi-weld.vercel.app/api/events'; // Replace with your actual API endpoint
 
 // Mock data for development/fallback - Comprehensive event data
 const mockEvents = [
@@ -389,6 +398,13 @@ const mockEvents = [
     "eventType": "default"
   }
 ];
+
+
+if (!navigator.onLine) {
+   const events = localStorage.getItem("lastEvents");
+   NProgress.done();
+   return events?JSON.parse(events):[];
+ }
 
 /**
  * Fetch events from API or return mock data
