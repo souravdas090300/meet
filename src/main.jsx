@@ -13,6 +13,15 @@ window.atatusInitialized = false; // Make it globally available
 
 try {
   const licenseKey = import.meta.env.VITE_ATATUS_LICENSE_KEY || '93a094075aa3483186cf248030fdad97';
+
+  ReactDOM.createRoot(document.getElementById('root')).render(
+ <React.StrictMode>
+   <App />
+ </React.StrictMode>,
+);
+serviceWorkerRegistration.register();
+
+  if (process.env.NODE_ENV === 'production' && 'serviceWorker' in navigator)
   
   if (licenseKey && licenseKey !== 'undefined' && typeof atatus.config === 'function') {
     atatus.config(licenseKey).install();
