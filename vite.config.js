@@ -8,14 +8,16 @@ export default defineConfig({
     react(),
     VitePWA({
       manifest: {
+        "id": process.env.VERCEL ? "/" : "/meet/",
         "short_name": "Meet App",
-        "name": "Meet App - Career Foundry Project",
+        "name": "Meet - Event Discovery App",
+        "description": "Find events happening in your city",
         "icons": [
           {
             "src": "favicon.ico",
             "sizes": "48x48",
             "type": "image/x-icon",
-            "purpose": "maskable"
+            "purpose": "any"
           },
           {
             "src": "meet-app-144.png",
@@ -27,19 +29,39 @@ export default defineConfig({
             "src": "meet-app-192.png",
             "type": "image/png",
             "sizes": "192x192",
-            "purpose": "maskable"
+            "purpose": "any"
           },
           {
             "src": "meet-app-512.png",
             "type": "image/png",
             "sizes": "512x512",
-            "purpose": "maskable"
+            "purpose": "any maskable"
           }
         ],
-        "start_url": ".",
+        "screenshots": [
+          {
+            "src": "meet-app-512.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "form_factor": "narrow",
+            "label": "Meet App mobile view"
+          },
+          {
+            "src": "meet-app-512.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "form_factor": "wide",
+            "label": "Meet App desktop view"
+          }
+        ],
+        "start_url": process.env.VERCEL ? "/" : "/meet/",
+        "scope": process.env.VERCEL ? "/" : "/meet/",
         "display": "standalone",
+        "orientation": "portrait-primary",
         "theme_color": "#000000",
-        "background_color": "#ffffff"
+        "background_color": "#ffffff",
+        "categories": ["productivity", "social", "entertainment"],
+        "lang": "en"
       },
       srcDir: 'src',
       filename: 'service-worker.js',
