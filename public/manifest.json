@@ -51,5 +51,9 @@
   "background_color": "#fafafa",
   "categories": ["productivity", "social", "entertainment"],
   "lang": "en",
-  "scope": "/meet/"
+  "scope": "/meet/",
+  "prefer_related_applications": false,
+  "launch_handler": {
+    "client_mode": "navigate-existing"
+  }
 }

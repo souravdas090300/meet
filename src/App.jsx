@@ -20,6 +20,7 @@ function App() {
   useEffect(() => {
     const fetchData = async () => {
       try {
+        // Check online status and set warning alert accordingly
         if (navigator.onLine) {
           setWarningAlert("");
         } else {
@@ -57,6 +58,25 @@ function App() {
     };
 
     fetchData();
+
+    // Add event listeners for online/offline status changes
+    const handleOnline = () => {
+      setWarningAlert("");
+      fetchData(); // Refresh data when back online
+    };
+
+    const handleOffline = () => {
+      setWarningAlert("You are offline. Events displayed may not be up to date.");
+    };
+
+    window.addEventListener('online', handleOnline);
+    window.addEventListener('offline', handleOffline);
+
+    // Cleanup event listeners
+    return () => {
+      window.removeEventListener('online', handleOnline);
+      window.removeEventListener('offline', handleOffline);
+    };
   }, [currentCity, currentNOE]);
 
   return (

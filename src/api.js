@@ -398,7 +398,13 @@ export const getEvents = async () => {
     const cachedEvents = localStorage.getItem("lastEvents");
     if (cachedEvents) {
       console.log('Loading events from cache (offline mode)');
-      return JSON.parse(cachedEvents);
+      try {
+        const parsedEvents = JSON.parse(cachedEvents);
+        return Array.isArray(parsedEvents) ? parsedEvents : mockEvents;
+      } catch (error) {
+        console.error('Error parsing cached events:', error);
+        return mockEvents;
+      }
     }
     // If no cached events, return mock data as fallback
     console.log('No cached events found, using mock data');
@@ -411,8 +417,13 @@ export const getEvents = async () => {
     const events = mockEvents;
     
     // Cache the events in localStorage for offline use
-    localStorage.setItem("lastEvents", JSON.stringify(events));
-    console.log('Events cached for offline use');
+    try {
+      localStorage.setItem("lastEvents", JSON.stringify(events));
+      localStorage.setItem("lastEventsTimestamp", Date.now().toString());
+      console.log('Events cached for offline use');
+    } catch (storageError) {
+      console.warn('Failed to cache events:', storageError);
+    }
     
     return events;
     
@@ -425,7 +436,12 @@ export const getEvents = async () => {
     // const events = data.events || data;
     // 
     // // Cache the events in localStorage for offline use
-    // localStorage.setItem("lastEvents", JSON.stringify(events));
+    // try {
+    //   localStorage.setItem("lastEvents", JSON.stringify(events));
+    //   localStorage.setItem("lastEventsTimestamp", Date.now().toString());
+    // } catch (storageError) {
+    //   console.warn('Failed to cache events:', storageError);
+    // }
     // 
     // return events;
   } catch (error) {
@@ -435,7 +451,13 @@ export const getEvents = async () => {
     const cachedEvents = localStorage.getItem("lastEvents");
     if (cachedEvents) {
       console.log('API failed, loading events from cache');
-      return JSON.parse(cachedEvents);
+      try {
+        const parsedEvents = JSON.parse(cachedEvents);
+        return Array.isArray(parsedEvents) ? parsedEvents : mockEvents;
+      } catch (parseError) {
+        console.error('Error parsing cached events:', parseError);
+        return mockEvents;
+      }
     }
     
     // Return mock data as final fallback
