@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import CitySearch from './components/CitySearch';
 import EventList from './components/EventList';
 import NumberOfEvents from './components/NumberOfEvents';
-import EventChart from './components/EventChart';
+import CityEventsChart from './components/CityEventsChart';
+import EventGenresChart from './components/EventGenresChart';
 import { InfoAlert, ErrorAlert, WarningAlert } from './components/Alert';
 import { getEvents, extractLocations } from './api';
 import { logAtatusEvent } from './utils/atatus-helpers';
@@ -106,7 +107,8 @@ function App() {
       </div>
 
       <div className="charts-container">
-        {events && events.length > 0 && <EventChart events={events} />}
+        <CityEventsChart events={events} />
+        <EventGenresChart events={events} />
       </div>
       
       <EventList events={events} />
