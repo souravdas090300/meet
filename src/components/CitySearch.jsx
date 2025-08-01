@@ -39,17 +39,26 @@ const CitySearch = ({ allLocations = [], setCurrentCity, setInfoAlert }) => {
     setInfoAlert('');
   };
 
+  const handleFocus = () => {
+    setShowSuggestions(true);
+    // If input is empty, show all locations
+    if (query === '') {
+      setSuggestions(allLocations);
+    }
+  };
+
   return (
     <div className="city-search">
       <label htmlFor="city-search-input">Search for a city:</label>
       <input
         id="city-search-input"
+        data-testid="city-search-input"
         type="text"
         className="city"
         placeholder="Search for a city"
         value={query}
         onChange={handleInputChanged}
-        onFocus={() => setShowSuggestions(true)}
+        onFocus={handleFocus}
       />
       {showSuggestions && (
         <ul className="suggestions">

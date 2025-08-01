@@ -37,7 +37,7 @@ describe('<App /> integration tests', () => {
 
     // Find the number of events input field
     const numberInput = screen.getByTestId('numberOfEventsInput');
-    expect(numberInput).toHaveValue('32'); // Default value
+    expect(numberInput).toHaveValue(32); // Default value (number)
 
     // Change the number of events to 10 using backspace method as suggested
     await user.type(numberInput, '{backspace}{backspace}10');
@@ -128,8 +128,12 @@ describe('<App /> component tests', () => {
     await user.clear(numberInput);
     await user.type(numberInput, '10');
 
-    expect(numberInput).toHaveValue('10');
-    expect(mockSetCurrentNOE).toHaveBeenCalledWith('10');
+    expect(numberInput).toHaveValue(10);
+    
+    // Wait for debounced call (NumberOfEvents has 500ms debounce)
+    await waitFor(() => {
+      expect(mockSetCurrentNOE).toHaveBeenCalledWith(10);
+    }, { timeout: 1000 });
   });
 
   test('renders event components correctly', () => {

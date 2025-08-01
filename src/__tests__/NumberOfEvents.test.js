@@ -20,7 +20,7 @@ describe('<NumberOfEvents /> component', () => {
         currentNOE={32}
       />
     );
-    expect(screen.getByRole('textbox')).toBeInTheDocument();
+    expect(screen.getByRole('spinbutton')).toBeInTheDocument();
   });
 
   test('default value of input field is 32', () => {
@@ -31,7 +31,7 @@ describe('<NumberOfEvents /> component', () => {
         currentNOE={32}
       />
     );
-    expect(screen.getByRole('textbox')).toHaveValue('32');
+    expect(screen.getByRole('spinbutton')).toHaveValue(32);
   });
 
   test('updates number of events when user types', async () => {
@@ -44,12 +44,16 @@ describe('<NumberOfEvents /> component', () => {
       />
     );
 
-    const numberTextBox = screen.getByRole('textbox');
+    const numberTextBox = screen.getByRole('spinbutton');
     await user.clear(numberTextBox);
     await user.type(numberTextBox, '10');
 
-    expect(numberTextBox).toHaveValue('10');
-    expect(mockSetCurrentNOE).toHaveBeenCalledWith('10');
+    expect(numberTextBox).toHaveValue(10);
+    
+    // Wait for debounced update
+    await new Promise(resolve => setTimeout(resolve, 600));
+    
+    expect(mockSetCurrentNOE).toHaveBeenCalledWith(10);
     expect(mockSetErrorAlert).toHaveBeenCalledWith('');
   });
 
@@ -63,7 +67,7 @@ describe('<NumberOfEvents /> component', () => {
       />
     );
 
-    const numberTextBox = screen.getByRole('textbox');
+    const numberTextBox = screen.getByRole('spinbutton');
     await user.clear(numberTextBox);
     await user.type(numberTextBox, '-5');
 
@@ -81,7 +85,7 @@ describe('<NumberOfEvents /> component', () => {
       />
     );
 
-    const numberTextBox = screen.getByRole('textbox');
+    const numberTextBox = screen.getByRole('spinbutton');
     await user.clear(numberTextBox);
     await user.type(numberTextBox, '0');
 
@@ -89,7 +93,7 @@ describe('<NumberOfEvents /> component', () => {
     expect(mockSetCurrentNOE).not.toHaveBeenCalled();
   });
 
-  test('calls setErrorAlert with error message when user enters non-numeric characters', async () => {
+  test('input field prevents non-numeric characters', async () => {
     const user = userEvent.setup();
     render(
       <NumberOfEvents 
@@ -99,11 +103,14 @@ describe('<NumberOfEvents /> component', () => {
       />
     );
 
-    const numberTextBox = screen.getByRole('textbox');
+    const numberTextBox = screen.getByRole('spinbutton');
     await user.clear(numberTextBox);
     await user.type(numberTextBox, 'abc');
 
-    expect(mockSetErrorAlert).toHaveBeenCalledWith('Only positive numbers are allowed');
+    // Number input prevents non-numeric characters, so the value should remain empty
+    expect(numberTextBox).toHaveValue(null);
+    // No error should be triggered since the input is empty
+    expect(mockSetErrorAlert).toHaveBeenCalledWith('');
     expect(mockSetCurrentNOE).not.toHaveBeenCalled();
   });
 });

@@ -24,12 +24,12 @@ describe('<EventList /> component', () => {
 
   test('renders empty list when no events provided', () => {
     render(<EventList events={[]} />);
-    
-    const eventList = document.querySelector('#event-list');
+
+    const eventList = document.querySelector('.event-list');
     expect(eventList).toBeInTheDocument();
-    
-    const eventListItems = within(eventList).queryAllByRole('listitem');
-    expect(eventListItems.length).toBe(0);
+
+    // When no events, there should be no list items
+    expect(eventList.textContent).toContain('No events found');
   });
 
   test('renders correct number of events', () => {

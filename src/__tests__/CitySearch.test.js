@@ -87,7 +87,8 @@ describe('<CitySearch /> integration', () => {
   test('renders suggestions list when the app is rendered.', async () => {
     // Mock the API functions for the App component
     getEvents.mockResolvedValue(mockData);
-    const mockLocations = ['London, UK', 'Berlin, Germany', 'New York, NY'];
+    // We have 4 unique locations in the mock data: London, Berlin, Paris, New York
+    const mockLocations = ['London, UK', 'Berlin, Germany', 'Paris, France', 'New York, NY, USA'];
     extractLocations.mockReturnValue(mockLocations);
 
     const user = userEvent.setup();
@@ -103,7 +104,7 @@ describe('<CitySearch /> integration', () => {
     // Wait for suggestions to appear
     await waitFor(() => {
       // Look specifically for suggestions within the city search component
-      const citySearchComponent = screen.getByTestId('city-search-input').closest('#city-search');
+      const citySearchComponent = screen.getByTestId('city-search-input').closest('.city-search');  
       const suggestions = within(citySearchComponent).queryAllByRole('listitem');
       // Expect to have locations + "See all cities" option
       expect(suggestions.length).toBe(mockLocations.length + 1);

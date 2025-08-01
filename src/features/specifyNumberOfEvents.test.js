@@ -21,18 +21,20 @@ defineFeature(feature, (test) => {
 
     then('the user should see 32 events by default', async () => {
       const AppDOM = AppComponent.container.firstChild;
-      const EventListDOM = AppDOM.querySelector('#event-list');
-
+      
       await waitFor(() => {
+        const EventListDOM = AppDOM.querySelector('#event-list');
+        expect(EventListDOM).not.toBeNull();
+        
         const EventListItems = within(EventListDOM).queryAllByRole('listitem');
-        // Note: We only have 5 events in mock data, but the default should be set to show up to 32
+        // Note: We only have 10 events in mock data, but the default should be set to show up to 32
         expect(EventListItems.length).toBeLessThanOrEqual(32);
-        expect(EventListItems.length).toBe(5); // We have exactly 5 events in mock data
+        expect(EventListItems.length).toBe(10); // We have exactly 10 events in mock data
       });
 
       // Also check that the NumberOfEvents input shows 32 as default
-      const NumberOfEventsDOM = AppDOM.querySelector('#number-of-events');
-      const numberInput = within(NumberOfEventsDOM).queryByRole('textbox');
+      const NumberOfEventsDOM = AppDOM.querySelector('.number-of-events');
+      const numberInput = within(NumberOfEventsDOM).queryByRole('spinbutton');
       expect(numberInput.value).toBe('32');
     });
   });
@@ -47,28 +49,39 @@ defineFeature(feature, (test) => {
     when('the user changes the number of events to 10', async () => {
       const user = userEvent.setup();
       const AppDOM = AppComponent.container.firstChild;
-      const NumberOfEventsDOM = AppDOM.querySelector('#number-of-events');
-      const numberInput = within(NumberOfEventsDOM).queryByRole('textbox');
+      const NumberOfEventsDOM = AppDOM.querySelector('.number-of-events');
+      const numberInput = within(NumberOfEventsDOM).queryByRole('spinbutton');
       
       await user.clear(numberInput);
       await user.type(numberInput, '10');
+      
+      // Wait for debounced update
+      await new Promise(resolve => setTimeout(resolve, 600));
     });
 
     then('the user should see exactly 10 events displayed', async () => {
       const AppDOM = AppComponent.container.firstChild;
-      const EventListDOM = AppDOM.querySelector('#event-list');
-      const NumberOfEventsDOM = AppDOM.querySelector('#number-of-events');
-      const numberInput = within(NumberOfEventsDOM).queryByRole('textbox');
+      
+      await waitFor(() => {
+        const EventListDOM = AppDOM.querySelector('#event-list');
+        expect(EventListDOM).not.toBeNull();
+        
+        const EventListItems = within(EventListDOM).queryAllByRole('listitem');
+        expect(EventListItems.length).toBe(10);
+      });
+
+      const NumberOfEventsDOM = AppDOM.querySelector('.number-of-events');
+      const numberInput = within(NumberOfEventsDOM).queryByRole('spinbutton');
 
       await waitFor(() => {
         // Check that the input value was updated
         expect(numberInput.value).toBe('10');
         
-        // Since we only have 5 events in mock data, we should see all 5
-        // but the component should be configured to show up to 10
+        // The user set it to 10, and we have 10 events in extended mock data, so we should see 10
+        const EventListDOM = AppDOM.querySelector('#event-list');
         const EventListItems = within(EventListDOM).queryAllByRole('listitem');
         expect(EventListItems.length).toBeLessThanOrEqual(10);
-        expect(EventListItems.length).toBe(5); // We have exactly 5 events in mock data
+        expect(EventListItems.length).toBe(10); // We have 10 events when user specifies 10
       });
     });
   });
