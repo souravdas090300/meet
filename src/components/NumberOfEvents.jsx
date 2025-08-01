@@ -1,8 +1,16 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
 const NumberOfEvents = ({ currentNOE, setCurrentNOE, setErrorAlert }) => {
+  const [inputValue, setInputValue] = useState(currentNOE.toString());
+
+  // Update local input value when currentNOE changes from parent
+  useEffect(() => {
+    setInputValue(currentNOE.toString());
+  }, [currentNOE]);
+
   const handleInputChanged = (event) => {
-    let value = event.target.value;
+    const value = event.target.value;
+    setInputValue(value); // Update local state immediately for smooth typing
     
     if (value === '') {
       setErrorAlert('Please enter a number between 1 and 100');
@@ -26,7 +34,7 @@ const NumberOfEvents = ({ currentNOE, setCurrentNOE, setErrorAlert }) => {
         id="number-of-events-input"
         type="number"
         className="number-of-events-input"
-        value={currentNOE}
+        value={inputValue}
         onChange={handleInputChanged}
         min="1"
         max="100"
