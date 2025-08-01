@@ -1,6 +1,5 @@
 import React from 'react';
-import { render, within, screen, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { render, within, waitFor } from '@testing-library/react';
 import CitySearch from '../components/CitySearch';
 import EventList from '../components/EventList';
 import App from '../App';

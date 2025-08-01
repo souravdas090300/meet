@@ -5,7 +5,7 @@ import NumberOfEvents from './components/NumberOfEvents';
 import EventChart from './components/EventChart';
 import { InfoAlert, ErrorAlert, WarningAlert } from './components/Alert';
 import { getEvents, extractLocations } from './api';
-import { trackPageView, logAtatusEvent } from './utils/atatus-helpers';
+import { logAtatusEvent } from './utils/atatus-helpers';
 import './App.css';
 
 function App() {

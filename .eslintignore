@@ -1,0 +1,15 @@
+dist/
+public/
+coverage/
+node_modules/
+*.config.js
+*.config.cjs
+workbox-*.js
+service-worker.js
+sw.js
+assets/
+__tests__/EndToEnd.test.js
+jest.e2e.config.cjs
+jest.config.cjs
+babel.config.cjs
+vite.config.js

@@ -3,7 +3,6 @@ import React from 'react';
 import { render, within, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import App from '../App';
-import { getEvents } from '../api';
 
 console.log('Loading feature file...');
 const feature = loadFeature('./src/features/filterEventsByCity.feature');
@@ -104,11 +103,8 @@ defineFeature(feature, (test) => {
         expect(EventListDOM).not.toBeNull();
         
         const EventListItems = within(EventListDOM).queryAllByRole('listitem');
-        const allEvents = await getEvents();
 
-        // filtering the list of all events down to events located in Germany
-        // citySearchInput.value should have the value "Berlin, Germany" at this point
-        const berlinEvents = allEvents.filter(event => event.location === citySearchInput.value);
+        // Check that events are displayed after city selection
         expect(EventListItems.length).toBeGreaterThan(0);
       });
     });
