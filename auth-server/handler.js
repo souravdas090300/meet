@@ -23,23 +23,12 @@ module.exports.getAuthURL = async (event) => {
     return {
       statusCode: 200,
       headers: {
-      "Access-Control-Allow-Origin": "*",
-      "Access-Control-Allow-Headers": "Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token",
-      "Access-Control-Allow-Methods": "GET,OPTIONS"
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Headers": "Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token",
+        "Access-Control-Allow-Methods": "GET,OPTIONS"
       },
       body: ""
     };
-  
-    
-  calendar.events.list(
-    {
-    calendarId: calendar_id,
-    auth: oAuth2Client,
-    timeMin: new Date().toISOString(),
-    singleEvents: true,
-    orderBy: "startTime",
-    }
-  );
   }
 
   try {

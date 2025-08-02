@@ -44,6 +44,13 @@
     .hidden {
       display: none;
     }
+    pre {
+      background: #f7fafc;
+      padding: 10px;
+      border-radius: 4px;
+      overflow-x: auto;
+      font-size: 12px;
+    }
   </style>
 </head>
 
@@ -114,7 +121,9 @@
 
     // Helper Functions
     function showElement(el, show = true) {
-      el.classList.toggle("hidden", !show);
+      if (el) {
+        el.classList.toggle("hidden", !show);
+      }
     }
 
     function resetUI() {
@@ -147,7 +156,7 @@
           const errorData = await response.json();
           errorMsg = errorData.message || response.statusText;
         } catch {
-          errorMsg = await response.text();
+          errorMsg = await response.text() || response.statusText;
         }
         throw new Error(`API Error (${response.status}): ${errorMsg}`);
       }
@@ -207,6 +216,11 @@
 
         elements.tokenResponse.textContent = JSON.stringify(data, null, 2);
         elements.tokenResponse.className = "success";
+        
+        // Auto-fill access token if present in response
+        if (data.access_token && elements.accessTokenInput) {
+          elements.accessTokenInput.value = data.access_token;
+        }
       } catch (error) {
         console.error("Token Exchange Error:", error);
         elements.tokenError.textContent = error.message;
@@ -247,5 +261,3 @@
   </script>
 </body>
 </html>
-
-

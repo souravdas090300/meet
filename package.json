@@ -6,7 +6,7 @@
   "homepage": "https://souravdas090300.github.io/meet",
   "dependencies": {
     "atatus-spa": "^4.6.5",
-    "googleapis": "^154.0.0",
+    "googleapis": "^154.1.0",
     "nprogress": "^0.2.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

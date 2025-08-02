@@ -50,6 +50,7 @@ p {
 
 .app-header {
   margin-bottom: 30px;
+  position: relative;
 }
 
 .app-header h1 {
@@ -61,6 +62,78 @@ p {
 .app-header p {
   color: #666;
   font-size: 1.2rem;
+}
+
+/* Authentication Controls */
+.auth-controls {
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.auth-status {
+  color: #28a745;
+  font-weight: 500;
+  font-size: 0.9rem;
+}
+
+.auth-button {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.auth-button.login {
+  background-color: #4285f4;
+  color: white;
+}
+
+.auth-button.login:hover {
+  background-color: #3367d6;
+  transform: translateY(-1px);
+}
+
+.auth-button.logout {
+  background-color: #dc3545;
+  color: white;
+}
+
+.auth-button.logout:hover {
+  background-color: #c82333;
+  transform: translateY(-1px);
+}
+
+/* Loading Container */
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 200px;
+}
+
+.loading-container p {
+  color: #666;
+  font-size: 1.1rem;
+}
+
+/* Responsive Auth Controls */
+@media (max-width: 768px) {
+  .auth-controls {
+    position: static;
+    justify-content: center;
+    margin-top: 15px;
+  }
+  
+  .app-header {
+    text-align: center;
+  }
 }
 
 .app-controls {

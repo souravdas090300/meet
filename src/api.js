@@ -1,4 +1,58 @@
 const EVENTS_API_URL = 'https://meet-pi-weld.vercel.app/api/events'; // Replace with your actual API endpoint
+const AUTH_SERVER_URL = 'https://pkpsfh72t5.execute-api.eu-central-1.amazonaws.com/dev/api'; // Your AWS Lambda auth server URL
+
+// Check if code is in the URL (from OAuth redirect)
+export const removeQuery = () => {
+  let newurl;
+  if (window.history.pushState && window.location.pathname) {
+    newurl = window.location.protocol + "//" + window.location.host + window.location.pathname;
+    window.history.pushState("", "", newurl);
+  } else {
+    newurl = window.location.protocol + "//" + window.location.host;
+    window.history.pushState("", "", newurl);
+  }
+};
+
+// Check if user is authenticated
+export const checkToken = async (accessToken) => {
+  const result = await fetch(
+    `https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=${accessToken}`
+  )
+    .then((res) => res.json())
+    .catch((error) => error.json());
+
+  return result;
+};
+
+// Get OAuth access token
+export const getToken = async (code) => {
+  const encodeCode = encodeURIComponent(code);
+  const response = await fetch(`${AUTH_SERVER_URL}/get-auth-token/${encodeCode}`);
+  const { access_token } = await response.json();
+  access_token && localStorage.setItem("access_token", access_token);
+  return access_token;
+};
+
+// Get authorization URL
+export const getAuthURL = async () => {
+  const response = await fetch(`${AUTH_SERVER_URL}/get-auth-url`);
+  const result = await response.json();
+  const { authUrl } = result;
+  return authUrl;
+};
+
+// Logout function
+export const logout = () => {
+  localStorage.removeItem("access_token");
+  localStorage.removeItem("lastEvents");
+  localStorage.removeItem("lastEventsTimestamp");
+};
+
+// Check if user is logged in
+export const isLoggedIn = () => {
+  const token = localStorage.getItem("access_token");
+  return !!token;
+};
 
 // Mock data for development/fallback - Comprehensive event data
 const mockEvents = [
@@ -411,41 +465,73 @@ export const getEvents = async () => {
     return mockEvents;
   }
 
+  // Check if there's an authorization code in the URL
+  const searchParams = new URLSearchParams(window.location.search);
+  const code = searchParams.get("code");
+
+  if (code) {
+    removeQuery();
+    const token = await getToken(code);
+    return await getEventsFromAPI(token);
+  }
+
+  // Check if we have a stored access token
+  const token = localStorage.getItem("access_token");
+  
+  if (token) {
+    const tokenCheck = await checkToken(token);
+    if (tokenCheck.error) {
+      // Token is invalid, remove it and redirect to OAuth
+      localStorage.removeItem("access_token");
+      return await redirectToOAuth();
+    } else {
+      // Token is valid, fetch events
+      return await getEventsFromAPI(token);
+    }
+  } else {
+    // No token, redirect to OAuth
+    return await redirectToOAuth();
+  }
+};
+
+// Helper function to redirect to OAuth
+const redirectToOAuth = async () => {
+  // For development, return mock data and show a message
+  if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+    console.log('Development mode: Using mock data. In production, user would be redirected to OAuth.');
+    return mockEvents;
+  }
+  
+  // In production, redirect to OAuth
+  const authUrl = await getAuthURL();
+  window.location.href = authUrl;
+  return [];
+};
+
+// Helper function to fetch events from Google Calendar API
+const getEventsFromAPI = async (accessToken) => {
   try {
-    // For now, use mock data since we don't have the actual API endpoint
-    // In production, replace this with actual API call
-    const events = mockEvents;
+    const response = await fetch(`${AUTH_SERVER_URL}/get-calendar-events/${accessToken}`);
+    
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    
+    const data = await response.json();
+    const events = data.events || [];
     
     // Cache the events in localStorage for offline use
     try {
       localStorage.setItem("lastEvents", JSON.stringify(events));
       localStorage.setItem("lastEventsTimestamp", Date.now().toString());
-      console.log('Events cached for offline use');
+      console.log('Real events cached for offline use');
     } catch (storageError) {
       console.warn('Failed to cache events:', storageError);
     }
     
     return events;
-    
-    // Uncomment this when you have a real API:
-    // const response = await fetch(EVENTS_API_URL);
-    // if (!response.ok) {
-    //   throw new Error(`HTTP error! status: ${response.status}`);
-    // }
-    // const data = await response.json();
-    // const events = data.events || data;
-    // 
-    // // Cache the events in localStorage for offline use
-    // try {
-    //   localStorage.setItem("lastEvents", JSON.stringify(events));
-    //   localStorage.setItem("lastEventsTimestamp", Date.now().toString());
-    // } catch (storageError) {
-    //   console.warn('Failed to cache events:', storageError);
-    // }
-    // 
-    // return events;
   } catch (error) {
-    console.error('Error fetching events:', error);
+    console.error('Error fetching events from Google Calendar API:', error);
     
     // Try to return cached events if API fails
     const cachedEvents = localStorage.getItem("lastEvents");
