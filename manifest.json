@@ -1,8 +1,7 @@
 {
-  "id": "/meet/",
   "short_name": "Meet App",
   "name": "Meet - Event Discovery App",
-  "description": "Find events happening in your city",
+  "description": "Find events happening in your city - A Progressive Web App",
   "icons": [
     {
       "src": "favicon.ico",
@@ -10,50 +9,25 @@
       "type": "image/x-icon"
     },
     {
-      "src": "meet-app-144.png",
-      "type": "image/png",
-      "sizes": "144x144",
-      "purpose": "any"
-    },
-    {
-      "src": "meet-app-192.png",
+      "src": "logo-192.png",
       "type": "image/png",
       "sizes": "192x192",
-      "purpose": "any"
+      "purpose": "any maskable"
     },
     {
-      "src": "meet-app-512.png",
+      "src": "logo-512.png",
       "type": "image/png",
       "sizes": "512x512",
       "purpose": "any maskable"
     }
   ],
-  "screenshots": [
-    {
-      "src": "meet-app-512.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "form_factor": "narrow",
-      "label": "Meet App mobile view"
-    },
-    {
-      "src": "meet-app-512.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "form_factor": "wide", 
-      "label": "Meet App desktop view"
-    }
-  ],
-  "start_url": "/meet/",
+  "start_url": "/",
   "display": "standalone",
   "orientation": "portrait-primary",
-  "theme_color": "#1976d2",
-  "background_color": "#fafafa",
-  "categories": ["productivity", "social", "entertainment"],
+  "theme_color": "#000000",
+  "background_color": "#ffffff",
   "lang": "en",
-  "scope": "/meet/",
-  "prefer_related_applications": false,
-  "launch_handler": {
-    "client_mode": "navigate-existing"
-  }
+  "scope": "/",
+  "categories": ["events", "social", "lifestyle"],
+  "prefer_related_applications": false
 }
