@@ -192,7 +192,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/auth-server/dev/1753635167714-2025-07-27T16:52:47.714Z/auth-server.zip"
+                "S3Key": "serverless/auth-server/dev/1754141608379-2025-08-02T13:33:28.379Z/auth-server.zip"
               },
               "Handler": "handler.getAuthURL",
               "Runtime": "nodejs18.x",
@@ -224,7 +224,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/auth-server/dev/1753635167714-2025-07-27T16:52:47.714Z/auth-server.zip"
+                "S3Key": "serverless/auth-server/dev/1754141608379-2025-08-02T13:33:28.379Z/auth-server.zip"
               },
               "Handler": "handler.getAccessToken",
               "Runtime": "nodejs18.x",
@@ -256,7 +256,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/auth-server/dev/1753635167714-2025-07-27T16:52:47.714Z/auth-server.zip"
+                "S3Key": "serverless/auth-server/dev/1754141608379-2025-08-02T13:33:28.379Z/auth-server.zip"
               },
               "Handler": "handler.getCalendarEvents",
               "Runtime": "nodejs18.x",
@@ -671,7 +671,7 @@
               "GetCalendarEventsLambdaPermissionApiGateway"
             ]
           },
-          "ApiGatewayDeployment1753635157401": {
+          "ApiGatewayDeployment1754141600248": {
             "Type": "AWS::ApiGateway::Deployment",
             "Properties": {
               "RestApiId": {
@@ -1072,7 +1072,7 @@
     "artifact": "C:\\Users\\dasau\\meet\\auth-server\\.serverless\\auth-server.zip"
   },
   "package": {
-    "artifactDirectoryName": "serverless/auth-server/dev/1753635167714-2025-07-27T16:52:47.714Z",
+    "artifactDirectoryName": "serverless/auth-server/dev/1754141608379-2025-08-02T13:33:28.379Z",
     "artifact": "auth-server.zip"
   }
 }
