@@ -576,7 +576,7 @@ MIT © [Sourav Das](https://github.com/souravdas090300)
 **Sourav Das**
 - GitHub: [@souravdas090300](https://github.com/souravdas090300)
 - LinkedIn: [Connect with me](https://linkedin.com/in/sourav-das-dev)
-- Portfolio: [View my work](https://souravdas090300.github.io)
+- Portfolio: [View my work]https://souravdas090300.github.io/meet/)
 
 ---
 
