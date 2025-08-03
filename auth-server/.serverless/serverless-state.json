@@ -10,8 +10,8 @@
       "region": "us-east-1",
       "timeout": 30,
       "environment": {
-        "CLIENT_ID": "YOUR_GOOGLE_CLIENT_ID",
-        "CLIENT_SECRET": "YOUR_GOOGLE_CLIENT_SECRET",
+        "CLIENT_ID": "961599722416-tiplg88mr59klc33o1rp27vhp3goee8t.apps.googleusercontent.com",
+        "CLIENT_SECRET": "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",
         "CALENDAR_ID": "fullstackwebdev@careerfoundry.com"
       },
       "stage": "dev",
@@ -192,17 +192,18 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/auth-server/dev/1754193818407-2025-08-03T04:03:38.407Z/auth-server.zip"
+                "S3Key": "serverless/auth-server/dev/1754231217586-2025-08-03T14:26:57.586Z/auth-server.zip"
               },
               "Handler": "handler.getAuthURL",
               "Runtime": "nodejs18.x",
               "FunctionName": "auth-server-dev-getAuthURL",
               "MemorySize": 1024,
               "Timeout": 30,
+              "Description": "Generate Google OAuth authorization URL",
               "Environment": {
                 "Variables": {
-                  "CLIENT_ID": "YOUR_GOOGLE_CLIENT_ID",
-                  "CLIENT_SECRET": "YOUR_GOOGLE_CLIENT_SECRET",
+                  "CLIENT_ID": "961599722416-tiplg88mr59klc33o1rp27vhp3goee8t.apps.googleusercontent.com",
+                  "CLIENT_SECRET": "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",
                   "CALENDAR_ID": "fullstackwebdev@careerfoundry.com"
                 }
               },
@@ -224,17 +225,18 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/auth-server/dev/1754193818407-2025-08-03T04:03:38.407Z/auth-server.zip"
+                "S3Key": "serverless/auth-server/dev/1754231217586-2025-08-03T14:26:57.586Z/auth-server.zip"
               },
               "Handler": "handler.getAccessToken",
               "Runtime": "nodejs18.x",
               "FunctionName": "auth-server-dev-getAccessToken",
               "MemorySize": 1024,
               "Timeout": 30,
+              "Description": "Exchange authorization code for access token",
               "Environment": {
                 "Variables": {
-                  "CLIENT_ID": "YOUR_GOOGLE_CLIENT_ID",
-                  "CLIENT_SECRET": "YOUR_GOOGLE_CLIENT_SECRET",
+                  "CLIENT_ID": "961599722416-tiplg88mr59klc33o1rp27vhp3goee8t.apps.googleusercontent.com",
+                  "CLIENT_SECRET": "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",
                   "CALENDAR_ID": "fullstackwebdev@careerfoundry.com"
                 }
               },
@@ -256,17 +258,18 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/auth-server/dev/1754193818407-2025-08-03T04:03:38.407Z/auth-server.zip"
+                "S3Key": "serverless/auth-server/dev/1754231217586-2025-08-03T14:26:57.586Z/auth-server.zip"
               },
               "Handler": "handler.getCalendarEvents",
               "Runtime": "nodejs18.x",
               "FunctionName": "auth-server-dev-getCalendarEvents",
               "MemorySize": 1024,
               "Timeout": 30,
+              "Description": "Get calendar events using access token",
               "Environment": {
                 "Variables": {
-                  "CLIENT_ID": "YOUR_GOOGLE_CLIENT_ID",
-                  "CLIENT_SECRET": "YOUR_GOOGLE_CLIENT_SECRET",
+                  "CLIENT_ID": "961599722416-tiplg88mr59klc33o1rp27vhp3goee8t.apps.googleusercontent.com",
+                  "CLIENT_SECRET": "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",
                   "CALENDAR_ID": "fullstackwebdev@careerfoundry.com"
                 }
               },
@@ -281,34 +284,37 @@
               "GetCalendarEventsLogGroup"
             ]
           },
-          "GetAuthURLLambdaVersionnnW96omwdGKRmorf1Ygeg7Uhi3fYz4HTpo37RSh0rUQ": {
+          "GetAuthURLLambdaVersioneAWmQmEkkwK7sCbP2v3YbYIQu4PiKSoneNCcIAg": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "GetAuthURLLambdaFunction"
               },
-              "CodeSha256": "eBDGiebDSKLFw36AbCWuXeU/36SLsAGpJKVTgXUypAQ="
+              "CodeSha256": "imUGFdURqxMDAi6l2FASyNO8kOxuoI01dg4/KPyVneA=",
+              "Description": "Generate Google OAuth authorization URL"
             }
           },
-          "GetAccessTokenLambdaVersionGTQrR09ElMOtqRUCfarMND3Ax23u8EaU0oS9R4tNFVw": {
+          "GetAccessTokenLambdaVersionBA3bSNpefKkDTtzB104g5EwleFWdI0pII7x7WIntUI": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "GetAccessTokenLambdaFunction"
               },
-              "CodeSha256": "eBDGiebDSKLFw36AbCWuXeU/36SLsAGpJKVTgXUypAQ="
+              "CodeSha256": "imUGFdURqxMDAi6l2FASyNO8kOxuoI01dg4/KPyVneA=",
+              "Description": "Exchange authorization code for access token"
             }
           },
-          "GetCalendarEventsLambdaVersionQBB9uxlWwtZM9gEwrmrt6W6oigOTwkdeL6WWmjttYrI": {
+          "GetCalendarEventsLambdaVersionGvMlHOy71Yf4WDiGnSgNGOWtKShmR0cunSPRMMY": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "GetCalendarEventsLambdaFunction"
               },
-              "CodeSha256": "eBDGiebDSKLFw36AbCWuXeU/36SLsAGpJKVTgXUypAQ="
+              "CodeSha256": "imUGFdURqxMDAi6l2FASyNO8kOxuoI01dg4/KPyVneA=",
+              "Description": "Get calendar events using access token"
             }
           },
           "ApiGatewayRestApi": {
@@ -671,7 +677,7 @@
               "GetCalendarEventsLambdaPermissionApiGateway"
             ]
           },
-          "ApiGatewayDeployment1754193798209": {
+          "ApiGatewayDeployment1754231190307": {
             "Type": "AWS::ApiGateway::Deployment",
             "Properties": {
               "RestApiId": {
@@ -812,7 +818,7 @@
           "GetAuthURLLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "GetAuthURLLambdaVersionnnW96omwdGKRmorf1Ygeg7Uhi3fYz4HTpo37RSh0rUQ"
+              "Ref": "GetAuthURLLambdaVersioneAWmQmEkkwK7sCbP2v3YbYIQu4PiKSoneNCcIAg"
             },
             "Export": {
               "Name": "sls-auth-server-dev-GetAuthURLLambdaFunctionQualifiedArn"
@@ -821,7 +827,7 @@
           "GetAccessTokenLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "GetAccessTokenLambdaVersionGTQrR09ElMOtqRUCfarMND3Ax23u8EaU0oS9R4tNFVw"
+              "Ref": "GetAccessTokenLambdaVersionBA3bSNpefKkDTtzB104g5EwleFWdI0pII7x7WIntUI"
             },
             "Export": {
               "Name": "sls-auth-server-dev-GetAccessTokenLambdaFunctionQualifiedArn"
@@ -830,7 +836,7 @@
           "GetCalendarEventsLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "GetCalendarEventsLambdaVersionQBB9uxlWwtZM9gEwrmrt6W6oigOTwkdeL6WWmjttYrI"
+              "Ref": "GetCalendarEventsLambdaVersionGvMlHOy71Yf4WDiGnSgNGOWtKShmR0cunSPRMMY"
             },
             "Export": {
               "Name": "sls-auth-server-dev-GetCalendarEventsLambdaFunctionQualifiedArn"
@@ -952,6 +958,7 @@
     "functions": {
       "getAuthURL": {
         "handler": "handler.getAuthURL",
+        "description": "Generate Google OAuth authorization URL",
         "events": [
           {
             "http": {
@@ -984,10 +991,11 @@
         "timeout": 30,
         "runtime": "nodejs18.x",
         "vpc": {},
-        "versionLogicalId": "GetAuthURLLambdaVersionnnW96omwdGKRmorf1Ygeg7Uhi3fYz4HTpo37RSh0rUQ"
+        "versionLogicalId": "GetAuthURLLambdaVersioneAWmQmEkkwK7sCbP2v3YbYIQu4PiKSoneNCcIAg"
       },
       "getAccessToken": {
         "handler": "handler.getAccessToken",
+        "description": "Exchange authorization code for access token",
         "events": [
           {
             "http": {
@@ -1020,10 +1028,11 @@
         "timeout": 30,
         "runtime": "nodejs18.x",
         "vpc": {},
-        "versionLogicalId": "GetAccessTokenLambdaVersionGTQrR09ElMOtqRUCfarMND3Ax23u8EaU0oS9R4tNFVw"
+        "versionLogicalId": "GetAccessTokenLambdaVersionBA3bSNpefKkDTtzB104g5EwleFWdI0pII7x7WIntUI"
       },
       "getCalendarEvents": {
         "handler": "handler.getCalendarEvents",
+        "description": "Get calendar events using access token",
         "events": [
           {
             "http": {
@@ -1056,7 +1065,7 @@
         "timeout": 30,
         "runtime": "nodejs18.x",
         "vpc": {},
-        "versionLogicalId": "GetCalendarEventsLambdaVersionQBB9uxlWwtZM9gEwrmrt6W6oigOTwkdeL6WWmjttYrI"
+        "versionLogicalId": "GetCalendarEventsLambdaVersionGvMlHOy71Yf4WDiGnSgNGOWtKShmR0cunSPRMMY"
       }
     },
     "configValidationMode": "warn",
@@ -1075,7 +1084,7 @@
     "artifact": "C:\\Users\\dasau\\meet\\auth-server\\.serverless\\auth-server.zip"
   },
   "package": {
-    "artifactDirectoryName": "serverless/auth-server/dev/1754193818407-2025-08-03T04:03:38.407Z",
+    "artifactDirectoryName": "serverless/auth-server/dev/1754231217586-2025-08-03T14:26:57.586Z",
     "artifact": "auth-server.zip"
   }
 }
