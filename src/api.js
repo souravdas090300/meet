@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 const EVENTS_API_URL = 'https://meet-pi-weld.vercel.app/api/events'; // Replace with your actual API endpoint
 const AUTH_SERVER_URL = 'https://pkpsfh72t5.execute-api.eu-central-1.amazonaws.com/dev/api'; // Your AWS Lambda auth server URL
 
@@ -440,10 +441,33 @@ const mockEvents = [
       "useDefault": true
     },
     "eventType": "default"
+=======
+// API functions for the Meet App
+const EVENTS_API_URL = 'https://your-api-endpoint.com/api/events'; // Replace with your actual API endpoint
+
+// Mock data for development/fallback
+const mockEvents = [
+  {
+    id: 1,
+    title: 'Sample Event 1',
+    description: 'This is a sample event for testing purposes.',
+    location: 'New York, NY',
+    date: '2025-08-15',
+    time: '18:00'
+  },
+  {
+    id: 2,
+    title: 'Sample Event 2',
+    description: 'Another sample event for testing purposes.',
+    location: 'Los Angeles, CA',
+    date: '2025-08-20',
+    time: '19:30'
+>>>>>>> Stashed changes
   }
 ];
 
 /**
+<<<<<<< Updated upstream
  * Fetch events from API or return cached data when offline
  */
 export const getEvents = async () => {
@@ -548,6 +572,26 @@ const getEventsFromAPI = async (accessToken) => {
     
     // Return mock data as final fallback
     console.log('API failed and no cache available, using mock data');
+=======
+ * Fetch events from API or return mock data
+ */
+export const getEvents = async () => {
+  try {
+    // For now, return mock data since we don't have the actual API endpoint
+    // In production, replace this with actual API call
+    return mockEvents;
+    
+    // Uncomment this when you have a real API:
+    // const response = await fetch(EVENTS_API_URL);
+    // if (!response.ok) {
+    //   throw new Error(`HTTP error! status: ${response.status}`);
+    // }
+    // const data = await response.json();
+    // return data.events || data;
+  } catch (error) {
+    console.error('Error fetching events:', error);
+    // Return mock data as fallback
+>>>>>>> Stashed changes
     return mockEvents;
   }
 };
@@ -560,9 +604,13 @@ export const extractLocations = (events) => {
     return [];
   }
   
+<<<<<<< Updated upstream
   const locations = events
     .filter(event => event && event.location)
     .map(event => event.location);
+=======
+  const locations = events.map(event => event.location);
+>>>>>>> Stashed changes
   const uniqueLocations = [...new Set(locations)];
   return uniqueLocations.sort();
 };
