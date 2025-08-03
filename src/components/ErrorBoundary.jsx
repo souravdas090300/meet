@@ -9,7 +9,11 @@ class ErrorBoundary extends React.Component {
 
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
   static getDerivedStateFromError() {
+=======
+  static getDerivedStateFromError(error) {
+>>>>>>> Stashed changes
 =======
   static getDerivedStateFromError(error) {
 >>>>>>> Stashed changes

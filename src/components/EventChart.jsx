@@ -5,12 +5,16 @@ const EventChart = ({ events = [] }) => {
   if (!events || events.length === 0) {
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
     return (
       <div className="event-charts">
         <h3>Event Statistics</h3>
         <p>No events to display</p>
       </div>
     );
+=======
+    return null;
+>>>>>>> Stashed changes
 =======
     return null;
 >>>>>>> Stashed changes
@@ -38,7 +42,10 @@ const EventChart = ({ events = [] }) => {
       <h3>Event Statistics</h3>
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
       <p>Total events: {events.length}</p>
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
 =======

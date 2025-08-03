@@ -1,7 +1,10 @@
 import React from 'react';
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 import Event from './Event';
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
 =======
@@ -19,12 +22,15 @@ const EventList = ({ events = [] }) => {
   return (
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
     <ul id="event-list">
       {events.map((event) => (
         <Event key={event.id} event={event} />
       ))}
     </ul>
 =======
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
     <div className="event-list">
@@ -41,6 +47,9 @@ const EventList = ({ events = [] }) => {
       ))}
     </div>
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes

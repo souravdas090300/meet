@@ -1,5 +1,6 @@
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 import React, { useState, useEffect, useRef } from 'react';
 
 const NumberOfEvents = ({ currentNOE, setCurrentNOE, setErrorAlert }) => {
@@ -81,6 +82,8 @@ const NumberOfEvents = ({ currentNOE, setCurrentNOE, setErrorAlert }) => {
 =======
 =======
 >>>>>>> Stashed changes
+=======
+>>>>>>> Stashed changes
 import React from 'react';
 
 const NumberOfEvents = ({ currentNOE, setCurrentNOE, setErrorAlert }) => {
@@ -98,6 +101,9 @@ const NumberOfEvents = ({ currentNOE, setCurrentNOE, setErrorAlert }) => {
       setErrorAlert('Please enter a number between 1 and 100');
     } else {
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
@@ -107,6 +113,7 @@ const NumberOfEvents = ({ currentNOE, setCurrentNOE, setErrorAlert }) => {
   };
 
   return (
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
     <div id="number-of-events" className="number-of-events">
@@ -122,6 +129,8 @@ const NumberOfEvents = ({ currentNOE, setCurrentNOE, setErrorAlert }) => {
 =======
 =======
 >>>>>>> Stashed changes
+=======
+>>>>>>> Stashed changes
     <div className="number-of-events">
       <label htmlFor="number-of-events-input">Number of Events:</label>
       <input
@@ -131,6 +140,9 @@ const NumberOfEvents = ({ currentNOE, setCurrentNOE, setErrorAlert }) => {
         value={currentNOE}
         onChange={handleInputChanged}
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
