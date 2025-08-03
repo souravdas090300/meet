@@ -4,91 +4,224 @@
   <meta charset="utf-8" />
   <meta http-equiv="x-ua-compatible" content="ie=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Test Auth Server</title>
+  <title>Google Calendar OAuth Test Client</title>
   <style>
-    #container {
-      max-width: 500px;
-      margin: 0 auto;
-      padding: 20px;
-      font-family: Arial, sans-serif;
+    :root {
+      --primary-color: #4285F4;
+      --error-color: #EA4335;
+      --success-color: #34A853;
+      --warning-color: #FBBC05;
+      --text-color: #202124;
+      --light-gray: #f5f5f5;
+      --border-radius: 4px;
     }
+    
+    body {
+      font-family: 'Roboto', Arial, sans-serif;
+      line-height: 1.6;
+      color: var(--text-color);
+      background-color: #f9f9f9;
+    }
+    
+    #container {
+      max-width: 800px;
+      margin: 2rem auto;
+      padding: 2rem;
+      background: white;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      border-radius: var(--border-radius);
+    }
+    
+    h1, h2 {
+      color: var(--primary-color);
+    }
+    
+    h1 {
+      border-bottom: 1px solid #eee;
+      padding-bottom: 0.5rem;
+      margin-bottom: 1.5rem;
+    }
+    
+    section {
+      margin-bottom: 2rem;
+      padding: 1.5rem;
+      background: var(--light-gray);
+      border-radius: var(--border-radius);
+    }
+    
     button {
-      padding: 8px 16px;
-      background: #2d3748;
+      padding: 0.75rem 1.5rem;
+      background: var(--primary-color);
       color: white;
       border: none;
-      border-radius: 4px;
+      border-radius: var(--border-radius);
       cursor: pointer;
+      font-weight: 500;
+      transition: background 0.2s;
+      margin-top: 0.5rem;
     }
+    
     button:hover {
-      background: #4a5568;
+      background: #3367d6;
     }
-    input {
-      padding: 8px;
+    
+    button:disabled {
+      background: #cccccc;
+      cursor: not-allowed;
+    }
+    
+    input, textarea {
       width: 100%;
-      margin: 8px 0;
+      padding: 0.75rem;
+      margin: 0.5rem 0 1rem;
+      border: 1px solid #ddd;
+      border-radius: var(--border-radius);
       box-sizing: border-box;
+      font-family: inherit;
     }
-    #authURL {
-      display: block;
-      margin: 10px 0;
-      word-break: break-all;
-      color: #3182ce;
+    
+    textarea {
+      min-height: 100px;
+      resize: vertical;
     }
+    
+    .status-message {
+      padding: 0.75rem;
+      margin: 1rem 0;
+      border-radius: var(--border-radius);
+    }
+    
     .error {
-      color: #e53e3e;
+      background-color: #FDECEA;
+      color: var(--error-color);
+      border-left: 4px solid var(--error-color);
     }
+    
     .success {
-      color: #38a169;
+      background-color: #E6F4EA;
+      color: var(--success-color);
+      border-left: 4px solid var(--success-color);
     }
+    
+    .info {
+      background-color: #E8F0FE;
+      color: var(--primary-color);
+      border-left: 4px solid var(--primary-color);
+    }
+    
     .hidden {
       display: none;
     }
+    
     pre {
       background: #f7fafc;
-      padding: 10px;
-      border-radius: 4px;
+      padding: 1rem;
+      border-radius: var(--border-radius);
       overflow-x: auto;
-      font-size: 12px;
+      font-size: 0.9rem;
+      border: 1px solid #e2e8f0;
+    }
+    
+    .copy-btn {
+      background: var(--warning-color);
+      margin-left: 0.5rem;
+    }
+    
+    .copy-btn:hover {
+      background: #e2a903;
+    }
+    
+    .step-number {
+      display: inline-block;
+      width: 24px;
+      height: 24px;
+      background: var(--primary-color);
+      color: white;
+      text-align: center;
+      border-radius: 50%;
+      margin-right: 0.5rem;
+      line-height: 24px;
+    }
+    
+    .loading {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 3px solid rgba(255,255,255,0.3);
+      border-radius: 50%;
+      border-top-color: white;
+      animation: spin 1s ease-in-out infinite;
+      margin-left: 10px;
+    }
+    
+    @keyframes spin {
+      to { transform: rotate(360deg); }
     }
   </style>
 </head>
 
 <body>
   <main id="container">
-    <h1>OAuth2 Test Client</h1>
+    <h1>Google Calendar OAuth Test Client</h1>
     
     <!-- Step 1: Get Auth URL -->
     <section>
-      <h2>Step 1: Get Authorization URL</h2>
-      <button id="getAuthUrlButton">Generate OAuth URL</button>
-      <p id="resultStatus" class="hidden"></p>
-      <a id="authURL" href="#" target="_blank" class="hidden">Authorization URL</a>
-      <p id="resultError" class="error hidden"></p>
+      <h2><span class="step-number">1</span> Get Authorization URL</h2>
+      <p>Click the button below to generate the OAuth authorization URL. You'll be redirected to Google to authenticate.</p>
+      <button id="getAuthUrlButton">
+        <span id="authButtonText">Generate OAuth URL</span>
+        <span id="authButtonSpinner" class="loading hidden"></span>
+      </button>
+      <div id="resultStatus" class="status-message hidden"></div>
+      <div id="authUrlContainer" class="hidden">
+        <label>Authorization URL:</label>
+        <textarea id="authURL" readonly></textarea>
+        <button id="copyAuthUrl" class="copy-btn">Copy URL</button>
+        <a id="openAuthUrl" href="#" target="_blank">
+          <button>Open in New Tab</button>
+        </a>
+      </div>
+      <div id="resultError" class="status-message error hidden"></div>
     </section>
 
     <!-- Step 2: Exchange Code for Token -->
     <section>
-      <h2>Step 2: Exchange Code for Token</h2>
-      <label>
-        Authorization Code:
-        <input id="code" type="text" placeholder="Paste your authorization code here" />
-      </label>
-      <button id="getToken">Get Access Token</button>
-      <pre id="tokenResponse" class="hidden"></pre>
-      <p id="tokenError" class="error hidden"></p>
+      <h2><span class="step-number">2</span> Exchange Code for Token</h2>
+      <p>After authorization, paste the code from the redirect URL below to get your access token.</p>
+      <label for="code">Authorization Code:</label>
+      <input id="code" type="text" placeholder="Paste your authorization code here" />
+      <button id="getToken">
+        <span id="tokenButtonText">Get Access Token</span>
+        <span id="tokenButtonSpinner" class="loading hidden"></span>
+      </button>
+      <div id="tokenResponseContainer" class="hidden">
+        <label>Token Response:</label>
+        <pre id="tokenResponse"></pre>
+        <button id="copyToken" class="copy-btn">Copy Token</button>
+      </div>
+      <div id="tokenError" class="status-message error hidden"></div>
+      
+      <div id="tokenInfo" class="hidden">
+        <h3>Access Token Information</h3>
+        <div id="tokenDetails"></div>
+      </div>
     </section>
 
     <!-- Step 3: Get Calendar Events -->
     <section>
-      <h2>Step 3: Get Calendar Events</h2>
-      <label>
-        Access Token:
-        <input id="accessToken" type="text" placeholder="Paste your access token here" />
-      </label>
-      <button id="getEvents">Get Calendar Events</button>
-      <pre id="eventsResponse" class="hidden"></pre>
-      <p id="eventsError" class="error hidden"></p>
+      <h2><span class="step-number">3</span> Get Calendar Events</h2>
+      <p>Use your access token to fetch calendar events from the Google Calendar API.</p>
+      <label for="accessToken">Access Token:</label>
+      <input id="accessToken" type="text" placeholder="Paste your access token here or it will auto-fill from step 2" />
+      <button id="getEvents">
+        <span id="eventsButtonText">Get Calendar Events</span>
+        <span id="eventsButtonSpinner" class="loading hidden"></span>
+      </button>
+      <div id="eventsResponseContainer" class="hidden">
+        <label>Events Response:</label>
+        <pre id="eventsResponse"></pre>
+      </div>
+      <div id="eventsError" class="status-message error hidden"></div>
     </section>
   </main>
 
@@ -105,24 +238,72 @@
 
     // DOM Elements
     const elements = {
+      // Buttons
       authUrlButton: document.getElementById("getAuthUrlButton"),
-      codeInput: document.getElementById("code"),
       tokenButton: document.getElementById("getToken"),
-      accessTokenInput: document.getElementById("accessToken"),
       eventsButton: document.getElementById("getEvents"),
+      copyAuthUrl: document.getElementById("copyAuthUrl"),
+      copyToken: document.getElementById("copyToken"),
+      openAuthUrl: document.getElementById("openAuthUrl"),
+      
+      // Inputs
+      codeInput: document.getElementById("code"),
+      accessTokenInput: document.getElementById("accessToken"),
+      
+      // Display elements
+      authUrlContainer: document.getElementById("authUrlContainer"),
+      authURL: document.getElementById("authURL"),
       resultStatus: document.getElementById("resultStatus"),
-      authLink: document.getElementById("authURL"),
       resultError: document.getElementById("resultError"),
+      tokenResponseContainer: document.getElementById("tokenResponseContainer"),
       tokenResponse: document.getElementById("tokenResponse"),
       tokenError: document.getElementById("tokenError"),
+      tokenInfo: document.getElementById("tokenInfo"),
+      tokenDetails: document.getElementById("tokenDetails"),
+      eventsResponseContainer: document.getElementById("eventsResponseContainer"),
       eventsResponse: document.getElementById("eventsResponse"),
-      eventsError: document.getElementById("eventsError")
+      eventsError: document.getElementById("eventsError"),
+      
+      // Loading indicators
+      authButtonText: document.getElementById("authButtonText"),
+      authButtonSpinner: document.getElementById("authButtonSpinner"),
+      tokenButtonText: document.getElementById("tokenButtonText"),
+      tokenButtonSpinner: document.getElementById("tokenButtonSpinner"),
+      eventsButtonText: document.getElementById("eventsButtonText"),
+      eventsButtonSpinner: document.getElementById("eventsButtonSpinner")
     };
 
     // Helper Functions
     function showElement(el, show = true) {
-      if (el) {
-        el.classList.toggle("hidden", !show);
+      el?.classList.toggle("hidden", !show);
+    }
+
+    function setLoading(buttonType, isLoading) {
+      let textElement, spinnerElement;
+      
+      switch(buttonType) {
+        case 'auth':
+          textElement = elements.authButtonText;
+          spinnerElement = elements.authButtonSpinner;
+          elements.authUrlButton.disabled = isLoading;
+          break;
+        case 'token':
+          textElement = elements.tokenButtonText;
+          spinnerElement = elements.tokenButtonSpinner;
+          elements.tokenButton.disabled = isLoading;
+          break;
+        case 'events':
+          textElement = elements.eventsButtonText;
+          spinnerElement = elements.eventsButtonSpinner;
+          elements.eventsButton.disabled = isLoading;
+          break;
+      }
+      
+      if (textElement && spinnerElement) {
+        textElement.textContent = isLoading ? 'Processing...' : 
+          buttonType === 'auth' ? 'Generate OAuth URL' :
+          buttonType === 'token' ? 'Get Access Token' : 'Get Calendar Events';
+        showElement(spinnerElement, isLoading);
       }
     }
 
@@ -130,6 +311,27 @@
       showElement(elements.resultError, false);
       showElement(elements.tokenError, false);
       showElement(elements.eventsError, false);
+    }
+
+    function showStatus(element, message, type = 'info') {
+      element.textContent = message;
+      element.className = `status-message ${type}`;
+      showElement(element, true);
+    }
+
+    function parseJwt(token) {
+      try {
+        const base64Url = token.split('.')[1];
+        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+        const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+          return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+        }).join(''));
+        
+        return JSON.parse(jsonPayload);
+      } catch (e) {
+        console.error("Error parsing JWT:", e);
+        return null;
+      }
     }
 
     async function makeApiRequest(url, method = "GET", body = null) {
@@ -167,9 +369,8 @@
     // Event Handlers
     elements.authUrlButton.addEventListener("click", async () => {
       resetUI();
-      showElement(elements.resultStatus);
-      elements.resultStatus.textContent = "Requesting authorization URL...";
-      elements.resultStatus.className = "";
+      setLoading('auth', true);
+      showStatus(elements.resultStatus, "Requesting authorization URL...");
 
       try {
         const data = await makeApiRequest(
@@ -180,17 +381,16 @@
           throw new Error("No authorization URL returned from server");
         }
 
-        elements.authLink.href = data.authUrl;
-        elements.authLink.textContent = data.authUrl;
-        showElement(elements.authLink);
-        
-        elements.resultStatus.textContent = "Success! Click the URL above to authorize.";
-        elements.resultStatus.className = "success";
+        elements.authURL.value = data.authUrl;
+        elements.openAuthUrl.href = data.authUrl;
+        showElement(elements.authUrlContainer);
+       
+        showStatus(elements.resultStatus, "Success! Use the URL above to authorize with Google.", 'success');
       } catch (error) {
         console.error("Authorization URL Error:", error);
-        elements.resultError.textContent = error.message;
-        showElement(elements.resultError);
-        elements.resultStatus.className = "error";
+        showStatus(elements.resultError, error.message, 'error');
+      } finally {
+        setLoading('auth', false);
       }
     });
 
@@ -199,14 +399,13 @@
       const code = elements.codeInput.value.trim();
 
       if (!code) {
-        elements.tokenError.textContent = "Please enter an authorization code";
-        showElement(elements.tokenError);
+        showStatus(elements.tokenError, "Please enter an authorization code", 'error');
         return;
       }
 
-      showElement(elements.tokenResponse);
+      setLoading('token', true);
+      showElement(elements.tokenResponseContainer);
       elements.tokenResponse.textContent = "Processing...";
-      elements.tokenResponse.className = "";
 
       try {
         const encodedCode = encodeURIComponent(code);
@@ -215,17 +414,29 @@
         );
 
         elements.tokenResponse.textContent = JSON.stringify(data, null, 2);
-        elements.tokenResponse.className = "success";
-        
+        showElement(elements.tokenResponseContainer);
+       
         // Auto-fill access token if present in response
         if (data.access_token && elements.accessTokenInput) {
           elements.accessTokenInput.value = data.access_token;
+          
+          // Parse and display token information
+          const tokenData = parseJwt(data.access_token);
+          if (tokenData) {
+            elements.tokenDetails.innerHTML = `
+              <p><strong>Issued To:</strong> ${tokenData.email || tokenData.sub}</p>
+              <p><strong>Scope:</strong> ${tokenData.scope || 'N/A'}</p>
+              <p><strong>Issued At:</strong> ${new Date(tokenData.iat * 1000).toLocaleString()}</p>
+              <p><strong>Expires At:</strong> ${new Date(tokenData.exp * 1000).toLocaleString()}</p>
+            `;
+            showElement(elements.tokenInfo);
+          }
         }
       } catch (error) {
         console.error("Token Exchange Error:", error);
-        elements.tokenError.textContent = error.message;
-        showElement(elements.tokenError);
-        elements.tokenResponse.className = "error";
+        showStatus(elements.tokenError, error.message, 'error');
+      } finally {
+        setLoading('token', false);
       }
     });
 
@@ -234,14 +445,13 @@
       const accessToken = elements.accessTokenInput.value.trim();
 
       if (!accessToken) {
-        elements.eventsError.textContent = "Please enter an access token";
-        showElement(elements.eventsError);
+        showStatus(elements.eventsError, "Please enter an access token", 'error');
         return;
       }
 
-      showElement(elements.eventsResponse);
+      setLoading('events', true);
+      showElement(elements.eventsResponseContainer);
       elements.eventsResponse.textContent = "Loading calendar events...";
-      elements.eventsResponse.className = "";
 
       try {
         const encodedToken = encodeURIComponent(accessToken);
@@ -250,14 +460,32 @@
         );
 
         elements.eventsResponse.textContent = JSON.stringify(data, null, 2);
-        elements.eventsResponse.className = "success";
       } catch (error) {
         console.error("Calendar Events Error:", error);
-        elements.eventsError.textContent = error.message;
-        showElement(elements.eventsError);
-        elements.eventsResponse.className = "error";
+        showStatus(elements.eventsError, error.message, 'error');
+      } finally {
+        setLoading('events', false);
       }
     });
+
+    // Copy buttons functionality
+    elements.copyAuthUrl.addEventListener("click", () => {
+      navigator.clipboard.writeText(elements.authURL.value)
+        .then(() => alert("Authorization URL copied to clipboard!"))
+        .catch(err => console.error("Could not copy text: ", err));
+    });
+
+    elements.copyToken.addEventListener("click", () => {
+      const tokenData = JSON.parse(elements.tokenResponse.textContent);
+      if (tokenData?.access_token) {
+        navigator.clipboard.writeText(tokenData.access_token)
+          .then(() => alert("Access token copied to clipboard!"))
+          .catch(err => console.error("Could not copy text: ", err));
+      }
+    });
+
+    // Initialize UI
+    resetUI();
   </script>
 </body>
 </html>
