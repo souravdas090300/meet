@@ -48,7 +48,21 @@ defineFeature(feature, (test) => {
 
     when('the user changes the number of events to 10', async () => {
       const user = userEvent.setup();
+      
+      // Wait for the app to load completely
+      await waitFor(() => {
+        const AppDOM = AppComponent.container.firstChild;
+        expect(AppDOM).not.toBeNull();
+      });
+      
       const AppDOM = AppComponent.container.firstChild;
+      
+      // Wait for NumberOfEvents component to be rendered
+      await waitFor(() => {
+        const NumberOfEventsDOM = AppDOM.querySelector('.number-of-events');
+        expect(NumberOfEventsDOM).not.toBeNull();
+      });
+      
       const NumberOfEventsDOM = AppDOM.querySelector('.number-of-events');
       const numberInput = within(NumberOfEventsDOM).queryByRole('spinbutton');
       

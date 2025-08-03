@@ -44,10 +44,22 @@ defineFeature(feature, (test) => {
 
     when('user starts typing in the city textbox', async () => {
       const user = userEvent.setup();
-      const AppDOM = AppComponent.container.firstChild;
-      const CitySearchDOM = AppDOM.querySelector('.city-search');
-      expect(CitySearchDOM).not.toBeNull();
       
+      // Wait for the app to load completely
+      await waitFor(() => {
+        const AppDOM = AppComponent.container.firstChild;
+        expect(AppDOM).not.toBeNull();
+      });
+      
+      const AppDOM = AppComponent.container.firstChild;
+      
+      // Wait for CitySearch component to be rendered
+      await waitFor(() => {
+        const CitySearchDOM = AppDOM.querySelector('.city-search');
+        expect(CitySearchDOM).not.toBeNull();
+      });
+      
+      const CitySearchDOM = AppDOM.querySelector('.city-search');
       const citySearchInput = within(CitySearchDOM).queryByRole('textbox');
       await user.type(citySearchInput, "Berlin");
     });
@@ -73,9 +85,18 @@ defineFeature(feature, (test) => {
     given('user was typing "Berlin" in the city textbox', async () => {
       AppComponent = render(<App />);
       const user = userEvent.setup();
-      AppDOM = AppComponent.container.firstChild;
-      CitySearchDOM = AppDOM.querySelector('.city-search');
-      expect(CitySearchDOM).not.toBeNull();
+      
+      // Wait for the app to load completely
+      await waitFor(() => {
+        AppDOM = AppComponent.container.firstChild;
+        expect(AppDOM).not.toBeNull();
+      });
+      
+      // Wait for CitySearch component to be rendered
+      await waitFor(() => {
+        CitySearchDOM = AppDOM.querySelector('.city-search');
+        expect(CitySearchDOM).not.toBeNull();
+      });
       
       citySearchInput = within(CitySearchDOM).queryByRole('textbox');  
       await user.type(citySearchInput, "Berlin");

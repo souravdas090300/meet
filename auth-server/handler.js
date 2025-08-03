@@ -1,164 +1,156 @@
-"use strict";
+'use strict';
+
 
 const { google } = require("googleapis");
 const calendar = google.calendar("v3");
+
 const SCOPES = ["https://www.googleapis.com/auth/calendar.events.public.readonly"];
 const { CLIENT_SECRET, CLIENT_ID, CALENDAR_ID } = process.env;
-const redirect_uris = [
-  "https://meet-pi-weld.vercel.app/",
-  "http://127.0.0.1:8080/",
-  "http://localhost:5173/",
-  "http://localhost:3000/"
-];
+
+// Primary redirect URI for production
+const REDIRECT_URI = "https://souravdas090300.github.io/meet/";
 
 const oAuth2Client = new google.auth.OAuth2(
-  CLIENT_ID,
-  CLIENT_SECRET,
-  redirect_uris[0]
+ CLIENT_ID,
+ CLIENT_SECRET,
+ REDIRECT_URI
 );
 
+
 module.exports.getAuthURL = async (event) => {
-  // Handle preflight OPTIONS request
-  if (event.httpMethod === 'OPTIONS') {
-    return {
-      statusCode: 200,
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Headers": "Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token",
-        "Access-Control-Allow-Methods": "GET,OPTIONS"
-      },
-      body: ""
-    };
-  }
+ /**
+  * Generate OAuth URL - supports environment switching via query parameter
+  * ?env=github for GitHub Pages deployment (default)
+  * ?env=local for local development
+  * ?env=test for local testing
+  * Default: GitHub Pages
+  */
+ 
+ let redirectUri = REDIRECT_URI; // Default to GitHub Pages
+ 
+ // Check for environment override
+ const queryParams = event?.queryStringParameters || {};
+ if (queryParams.env) {
+   switch (queryParams.env.toLowerCase()) {
+     case 'github':
+     case 'production':
+       redirectUri = "https://souravdas090300.github.io/meet/";
+       break;
+     case 'local':
+       redirectUri = "http://localhost:3000/";
+       break;
+     case 'test':
+       redirectUri = "http://127.0.0.1:3000/";
+       break;
+     // Default remains GitHub Pages
+   }
+ }
+ 
+ // Create OAuth client with the selected redirect URI
+ const oAuth2ClientForRequest = new google.auth.OAuth2(
+   CLIENT_ID,
+   CLIENT_SECRET,
+   redirectUri
+ );
+ 
+ const authUrl = oAuth2ClientForRequest.generateAuthUrl({
+   access_type: "offline",
+   scope: SCOPES,
+ });
 
-  try {
-    const authUrl = oAuth2Client.generateAuthUrl({
-      access_type: "offline",
-      scope: SCOPES,
-      prompt: "consent"
-    });
-
-    return {
-      statusCode: 200,
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Credentials": true,
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        authUrl: authUrl
-      })
-    };
-  } catch (error) {
-    return {
-      statusCode: 500,
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        error: "Failed to generate authentication URL",
-        details: error.message
-      })
-    };
-  }
+ return {
+   statusCode: 200,
+   headers: {
+     'Access-Control-Allow-Origin': '*',
+     'Access-Control-Allow-Credentials': true,
+   },
+   body: JSON.stringify({
+     authUrl,
+     redirectUri,
+   }),
+ };
 };
 
 module.exports.getAccessToken = async (event) => {
-  // Handle preflight OPTIONS request
-  if (event.httpMethod === 'OPTIONS') {
-    return {
-      statusCode: 200,
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Headers": "Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token",
-        "Access-Control-Allow-Methods": "GET,OPTIONS"
-      },
-      body: ""
-    };
-  }
+ // Decode authorization code extracted from the URL query
+ const code = decodeURIComponent(`${event.pathParameters.code}`);
 
-  try {
-    const code = decodeURIComponent(event.pathParameters.code);
-    
-    const { tokens } = await oAuth2Client.getToken(code);
-    
-    return {
-      statusCode: 200,
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Credentials": true,
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(tokens)
-    };
-  } catch (error) {
-    console.error("Token exchange error:", error);
-    return {
-      statusCode: 500,
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        error: "Failed to exchange code for token",
-        details: error.message
-      })
-    };
-  }
+
+ return new Promise((resolve, reject) => {
+   /**
+    *  Exchange authorization code for access token with a “callback” after the exchange,
+    *  The callback in this case is an arrow function with the results as parameters: “error” and “response”
+    */
+
+
+   oAuth2Client.getToken(code, (error, response) => {
+     if (error) {
+       return reject(error);
+     }
+     return resolve(response);
+   });
+ })
+   .then((results) => {
+     // Respond with OAuth token
+     return {
+       statusCode: 200,
+       headers: {
+         'Access-Control-Allow-Origin': '*',
+         'Access-Control-Allow-Credentials': true,
+       },
+       body: JSON.stringify(results),
+     };
+   })
+   .catch((error) => {
+     // Handle error
+     return {
+       statusCode: 500,
+       body: JSON.stringify(error),
+     };
+   });
 };
 
 module.exports.getCalendarEvents = async (event) => {
-  // Handle preflight OPTIONS request
-  if (event.httpMethod === 'OPTIONS') {
-    return {
-      statusCode: 200,
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Headers": "Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token",
-        "Access-Control-Allow-Methods": "GET,OPTIONS"
+  const access_token = decodeURIComponent(`${event.pathParameters.access_token}`);
+  oAuth2Client.setCredentials({ access_token });
+
+
+  return new Promise((resolve, reject) => {
+    calendar.events.list(
+      {
+        calendarId: CALENDAR_ID,
+        auth: oAuth2Client,
+        timeMin: new Date().toISOString(),
+        singleEvents: true,
+        orderBy: "startTime",
       },
-      body: ""
-    };
-  }
-
-  try {
-    const access_token = decodeURIComponent(event.pathParameters.access_token);
-    
-    oAuth2Client.setCredentials({ access_token });
-
-    const events = await calendar.events.list({
-      calendarId: CALENDAR_ID,
-      auth: oAuth2Client,
-      timeMin: (new Date()).toISOString(),
-      maxResults: 32,
-      singleEvents: true,
-      orderBy: "startTime",
+      (error, response) => {
+        if (error) {
+          reject(error);
+        } else {
+          resolve(response);
+        }
+      }
+    );
+  })
+    .then((results) => {
+      return {
+        statusCode: 200,
+        headers: {
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Credentials": true,
+        },
+        body: JSON.stringify({ events: results.data.items }),
+      };
+    })
+    .catch((error) => {
+      return {
+        statusCode: 500,
+        headers: {
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Credentials": true,
+        },
+        body: JSON.stringify(error),
+      };
     });
-
-    return {
-      statusCode: 200,
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Credentials": true,
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        events: events.data.items
-      })
-    };
-  } catch (error) {
-    console.error("Calendar events error:", error);
-    return {
-      statusCode: 500,
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        error: "Failed to fetch calendar events",
-        details: error.message
-      })
-    };
-  }
 };
