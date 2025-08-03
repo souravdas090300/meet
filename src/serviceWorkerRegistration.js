@@ -10,7 +10,11 @@ const isLocalhost = Boolean(
     if (import.meta.env.PROD && 'serviceWorker' in navigator) {
         window.addEventListener('load', () => {
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
           const swUrl = '/sw.js'; // Updated to point to the correct service worker file
+=======
+          const swUrl = '/service-worker.js';
+>>>>>>> Stashed changes
 =======
           const swUrl = '/service-worker.js';
 >>>>>>> Stashed changes

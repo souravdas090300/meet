@@ -40,6 +40,7 @@ const CitySearch = ({ allLocations = [], setCurrentCity, setInfoAlert }) => {
   };
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
   const handleFocus = () => {
     setShowSuggestions(true);
     // If input is empty, show all locations
@@ -50,13 +51,18 @@ const CitySearch = ({ allLocations = [], setCurrentCity, setInfoAlert }) => {
 
 =======
 >>>>>>> Stashed changes
+=======
+>>>>>>> Stashed changes
   return (
     <div className="city-search">
       <label htmlFor="city-search-input">Search for a city:</label>
       <input
         id="city-search-input"
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
         data-testid="city-search-input"
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
         type="text"
@@ -65,7 +71,11 @@ const CitySearch = ({ allLocations = [], setCurrentCity, setInfoAlert }) => {
         value={query}
         onChange={handleInputChanged}
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
         onFocus={handleFocus}
+=======
+        onFocus={() => setShowSuggestions(true)}
+>>>>>>> Stashed changes
 =======
         onFocus={() => setShowSuggestions(true)}
 >>>>>>> Stashed changes

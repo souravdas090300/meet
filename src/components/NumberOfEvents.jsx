@@ -1,4 +1,5 @@
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 import React, { useState, useEffect, useRef } from 'react';
 
 const NumberOfEvents = ({ currentNOE, setCurrentNOE, setErrorAlert }) => {
@@ -78,6 +79,8 @@ const NumberOfEvents = ({ currentNOE, setCurrentNOE, setErrorAlert }) => {
       }
       
 =======
+=======
+>>>>>>> Stashed changes
 import React from 'react';
 
 const NumberOfEvents = ({ currentNOE, setCurrentNOE, setErrorAlert }) => {
@@ -94,6 +97,9 @@ const NumberOfEvents = ({ currentNOE, setCurrentNOE, setErrorAlert }) => {
     if (isNaN(numberValue) || numberValue < 1 || numberValue > 100) {
       setErrorAlert('Please enter a number between 1 and 100');
     } else {
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
       setErrorAlert('');
       setCurrentNOE(numberValue);
@@ -101,6 +107,7 @@ const NumberOfEvents = ({ currentNOE, setCurrentNOE, setErrorAlert }) => {
   };
 
   return (
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
     <div id="number-of-events" className="number-of-events">
       <label htmlFor="number-of-events-input">Number of Events:</label>
@@ -113,6 +120,8 @@ const NumberOfEvents = ({ currentNOE, setCurrentNOE, setErrorAlert }) => {
         onChange={handleInputChanged}
         onBlur={handleBlur}
 =======
+=======
+>>>>>>> Stashed changes
     <div className="number-of-events">
       <label htmlFor="number-of-events-input">Number of Events:</label>
       <input
@@ -121,6 +130,9 @@ const NumberOfEvents = ({ currentNOE, setCurrentNOE, setErrorAlert }) => {
         className="number-of-events-input"
         value={currentNOE}
         onChange={handleInputChanged}
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
         min="1"
         max="100"

@@ -1,4 +1,5 @@
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 const EVENTS_API_URL = 'https://meet-pi-weld.vercel.app/api/events'; // Replace with your actual API endpoint
 const AUTH_SERVER_URL = 'https://pkpsfh72t5.execute-api.eu-central-1.amazonaws.com/dev/api'; // Your AWS Lambda auth server URL
 
@@ -442,6 +443,8 @@ const mockEvents = [
     },
     "eventType": "default"
 =======
+=======
+>>>>>>> Stashed changes
 // API functions for the Meet App
 const EVENTS_API_URL = 'https://your-api-endpoint.com/api/events'; // Replace with your actual API endpoint
 
@@ -462,11 +465,15 @@ const mockEvents = [
     location: 'Los Angeles, CA',
     date: '2025-08-20',
     time: '19:30'
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
   }
 ];
 
 /**
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
  * Fetch events from API or return cached data when offline
  */
@@ -573,6 +580,8 @@ const getEventsFromAPI = async (accessToken) => {
     // Return mock data as final fallback
     console.log('API failed and no cache available, using mock data');
 =======
+=======
+>>>>>>> Stashed changes
  * Fetch events from API or return mock data
  */
 export const getEvents = async () => {
@@ -591,6 +600,9 @@ export const getEvents = async () => {
   } catch (error) {
     console.error('Error fetching events:', error);
     // Return mock data as fallback
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
     return mockEvents;
   }
@@ -605,9 +617,13 @@ export const extractLocations = (events) => {
   }
   
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
   const locations = events
     .filter(event => event && event.location)
     .map(event => event.location);
+=======
+  const locations = events.map(event => event.location);
+>>>>>>> Stashed changes
 =======
   const locations = events.map(event => event.location);
 >>>>>>> Stashed changes
