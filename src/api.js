@@ -12,7 +12,7 @@
 
 // Replace this with your actual deployed AWS Lambda API Gateway URL
 // Format: https://{api-id}.execute-api.{region}.amazonaws.com/{stage}
-const AUTH_SERVER_URL = 'https://YOUR_API_GATEWAY_ID.execute-api.eu-central-1.amazonaws.com/dev';
+const AUTH_SERVER_URL = "https://pkpsfh72t5.execute-api.eu-central-1.amazonaws.com/dev";
 
 // Check if code is in the URL (from OAuth redirect)
 export const removeQuery = () => {
