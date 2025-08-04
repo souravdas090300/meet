@@ -2,6 +2,10 @@ import { loadFeature, defineFeature } from 'jest-cucumber';
 import React from 'react';
 import { render, within, waitFor, fireEvent } from '@testing-library/react';
 import App from '../App';
+import { getEvents } from '../api';
+
+// Mock the API module
+jest.mock('../api');
 
 const feature = loadFeature('./src/features/specifyNumberOfEvents.feature');
 
@@ -11,7 +15,19 @@ defineFeature(feature, (test) => {
     let AppComponent;
 
     given('user hasn\'t specified or filtered the number of events', () => {
-      // Setup code (if needed)
+      // Mock getEvents to return mock data
+      getEvents.mockResolvedValue([
+        { id: '1', summary: 'Event 1', location: 'Location 1' },
+        { id: '2', summary: 'Event 2', location: 'Location 2' },
+        { id: '3', summary: 'Event 3', location: 'Location 3' },
+        { id: '4', summary: 'Event 4', location: 'Location 4' },
+        { id: '5', summary: 'Event 5', location: 'Location 5' },
+        { id: '6', summary: 'Event 6', location: 'Location 6' },
+        { id: '7', summary: 'Event 7', location: 'Location 7' },
+        { id: '8', summary: 'Event 8', location: 'Location 8' },
+        { id: '9', summary: 'Event 9', location: 'Location 9' },
+        { id: '10', summary: 'Event 10', location: 'Location 10' }
+      ]);
     });
 
     when('the user opens the app', () => {
@@ -25,9 +41,9 @@ defineFeature(feature, (test) => {
         const EventListDOM = AppDOM.querySelector('#event-list');
         expect(EventListDOM).not.toBeNull();
         const EventListItems = within(EventListDOM).queryAllByRole('listitem');
-        // Note: The mock data shows 10 events (some duplicated from the 5 unique events)
+        // Should show 10 events (our mock data length) which is less than 32
         expect(EventListItems.length).toBeLessThanOrEqual(32);
-        expect(EventListItems.length).toBe(10); // The app shows 10 events by default
+        expect(EventListItems.length).toBe(10); // The mock data has 10 events
       });
 
       // Also check that the NumberOfEvents input shows 32 as default
@@ -42,6 +58,19 @@ defineFeature(feature, (test) => {
     let AppComponent;
 
     given('the main page is open', () => {
+      // Mock getEvents to return mock data
+      getEvents.mockResolvedValue([
+        { id: '1', summary: 'Event 1', location: 'Location 1' },
+        { id: '2', summary: 'Event 2', location: 'Location 2' },
+        { id: '3', summary: 'Event 3', location: 'Location 3' },
+        { id: '4', summary: 'Event 4', location: 'Location 4' },
+        { id: '5', summary: 'Event 5', location: 'Location 5' },
+        { id: '6', summary: 'Event 6', location: 'Location 6' },
+        { id: '7', summary: 'Event 7', location: 'Location 7' },
+        { id: '8', summary: 'Event 8', location: 'Location 8' },
+        { id: '9', summary: 'Event 9', location: 'Location 9' },
+        { id: '10', summary: 'Event 10', location: 'Location 10' }
+      ]);
       AppComponent = render(<App />);
     });
 
@@ -72,11 +101,10 @@ defineFeature(feature, (test) => {
         // Check that the input value was updated
         expect(numberInput.value).toBe('10');
         
-        // Since setting to 10 and the app shows 10 events by default anyway, 
-        // we should still see 10 events (limited by the mock data)
+        // Should show 10 events from our mock data
         const EventListItems = within(EventListDOM).queryAllByRole('listitem');
         expect(EventListItems.length).toBeLessThanOrEqual(10);
-        expect(EventListItems.length).toBe(10); // The app shows 10 events with current mock data
+        expect(EventListItems.length).toBe(10); // The app shows 10 events with mock data
       });
     });
   });

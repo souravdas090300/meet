@@ -534,13 +534,7 @@ export const getEvents = async () => {
 
 // Helper function to redirect to OAuth
 const redirectToOAuth = async () => {
-  // For development, return mock data and show a message
-  if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
-    console.log('Development mode: Using mock data. In production, user would be redirected to OAuth.');
-    return mockEvents;
-  }
-  
-  // In production, redirect to OAuth
+  // Always use real OAuth for proper GitHub integration
   const authUrl = await getAuthURL();
   window.location.href = authUrl;
   return [];

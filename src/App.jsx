@@ -159,7 +159,9 @@ function App() {
             <EventGenresChart events={events} />
           </div>
           
-          <EventList events={events} />
+          <div className="event-list-container">
+            <EventList events={events} />
+          </div>
         </>
       )}
     </div>

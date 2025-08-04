@@ -12,7 +12,7 @@ const components = [
 components.forEach(component => {
   try {
     console.log(`\n=== Testing ${component} ===`);
-    const result = execSync(`npm test -- ${component} --watchAll=false`, { 
+    execSync(`npm test -- ${component} --watchAll=false`, { 
       encoding: 'utf8',
       stdio: 'pipe'
     });
