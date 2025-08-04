@@ -23,7 +23,7 @@ const AuthTest = () => {
           setAuthStatus('authenticated');
           setTokenInfo(tokenCheck);
         }
-      } catch (err) {
+      } catch {
         setAuthStatus('error');
         setError('Failed to validate token');
       }

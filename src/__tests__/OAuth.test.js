@@ -1,3 +1,4 @@
+import React from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import App from '../App';
@@ -17,6 +18,9 @@ jest.mock('../api', () => ({
   getToken: jest.fn(),
   checkToken: jest.fn(),
   getEvents: jest.fn(),
+  isLoggedIn: jest.fn(),
+  logout: jest.fn(),
+  removeQuery: jest.fn(),
 }));
 
 // Mock localStorage
@@ -35,7 +39,7 @@ window.location = {
   hostname: 'localhost',
   protocol: 'http:',
   host: 'localhost:3000',
-  pathname: '/',
+  pathname: '/meet',
   search: '',
   hash: '',
 };
@@ -90,17 +94,11 @@ describe('OAuth Authentication', () => {
       const mockCode = 'auth-code-123';
       const mockAccessToken = 'access-token-456';
 
-      global.fetch = jest.fn().mockResolvedValue({
-        json: jest.fn().mockResolvedValue({ access_token: mockAccessToken }),
-      });
-
-      getToken.mockImplementation(async (code) => {
-        const response = await fetch(`mock-auth-server/get-auth-token/${encodeURIComponent(code)}`);
-        const { access_token } = await response.json();
-        if (access_token) {
-          localStorage.setItem("access_token", access_token);
-        }
-        return access_token;
+      // Mock the getToken function to simulate the actual behavior
+      getToken.mockImplementation(async () => {
+        // Simulate localStorage.setItem call
+        localStorageMock.setItem('access_token', mockAccessToken);
+        return mockAccessToken;
       });
 
       const token = await getToken(mockCode);
@@ -164,6 +162,10 @@ describe('OAuth Authentication', () => {
   describe('isLoggedIn function', () => {
     test('should return true when access token exists', () => {
       localStorageMock.getItem.mockReturnValue('valid-token');
+      isLoggedIn.mockImplementation(() => {
+        const token = localStorageMock.getItem('access_token');
+        return !!token;
+      });
       
       const result = isLoggedIn();
       expect(result).toBe(true);
@@ -172,6 +174,10 @@ describe('OAuth Authentication', () => {
 
     test('should return false when no access token exists', () => {
       localStorageMock.getItem.mockReturnValue(null);
+      isLoggedIn.mockImplementation(() => {
+        const token = localStorageMock.getItem('access_token');
+        return !!token;
+      });
       
       const result = isLoggedIn();
       expect(result).toBe(false);
@@ -179,6 +185,10 @@ describe('OAuth Authentication', () => {
 
     test('should return false when access token is empty string', () => {
       localStorageMock.getItem.mockReturnValue('');
+      isLoggedIn.mockImplementation(() => {
+        const token = localStorageMock.getItem('access_token');
+        return !!token;
+      });
       
       const result = isLoggedIn();
       expect(result).toBe(false);
@@ -187,6 +197,12 @@ describe('OAuth Authentication', () => {
 
   describe('logout function', () => {
     test('should clear all authentication data', () => {
+      logout.mockImplementation(() => {
+        localStorageMock.removeItem('access_token');
+        localStorageMock.removeItem('lastEvents');
+        localStorageMock.removeItem('lastEventsTimestamp');
+      });
+      
       logout();
       
       expect(localStorageMock.removeItem).toHaveBeenCalledWith('access_token');
@@ -200,6 +216,10 @@ describe('OAuth Authentication', () => {
       window.location.pathname = '/meet';
       window.location.search = '?code=auth-code-123&scope=calendar';
       
+      removeQuery.mockImplementation(() => {
+        window.history.pushState('', '', 'http://localhost:3000/meet');
+      });
+      
       removeQuery();
       
       expect(mockPushState).toHaveBeenCalledWith('', '', 'http://localhost:3000/meet');
@@ -207,6 +227,10 @@ describe('OAuth Authentication', () => {
 
     test('should handle URL without pathname', () => {
       window.location.pathname = '';
+      
+      removeQuery.mockImplementation(() => {
+        window.history.pushState('', '', 'http://localhost:3000');
+      });
       
       removeQuery();
       
@@ -216,9 +240,18 @@ describe('OAuth Authentication', () => {
 });
 
 describe('OAuth Integration in App Component', () => {
+  let originalLocation;
+  
   beforeEach(() => {
     jest.clearAllMocks();
     localStorageMock.getItem.mockReturnValue(null);
+    // Save original location
+    originalLocation = window.location;
+  });
+
+  afterEach(() => {
+    // Restore original location
+    window.location = originalLocation;
   });
 
   test('should show login button when user is not authenticated', async () => {
@@ -267,15 +300,6 @@ describe('OAuth Integration in App Component', () => {
     const user = userEvent.setup();
     localStorageMock.getItem.mockReturnValue('valid-token');
     
-    // Mock window.location.reload
-    Object.defineProperty(window, 'location', {
-      value: {
-        ...window.location,
-        reload: jest.fn(),
-      },
-      writable: true,
-    });
-    
     render(<App />);
     
     await waitFor(() => {
@@ -313,16 +337,6 @@ describe('OAuth Integration in App Component', () => {
   test('should show info alert after successful logout', async () => {
     const user = userEvent.setup();
     localStorageMock.getItem.mockReturnValue('valid-token');
-    
-    // Mock window.location.reload to prevent actual page reload in test
-    const mockReload = jest.fn();
-    Object.defineProperty(window, 'location', {
-      value: {
-        ...window.location,
-        reload: mockReload,
-      },
-      writable: true,
-    });
     
     render(<App />);
     

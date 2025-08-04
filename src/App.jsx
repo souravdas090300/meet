@@ -95,7 +95,7 @@ function App() {
     try {
       const authUrl = await getAuthURL();
       window.location.href = authUrl;
-    } catch (error) {
+    } catch {
       setErrorAlert('Failed to initiate login. Please try again.');
     }
   };

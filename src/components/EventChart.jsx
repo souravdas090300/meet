@@ -3,24 +3,12 @@ import { PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, CartesianGrid, Toolti
 
 const EventChart = ({ events = [] }) => {
   if (!events || events.length === 0) {
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
     return (
       <div className="event-charts">
         <h3>Event Statistics</h3>
         <p>No events to display</p>
       </div>
     );
-=======
-    return null;
->>>>>>> Stashed changes
-=======
-    return null;
->>>>>>> Stashed changes
-=======
-    return null;
->>>>>>> Stashed changes
   }
 
   // Prepare data for charts
@@ -40,16 +28,7 @@ const EventChart = ({ events = [] }) => {
   return (
     <div className="event-charts">
       <h3>Event Statistics</h3>
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
       <p>Total events: {events.length}</p>
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
       
       <div className="chart-container">
         <h4>Events by Location</h4>

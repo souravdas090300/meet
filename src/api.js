@@ -1,8 +1,18 @@
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-const EVENTS_API_URL = 'https://meet-pi-weld.vercel.app/api/events'; // Replace with your actual API endpoint
-const AUTH_SERVER_URL = 'https://pkpsfh72t5.execute-api.eu-central-1.amazonaws.com/dev/api'; // Your AWS Lambda auth server URL
+/**
+ * API Configuration for Meet App
+ * 
+ * To get your actual API Gateway URL:
+ * 1. Deploy your auth-server using: serverless deploy
+ * 2. Copy the API Gateway URL from the deployment output
+ * 3. Replace YOUR_API_GATEWAY_ID below with the actual ID
+ * 
+ * The URL format should be:
+ * https://{api-gateway-id}.execute-api.eu-central-1.amazonaws.com/dev
+ */
+
+// Replace this with your actual deployed AWS Lambda API Gateway URL
+// Format: https://{api-id}.execute-api.{region}.amazonaws.com/{stage}
+const AUTH_SERVER_URL = 'https://YOUR_API_GATEWAY_ID.execute-api.eu-central-1.amazonaws.com/dev';
 
 // Check if code is in the URL (from OAuth redirect)
 export const removeQuery = () => {
@@ -29,19 +39,44 @@ export const checkToken = async (accessToken) => {
 
 // Get OAuth access token
 export const getToken = async (code) => {
-  const encodeCode = encodeURIComponent(code);
-  const response = await fetch(`${AUTH_SERVER_URL}/get-auth-token/${encodeCode}`);
-  const { access_token } = await response.json();
-  access_token && localStorage.setItem("access_token", access_token);
-  return access_token;
+  try {
+    const encodeCode = encodeURIComponent(code);
+    const response = await fetch(`${AUTH_SERVER_URL}/api/token/${encodeCode}`);
+    
+    if (!response.ok) {
+      throw new Error(`Failed to get access token: ${response.status}`);
+    }
+    
+    const { access_token } = await response.json();
+    
+    if (access_token) {
+      localStorage.setItem("access_token", access_token);
+    }
+    
+    return access_token;
+  } catch (error) {
+    console.error('Error getting access token:', error);
+    throw error;
+  }
 };
 
 // Get authorization URL
 export const getAuthURL = async () => {
-  const response = await fetch(`${AUTH_SERVER_URL}/get-auth-url`);
-  const result = await response.json();
-  const { authUrl } = result;
-  return authUrl;
+  try {
+    const response = await fetch(`${AUTH_SERVER_URL}/api/get-auth-url`);
+    
+    if (!response.ok) {
+      throw new Error(`Failed to get auth URL: ${response.status}`);
+    }
+    
+    const result = await response.json();
+    const { authUrl } = result;
+    
+    return authUrl;
+  } catch (error) {
+    console.error('Error getting auth URL:', error);
+    throw error;
+  }
 };
 
 // Logout function
@@ -443,45 +478,10 @@ const mockEvents = [
       "useDefault": true
     },
     "eventType": "default"
-=======
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
-// API functions for the Meet App
-const EVENTS_API_URL = 'https://your-api-endpoint.com/api/events'; // Replace with your actual API endpoint
-
-// Mock data for development/fallback
-const mockEvents = [
-  {
-    id: 1,
-    title: 'Sample Event 1',
-    description: 'This is a sample event for testing purposes.',
-    location: 'New York, NY',
-    date: '2025-08-15',
-    time: '18:00'
-  },
-  {
-    id: 2,
-    title: 'Sample Event 2',
-    description: 'Another sample event for testing purposes.',
-    location: 'Los Angeles, CA',
-    date: '2025-08-20',
-    time: '19:30'
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
   }
 ];
 
 /**
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
  * Fetch events from API or return cached data when offline
  */
 export const getEvents = async () => {
@@ -549,7 +549,7 @@ const redirectToOAuth = async () => {
 // Helper function to fetch events from Google Calendar API
 const getEventsFromAPI = async (accessToken) => {
   try {
-    const response = await fetch(`${AUTH_SERVER_URL}/get-calendar-events/${accessToken}`);
+    const response = await fetch(`${AUTH_SERVER_URL}/api/get-events/${accessToken}`);
     
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
@@ -586,36 +586,6 @@ const getEventsFromAPI = async (accessToken) => {
     
     // Return mock data as final fallback
     console.log('API failed and no cache available, using mock data');
-=======
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
- * Fetch events from API or return mock data
- */
-export const getEvents = async () => {
-  try {
-    // For now, return mock data since we don't have the actual API endpoint
-    // In production, replace this with actual API call
-    return mockEvents;
-    
-    // Uncomment this when you have a real API:
-    // const response = await fetch(EVENTS_API_URL);
-    // if (!response.ok) {
-    //   throw new Error(`HTTP error! status: ${response.status}`);
-    // }
-    // const data = await response.json();
-    // return data.events || data;
-  } catch (error) {
-    console.error('Error fetching events:', error);
-    // Return mock data as fallback
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
     return mockEvents;
   }
 };
@@ -628,21 +598,9 @@ export const extractLocations = (events) => {
     return [];
   }
   
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
   const locations = events
     .filter(event => event && event.location)
     .map(event => event.location);
-=======
-  const locations = events.map(event => event.location);
->>>>>>> Stashed changes
-=======
-  const locations = events.map(event => event.location);
->>>>>>> Stashed changes
-=======
-  const locations = events.map(event => event.location);
->>>>>>> Stashed changes
   const uniqueLocations = [...new Set(locations)];
   return uniqueLocations.sort();
 };
