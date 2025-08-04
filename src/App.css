@@ -149,9 +149,10 @@ p {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 20px;
+  min-height: 450px;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
   .charts-container {
     grid-template-columns: 1fr;
   }
@@ -164,6 +165,8 @@ p {
   border-radius: 8px;
   padding: 20px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  min-width: 0; /* Allows charts to shrink properly */
+  overflow: hidden; /* Prevents content overflow */
 }
 
 .charts-container h4 {

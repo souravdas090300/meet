@@ -27,7 +27,7 @@ const CityEventsChart = ({ events }) => {
   return (
     <div>
       <h4>Events by City</h4>
-      <ResponsiveContainer width="99%" height={400}>
+      <ResponsiveContainer width="100%" height={400}>
         <ScatterChart
           margin={{
             top: 20,
