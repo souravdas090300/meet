@@ -125,93 +125,108 @@ Meet App is an enterprise-grade Progressive Web Application demonstrating modern
 
 ## 👤 User Stories & Implementation
 
-### Feature 1: OAuth Authentication ⭐ **IMPLEMENTED**
-**User Story**: As a user, I want to securely authenticate with Google so I can access my calendar events.
+### Feature 1: Filter Events by City ⭐ **IMPLEMENTED**
 
-**Implementation**:
+**Scenario 1**: When user hasn't searched for a city, show upcoming events from all cities.
+- **Given** user has not searched for any city
+- **When** the user opens the app
+- **Then** the user should see the list of all upcoming events.
+
+**Scenario 2**: User should see a list of suggestions when they search for a city.
+- **Given** the main page is open
+- **When** user starts typing in the city textbox
+- **Then** the user should receive a list of cities (suggestions) that match what they've typed
+
+**Scenario 3**: User can select a city from the suggested list.
+- **Given** user was typing "Berlin" in the city textbox
+- **And** the list of suggested cities is showing
+- **When** the user selects a city (e.g., "Berlin, Germany") from the list
+- **Then** their city should be changed to that city (i.e., "Berlin, Germany")
+- **And** the user should receive a list of upcoming events in that city
+
+### Feature 2: Show/Hide Event Details ⭐ **IMPLEMENTED**
+
+**Scenario 1**: An event element is collapsed by default
+- **Given** user hasn't searched for any city
+- **When** the user opens the app
+- **Then** the user should see a list of events
+- **And** all event details should be hidden
+
+**Scenario 2**: User can expand an event to see its details
+- **Given** the main page is open
+- **When** the user clicks on "Show details" button for an event
+- **Then** the event details should be displayed
+
+**Scenario 3**: User can collapse an event to hide its details
+- **Given** the user has expanded an event's details
+- **When** the user clicks on "Hide details" button
+- **Then** the event details should be hidden
+
+### Feature 3: Specify Number of Events ⭐ **IMPLEMENTED**
+
+**Scenario 1**: When user hasn't specified a number, 32 is the default number
+- **Given** user hasn't specified or filtered the number of events
+- **When** the user opens the app
+- **Then** the user should see 32 events by default
+
+**Scenario 2**: User can change the number of events they want to see
+- **Given** the main page is open
+- **When** the user changes the number of events to 10
+- **Then** the user should see exactly 10 events displayed
+
+### Feature 4: Use the App When Offline ⭐ **IMPLEMENTED**
+
+**Scenario 1**: Show cached data when there's no internet connection
+- **Given** the user has no internet connection
+- **When** the user opens the app
+- **Then** the user should see cached events data
+
+**Scenario 2**: Show error when user changes search settings (city, number of events)
+- **Given** the user has no internet connection
+- **When** the user changes search settings
+- **Then** the user should see an error message
+
+### Feature 5: Add an App Shortcut to the Home Screen ⭐ **IMPLEMENTED**
+
+**Scenario 1**: User can install the meet app as a shortcut on their device home screen
+- **Given** the user is using a compatible browser
+- **When** the user visits the app
+- **Then** the user should be able to install the app on their device
+
+### Feature 6: Display Charts Visualizing Event Details ⭐ **IMPLEMENTED**
+
+**Scenario 1**: Show a chart with the number of upcoming events in each city
+- **Given** the user has events loaded
+- **When** the user views the charts section
+- **Then** the user should see a scatter plot showing the number of upcoming events in each city
+
+**Implementation Details**:
+- ✅ **Scatter Chart**: Event count per city with interactive tooltips
+- ✅ **Pie Chart**: Event genre distribution with custom labels
+- ✅ **Recharts Integration**: Professional charting library implementation
+- ✅ **Responsive Design**: Charts adapt to all screen sizes
+
+### Additional Features Implemented
+
+#### OAuth Authentication ⭐ **IMPLEMENTED**
 - ✅ Google OAuth 2.0 integration
 - ✅ AWS Lambda functions for secure token handling
 - ✅ Automatic token refresh
 - ✅ Secure authentication flow
 
-### Feature 2: Filter Events by City ⭐ **IMPLEMENTED**
-**User Story**: As a user, I should be able to filter events by city so that I can see relevant events in my area.
-
-**Implementation**:
-- ✅ Smart city search with auto-suggestions
-- ✅ Real-time filtering as user types
-- ✅ "All cities" option for comprehensive view
-- ✅ Error handling for invalid inputs
-
-### Feature 3: Show/Hide Event Details **IMPLEMENTED**
-**User Story**: As a user, I should be able to toggle event details so that I can focus only on what interests me.
-
-**Implementation**:
-- ✅ Expandable event cards
-- ✅ "Show Details" / "Hide Details" buttons
-- ✅ Smooth animations and transitions
-- ✅ Mobile-optimized detail view
-
-### Feature 4: Specify Number of Events **IMPLEMENTED**
-**User Story**: As a user, I should be able to control how many events I see at once.
-
-**Implementation**:
-- ✅ Input field for event count (1-1000)
-- ✅ Default display of 32 events
-- ✅ Input validation and error alerts
-- ✅ Dynamic event list updates
-
-### Feature 5: Offline App Usage **IMPLEMENTED**
-**User Story**: As a user, I should be able to access event data even without an internet connection.
-
-**Implementation**:
-- ✅ Complete service worker implementation
-- ✅ localStorage caching of event data
-- ✅ Offline indicator and alerts
-- ✅ Background sync when reconnected
-
-### Feature 6: PWA Installation **IMPLEMENTED**
-**User Story**: As a user, I want to install the app for quick access from my home screen.
-
-**Implementation**:
-- ✅ Web app manifest configuration
-- ✅ Installation prompts on supported browsers
-- ✅ Standalone app mode
-- ✅ Custom app icons (144px, 192px, 512px)
-
-### Feature 7: Data Visualization **IMPLEMENTED** ✨
-**User Story**: As a user, I want interactive visualizations to understand event trends and distribution.
-
-**Implementation**:
-- ✅ **Scatter Chart**: Event count per city with interactive tooltips
-  - Shows event distribution across different cities
-  - Responsive design with proper axis labeling
-  - Hover tooltips with detailed information
-  - Professional grid layout and styling
-- ✅ **Pie Chart**: Event genre distribution with custom labels
-  - Displays event genres (React, JavaScript, Node, jQuery, Angular)
-  - Custom percentage labels with math calculations
-  - Color-coded segments with legend
-  - Responsive container that adapts to screen size
-- ✅ **Chart Layout**: Side-by-side display on desktop, stacked on mobile
-- ✅ **Recharts Integration**: Professional charting library implementation
-
-### Feature 8: Comprehensive Testing **IMPLEMENTED**
-**Implementation**:
+#### Comprehensive Testing ⭐ **IMPLEMENTED**
 - ✅ **76 tests** with Jest and React Testing Library
 - ✅ **95%+ code coverage** across all components
 - ✅ **BDD testing** with Cucumber and Gherkin
 - ✅ **End-to-end testing** with Puppeteer
 
-### Feature 9: Performance Monitoring **IMPLEMENTED**
-**Implementation**:
+#### Performance Monitoring ⭐ **IMPLEMENTED**
 - ✅ **Atatus SPA integration** for real-time monitoring
 - ✅ **Error tracking** and performance insights
 - ✅ **User session recording**
 - ✅ **Custom performance metrics**
 
-### Feature 10: Alert System **IMPLEMENTED**
-**Implementation**:
+#### Alert System ⭐ **IMPLEMENTED**
 - ✅ **InfoAlert**: User information and confirmations
 - ✅ **ErrorAlert**: Error messages and recovery guidance
 - ✅ **WarningAlert**: Caution messages and warnings
@@ -454,11 +469,11 @@ npm run deploy
 
 ## 📦 Deployment
 
-### Production Deployment (Vercel + AWS)
+### Production Deployment (GitHub Pages + AWS)
 
-> **Live Demo**: [https://meet-pi-weld.vercel.app/](https://meet-pi-weld.vercel.app/)
+> **Live Demo**: [https://souravdas090300.github.io/meet/](https://souravdas090300.github.io/meet/)
 
-**Frontend (Vercel)**
+**Frontend (GitHub Pages)**
 - ✅ Connected to GitHub for automatic deploys
 - ✅ Deploys on every push to `main` branch
 - ✅ Preview deployments for pull requests
@@ -999,7 +1014,7 @@ SOFTWARE.
 **Technology Partners**  
 - ⚛️ **React Team**: For the incredible React framework
 - 📊 **Recharts Team**: For powerful chart visualization library
-- ☁️ **Vercel**: For seamless deployment and hosting platform
+- ☁️ **GitHub Pages**: For seamless deployment and hosting platform
 - 🚀 **AWS**: For reliable serverless infrastructure
 - 📈 **Atatus**: For comprehensive performance monitoring
 
