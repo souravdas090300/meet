@@ -17,6 +17,8 @@ A production-ready React Progressive Web Application featuring Google Calendar i
 ### 🎯 Project Description
 The Meet app demonstrates advanced full-stack development skills through a sophisticated Progressive Web Application that integrates with Google Calendar API. Users can view and filter calendar events, visualize data through interactive charts, and enjoy a seamless offline experience. The application showcases modern React development, OAuth authentication, serverless architecture with AWS Lambda, and comprehensive testing strategies.
 
+**Authentication Note:** *Currently configured for demonstration purposes with restricted access. Users can sign in with any Google account to view the demo calendar events.*
+
 **Key Objectives:**
 - Implement secure OAuth 2.0 authentication flow
 - Build serverless backend with AWS Lambda functions
