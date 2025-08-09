@@ -191,6 +191,40 @@ const mockData = [
       "useDefault": true
     },
     "eventType": "default"
+  },
+  {
+    "kind": "calendar#event",
+    "etag": "\"3181159875584000\"",
+    "id": "6xyz7uvw2abc8def3ghi9jkl4mno",
+    "status": "confirmed",
+    "htmlLink": "https://www.google.com/calendar/event",
+    "created": "2020-05-19T19:14:30.000Z",
+    "updated": "2020-05-27T11:45:37.792Z",
+    "summary": "React Advanced Workshop",
+    "description": "Deep dive into advanced React concepts and patterns.",
+    "location": "Paris, France",
+    "creator": {
+      "email": "fullstack-webdev@careerfoundry.com",
+      "displayName": "CareerFoundry"
+    },
+    "organizer": {
+      "email": "fullstack-webdev@careerfoundry.com",
+      "displayName": "CareerFoundry"
+    },
+    "start": {
+      "dateTime": "2020-05-29T10:00:00+02:00",
+      "timeZone": "Europe/Paris"
+    },
+    "end": {
+      "dateTime": "2020-05-29T17:00:00+02:00",
+      "timeZone": "Europe/Paris"
+    },
+    "iCalUID": "6xyz7uvw2abc8def3ghi9jkl4mno@google.com",
+    "sequence": 0,
+    "reminders": {
+      "useDefault": true
+    },
+    "eventType": "default"
   }
 ];
 

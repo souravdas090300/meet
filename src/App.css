@@ -298,6 +298,26 @@ p {
   .chart-container h4 {
     font-size: 1.1rem;
   }
+  
+  /* Mobile-specific chart adjustments */
+  .charts-container > div {
+    padding: 15px;
+    margin: 10px 0;
+  }
+  
+  .charts-container h4 {
+    font-size: 1.1rem;
+    margin-bottom: 10px;
+  }
+  
+  /* Ensure pie chart labels don't overflow */
+  .recharts-wrapper {
+    overflow: hidden;
+  }
+  
+  .recharts-legend-wrapper {
+    overflow: hidden;
+  }
 }
 
 .city {

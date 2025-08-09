@@ -4,7 +4,7 @@
 
 **Meet App** is a sophisticated Progressive Web Application (PWA) that demonstrates advanced full-stack development skills through Google Calendar integration, OAuth authentication, AWS serverless architecture, and comprehensive data visualization. This enterprise-grade application showcases modern React development practices and cloud-based solutions.
 
-![Meet App Screenshot](https://via.placeholder.com/800x400/4285f4/ffffff?text=Meet+App+Dashboard)
+![Meet App Screenshot](c:\Users\dasau\OneDrive\Pictures\Screenshots\Screenshot (267).png)
 
 ---
 

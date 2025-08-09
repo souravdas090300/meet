@@ -478,6 +478,754 @@ const mockEvents = [
       "useDefault": true
     },
     "eventType": "default"
+  },
+  {
+    "kind": "calendar#event",
+    "etag": "\"3181159875584000\"",
+    "id": "11xyz7uvw2abc8def3ghi9jkl4mno",
+    "status": "confirmed",
+    "htmlLink": "https://www.google.com/calendar/event",
+    "created": "2020-05-19T19:14:30.000Z",
+    "updated": "2020-05-27T11:45:37.792Z",
+    "summary": "Python Django Workshop",
+    "description": "Build powerful web applications with Django framework. Learn models, views, templates, and deployment strategies.",
+    "location": "Sydney, NSW, Australia",
+    "creator": {
+      "email": "fullstack-webdev@careerfoundry.com",
+      "displayName": "CareerFoundry"
+    },
+    "organizer": {
+      "email": "fullstack-webdev@careerfoundry.com",
+      "displayName": "CareerFoundry"
+    },
+    "start": {
+      "dateTime": "2020-05-29T10:00:00+10:00",
+      "timeZone": "Australia/Sydney"
+    },
+    "end": {
+      "dateTime": "2020-05-29T17:00:00+10:00",
+      "timeZone": "Australia/Sydney"
+    },
+    "iCalUID": "11xyz7uvw2abc8def3ghi9jkl4mno@google.com",
+    "sequence": 0,
+    "reminders": {
+      "useDefault": true
+    },
+    "eventType": "default"
+  },
+  {
+    "kind": "calendar#event",
+    "etag": "\"3181159875584000\"",
+    "id": "12xyz7uvw2abc8def3ghi9jkl4mno",
+    "status": "confirmed",
+    "htmlLink": "https://www.google.com/calendar/event",
+    "created": "2020-05-19T19:14:30.000Z",
+    "updated": "2020-05-27T11:45:37.792Z",
+    "summary": "MongoDB Database Design",
+    "description": "Learn NoSQL database design with MongoDB. Understand collections, documents, indexing, and performance optimization.",
+    "location": "Mumbai, India",
+    "creator": {
+      "email": "fullstack-webdev@careerfoundry.com",
+      "displayName": "CareerFoundry"
+    },
+    "organizer": {
+      "email": "fullstack-webdev@careerfoundry.com",
+      "displayName": "CareerFoundry"
+    },
+    "start": {
+      "dateTime": "2020-05-30T14:00:00+05:30",
+      "timeZone": "Asia/Kolkata"
+    },
+    "end": {
+      "dateTime": "2020-05-30T18:00:00+05:30",
+      "timeZone": "Asia/Kolkata"
+    },
+    "iCalUID": "12xyz7uvw2abc8def3ghi9jkl4mno@google.com",
+    "sequence": 0,
+    "reminders": {
+      "useDefault": true
+    },
+    "eventType": "default"
+  },
+  {
+    "kind": "calendar#event",
+    "etag": "\"3181159875584000\"",
+    "id": "13xyz7uvw2abc8def3ghi9jkl4mno",
+    "status": "confirmed",
+    "htmlLink": "https://www.google.com/calendar/event",
+    "created": "2020-05-19T19:14:30.000Z",
+    "updated": "2020-05-27T11:45:37.792Z",
+    "summary": "React Advanced Patterns",
+    "description": "Dive deep into advanced React patterns: hooks, context, render props, higher-order components, and performance optimization.",
+    "location": "Tokyo, Japan",
+    "creator": {
+      "email": "fullstack-webdev@careerfoundry.com",
+      "displayName": "CareerFoundry"
+    },
+    "organizer": {
+      "email": "fullstack-webdev@careerfoundry.com",
+      "displayName": "CareerFoundry"
+    },
+    "start": {
+      "dateTime": "2020-06-01T15:00:00+09:00",
+      "timeZone": "Asia/Tokyo"
+    },
+    "end": {
+      "dateTime": "2020-06-01T18:00:00+09:00",
+      "timeZone": "Asia/Tokyo"
+    },
+    "iCalUID": "13xyz7uvw2abc8def3ghi9jkl4mno@google.com",
+    "sequence": 0,
+    "reminders": {
+      "useDefault": true
+    },
+    "eventType": "default"
+  },
+  {
+    "kind": "calendar#event",
+    "etag": "\"3181159875584000\"",
+    "id": "14xyz7uvw2abc8def3ghi9jkl4mno",
+    "status": "confirmed",
+    "htmlLink": "https://www.google.com/calendar/event",
+    "created": "2020-05-19T19:14:30.000Z",
+    "updated": "2020-05-27T11:45:37.792Z",
+    "summary": "Node.js API Development",
+    "description": "Build robust RESTful APIs with Node.js and Express. Learn authentication, middleware, error handling, and testing.",
+    "location": "São Paulo, Brazil",
+    "creator": {
+      "email": "fullstack-webdev@careerfoundry.com",
+      "displayName": "CareerFoundry"
+    },
+    "organizer": {
+      "email": "fullstack-webdev@careerfoundry.com",
+      "displayName": "CareerFoundry"
+    },
+    "start": {
+      "dateTime": "2020-06-02T10:00:00-03:00",
+      "timeZone": "America/Sao_Paulo"
+    },
+    "end": {
+      "dateTime": "2020-06-02T17:00:00-03:00",
+      "timeZone": "America/Sao_Paulo"
+    },
+    "iCalUID": "14xyz7uvw2abc8def3ghi9jkl4mno@google.com",
+    "sequence": 0,
+    "reminders": {
+      "useDefault": true
+    },
+    "eventType": "default"
+  },
+  {
+    "kind": "calendar#event",
+    "etag": "\"3181159875584000\"",
+    "id": "15xyz7uvw2abc8def3ghi9jkl4mno",
+    "status": "confirmed",
+    "htmlLink": "https://www.google.com/calendar/event",
+    "created": "2020-05-19T19:14:30.000Z",
+    "updated": "2020-05-27T11:45:37.792Z",
+    "summary": "Angular Framework Workshop",
+    "description": "Master Angular framework from basics to advanced concepts. Components, services, routing, and testing strategies.",
+    "location": "Stockholm, Sweden",
+    "creator": {
+      "email": "fullstack-webdev@careerfoundry.com",
+      "displayName": "CareerFoundry"
+    },
+    "organizer": {
+      "email": "fullstack-webdev@careerfoundry.com",
+      "displayName": "CareerFoundry"
+    },
+    "start": {
+      "dateTime": "2020-06-03T09:00:00+02:00",
+      "timeZone": "Europe/Stockholm"
+    },
+    "end": {
+      "dateTime": "2020-06-03T16:00:00+02:00",
+      "timeZone": "Europe/Stockholm"
+    },
+    "iCalUID": "15xyz7uvw2abc8def3ghi9jkl4mno@google.com",
+    "sequence": 0,
+    "reminders": {
+      "useDefault": true
+    },
+    "eventType": "default"
+  },
+  {
+    "kind": "calendar#event",
+    "etag": "\"3181159875584000\"",
+    "id": "16xyz7uvw2abc8def3ghi9jkl4mno",
+    "status": "confirmed",
+    "htmlLink": "https://www.google.com/calendar/event",
+    "created": "2020-05-19T19:14:30.000Z",
+    "updated": "2020-05-27T11:45:37.792Z",
+    "summary": "Vue.js Complete Guide",
+    "description": "Learn Vue.js from scratch. Reactive data, components, Vuex state management, and building single-page applications.",
+    "location": "Barcelona, Spain",
+    "creator": {
+      "email": "fullstack-webdev@careerfoundry.com",
+      "displayName": "CareerFoundry"
+    },
+    "organizer": {
+      "email": "fullstack-webdev@careerfoundry.com",
+      "displayName": "CareerFoundry"
+    },
+    "start": {
+      "dateTime": "2020-06-04T11:00:00+02:00",
+      "timeZone": "Europe/Madrid"
+    },
+    "end": {
+      "dateTime": "2020-06-04T18:00:00+02:00",
+      "timeZone": "Europe/Madrid"
+    },
+    "iCalUID": "16xyz7uvw2abc8def3ghi9jkl4mno@google.com",
+    "sequence": 0,
+    "reminders": {
+      "useDefault": true
+    },
+    "eventType": "default"
+  },
+  {
+    "kind": "calendar#event",
+    "etag": "\"3181159875584000\"",
+    "id": "17xyz7uvw2abc8def3ghi9jkl4mno",
+    "status": "confirmed",
+    "htmlLink": "https://www.google.com/calendar/event",
+    "created": "2020-05-19T19:14:30.000Z",
+    "updated": "2020-05-27T11:45:37.792Z",
+    "summary": "DevOps with Docker",
+    "description": "Learn containerization with Docker. Build, deploy, and manage applications using containers and orchestration.",
+    "location": "Amsterdam, Netherlands",
+    "creator": {
+      "email": "fullstack-webdev@careerfoundry.com",
+      "displayName": "CareerFoundry"
+    },
+    "organizer": {
+      "email": "fullstack-webdev@careerfoundry.com",
+      "displayName": "CareerFoundry"
+    },
+    "start": {
+      "dateTime": "2020-06-05T10:00:00+02:00",
+      "timeZone": "Europe/Amsterdam"
+    },
+    "end": {
+      "dateTime": "2020-06-05T17:00:00+02:00",
+      "timeZone": "Europe/Amsterdam"
+    },
+    "iCalUID": "17xyz7uvw2abc8def3ghi9jkl4mno@google.com",
+    "sequence": 0,
+    "reminders": {
+      "useDefault": true
+    },
+    "eventType": "default"
+  },
+  {
+    "kind": "calendar#event",
+    "etag": "\"3181159875584000\"",
+    "id": "18xyz7uvw2abc8def3ghi9jkl4mno",
+    "status": "confirmed",
+    "htmlLink": "https://www.google.com/calendar/event",
+    "created": "2020-05-19T19:14:30.000Z",
+    "updated": "2020-05-27T11:45:37.792Z",
+    "summary": "JavaScript ES6+ Features",
+    "description": "Master modern JavaScript features: arrow functions, destructuring, modules, async/await, and more.",
+    "location": "Zurich, Switzerland",
+    "creator": {
+      "email": "fullstack-webdev@careerfoundry.com",
+      "displayName": "CareerFoundry"
+    },
+    "organizer": {
+      "email": "fullstack-webdev@careerfoundry.com",
+      "displayName": "CareerFoundry"
+    },
+    "start": {
+      "dateTime": "2020-06-06T14:00:00+02:00",
+      "timeZone": "Europe/Zurich"
+    },
+    "end": {
+      "dateTime": "2020-06-06T18:00:00+02:00",
+      "timeZone": "Europe/Zurich"
+    },
+    "iCalUID": "18xyz7uvw2abc8def3ghi9jkl4mno@google.com",
+    "sequence": 0,
+    "reminders": {
+      "useDefault": true
+    },
+    "eventType": "default"
+  },
+  {
+    "kind": "calendar#event",
+    "etag": "\"3181159875584000\"",
+    "id": "19xyz7uvw2abc8def3ghi9jkl4mno",
+    "status": "confirmed",
+    "htmlLink": "https://www.google.com/calendar/event",
+    "created": "2020-05-19T19:14:30.000Z",
+    "updated": "2020-05-27T11:45:37.792Z",
+    "summary": "GraphQL API Design",
+    "description": "Learn GraphQL for building efficient APIs. Queries, mutations, subscriptions, and schema design best practices.",
+    "location": "Vienna, Austria",
+    "creator": {
+      "email": "fullstack-webdev@careerfoundry.com",
+      "displayName": "CareerFoundry"
+    },
+    "organizer": {
+      "email": "fullstack-webdev@careerfoundry.com",
+      "displayName": "CareerFoundry"
+    },
+    "start": {
+      "dateTime": "2020-06-07T13:00:00+02:00",
+      "timeZone": "Europe/Vienna"
+    },
+    "end": {
+      "dateTime": "2020-06-07T17:00:00+02:00",
+      "timeZone": "Europe/Vienna"
+    },
+    "iCalUID": "19xyz7uvw2abc8def3ghi9jkl4mno@google.com",
+    "sequence": 0,
+    "reminders": {
+      "useDefault": true
+    },
+    "eventType": "default"
+  },
+  {
+    "kind": "calendar#event",
+    "etag": "\"3181159875584000\"",
+    "id": "20xyz7uvw2abc8def3ghi9jkl4mno",
+    "status": "confirmed",
+    "htmlLink": "https://www.google.com/calendar/event",
+    "created": "2020-05-19T19:14:30.000Z",
+    "updated": "2020-05-27T11:45:37.792Z",
+    "summary": "TypeScript for JavaScript Developers",
+    "description": "Add static typing to JavaScript with TypeScript. Interfaces, generics, decorators, and advanced type features.",
+    "location": "Copenhagen, Denmark",
+    "creator": {
+      "email": "fullstack-webdev@careerfoundry.com",
+      "displayName": "CareerFoundry"
+    },
+    "organizer": {
+      "email": "fullstack-webdev@careerfoundry.com",
+      "displayName": "CareerFoundry"
+    },
+    "start": {
+      "dateTime": "2020-06-08T10:00:00+02:00",
+      "timeZone": "Europe/Copenhagen"
+    },
+    "end": {
+      "dateTime": "2020-06-08T16:00:00+02:00",
+      "timeZone": "Europe/Copenhagen"
+    },
+    "iCalUID": "20xyz7uvw2abc8def3ghi9jkl4mno@google.com",
+    "sequence": 0,
+    "reminders": {
+      "useDefault": true
+    },
+    "eventType": "default"
+  },
+  {
+    "kind": "calendar#event",
+    "etag": "\"3181159875584000\"",
+    "id": "21xyz7uvw2abc8def3ghi9jkl4mno",
+    "status": "confirmed",
+    "htmlLink": "https://www.google.com/calendar/event",
+    "created": "2020-05-19T19:14:30.000Z",
+    "updated": "2020-05-27T11:45:37.792Z",
+    "summary": "React Native Mobile Development",
+    "description": "Build cross-platform mobile apps with React Native. Navigation, state management, and native modules.",
+    "location": "Oslo, Norway",
+    "creator": {
+      "email": "fullstack-webdev@careerfoundry.com",
+      "displayName": "CareerFoundry"
+    },
+    "organizer": {
+      "email": "fullstack-webdev@careerfoundry.com",
+      "displayName": "CareerFoundry"
+    },
+    "start": {
+      "dateTime": "2020-06-09T09:00:00+02:00",
+      "timeZone": "Europe/Oslo"
+    },
+    "end": {
+      "dateTime": "2020-06-09T17:00:00+02:00",
+      "timeZone": "Europe/Oslo"
+    },
+    "iCalUID": "21xyz7uvw2abc8def3ghi9jkl4mno@google.com",
+    "sequence": 0,
+    "reminders": {
+      "useDefault": true
+    },
+    "eventType": "default"
+  },
+  {
+    "kind": "calendar#event",
+    "etag": "\"3181159875584000\"",
+    "id": "22xyz7uvw2abc8def3ghi9jkl4mno",
+    "status": "confirmed",
+    "htmlLink": "https://www.google.com/calendar/event",
+    "created": "2020-05-19T19:14:30.000Z",
+    "updated": "2020-05-27T11:45:37.792Z",
+    "summary": "Kubernetes Orchestration",
+    "description": "Master Kubernetes for container orchestration. Pods, services, deployments, and cluster management.",
+    "location": "Helsinki, Finland",
+    "creator": {
+      "email": "fullstack-webdev@careerfoundry.com",
+      "displayName": "CareerFoundry"
+    },
+    "organizer": {
+      "email": "fullstack-webdev@careerfoundry.com",
+      "displayName": "CareerFoundry"
+    },
+    "start": {
+      "dateTime": "2020-06-10T11:00:00+03:00",
+      "timeZone": "Europe/Helsinki"
+    },
+    "end": {
+      "dateTime": "2020-06-10T18:00:00+03:00",
+      "timeZone": "Europe/Helsinki"
+    },
+    "iCalUID": "22xyz7uvw2abc8def3ghi9jkl4mno@google.com",
+    "sequence": 0,
+    "reminders": {
+      "useDefault": true
+    },
+    "eventType": "default"
+  },
+  {
+    "kind": "calendar#event",
+    "etag": "\"3181159875584000\"",
+    "id": "23xyz7uvw2abc8def3ghi9jkl4mno",
+    "status": "confirmed",
+    "htmlLink": "https://www.google.com/calendar/event",
+    "created": "2020-05-19T19:14:30.000Z",
+    "updated": "2020-05-27T11:45:37.792Z",
+    "summary": "jQuery Advanced Techniques",
+    "description": "Advanced jQuery techniques for dynamic web interfaces. Plugins, animations, AJAX, and performance optimization.",
+    "location": "Brussels, Belgium",
+    "creator": {
+      "email": "fullstack-webdev@careerfoundry.com",
+      "displayName": "CareerFoundry"
+    },
+    "organizer": {
+      "email": "fullstack-webdev@careerfoundry.com",
+      "displayName": "CareerFoundry"
+    },
+    "start": {
+      "dateTime": "2020-06-11T14:00:00+02:00",
+      "timeZone": "Europe/Brussels"
+    },
+    "end": {
+      "dateTime": "2020-06-11T18:00:00+02:00",
+      "timeZone": "Europe/Brussels"
+    },
+    "iCalUID": "23xyz7uvw2abc8def3ghi9jkl4mno@google.com",
+    "sequence": 0,
+    "reminders": {
+      "useDefault": true
+    },
+    "eventType": "default"
+  },
+  {
+    "kind": "calendar#event",
+    "etag": "\"3181159875584000\"",
+    "id": "24xyz7uvw2abc8def3ghi9jkl4mno",
+    "status": "confirmed",
+    "htmlLink": "https://www.google.com/calendar/event",
+    "created": "2020-05-19T19:14:30.000Z",
+    "updated": "2020-05-27T11:45:37.792Z",
+    "summary": "Web Security Best Practices",
+    "description": "Learn web security fundamentals. HTTPS, authentication, authorization, OWASP top 10, and secure coding practices.",
+    "location": "Prague, Czech Republic",
+    "creator": {
+      "email": "fullstack-webdev@careerfoundry.com",
+      "displayName": "CareerFoundry"
+    },
+    "organizer": {
+      "email": "fullstack-webdev@careerfoundry.com",
+      "displayName": "CareerFoundry"
+    },
+    "start": {
+      "dateTime": "2020-06-12T10:00:00+02:00",
+      "timeZone": "Europe/Prague"
+    },
+    "end": {
+      "dateTime": "2020-06-12T17:00:00+02:00",
+      "timeZone": "Europe/Prague"
+    },
+    "iCalUID": "24xyz7uvw2abc8def3ghi9jkl4mno@google.com",
+    "sequence": 0,
+    "reminders": {
+      "useDefault": true
+    },
+    "eventType": "default"
+  },
+  {
+    "kind": "calendar#event",
+    "etag": "\"3181159875584000\"",
+    "id": "25xyz7uvw2abc8def3ghi9jkl4mno",
+    "status": "confirmed",
+    "htmlLink": "https://www.google.com/calendar/event",
+    "created": "2020-05-19T19:14:30.000Z",
+    "updated": "2020-05-27T11:45:37.792Z",
+    "summary": "Progressive Web Apps",
+    "description": "Build PWAs with modern web technologies. Service workers, offline functionality, app manifests, and native-like experiences.",
+    "location": "Budapest, Hungary",
+    "creator": {
+      "email": "fullstack-webdev@careerfoundry.com",
+      "displayName": "CareerFoundry"
+    },
+    "organizer": {
+      "email": "fullstack-webdev@careerfoundry.com",
+      "displayName": "CareerFoundry"
+    },
+    "start": {
+      "dateTime": "2020-06-13T13:00:00+02:00",
+      "timeZone": "Europe/Budapest"
+    },
+    "end": {
+      "dateTime": "2020-06-13T18:00:00+02:00",
+      "timeZone": "Europe/Budapest"
+    },
+    "iCalUID": "25xyz7uvw2abc8def3ghi9jkl4mno@google.com",
+    "sequence": 0,
+    "reminders": {
+      "useDefault": true
+    },
+    "eventType": "default"
+  },
+  {
+    "kind": "calendar#event",
+    "etag": "\"3181159875584000\"",
+    "id": "26xyz7uvw2abc8def3ghi9jkl4mno",
+    "status": "confirmed",
+    "htmlLink": "https://www.google.com/calendar/event",
+    "created": "2020-05-19T19:14:30.000Z",
+    "updated": "2020-05-27T11:45:37.792Z",
+    "summary": "Microservices Architecture",
+    "description": "Design and build microservices architectures. API gateways, service discovery, distributed systems patterns.",
+    "location": "Warsaw, Poland",
+    "creator": {
+      "email": "fullstack-webdev@careerfoundry.com",
+      "displayName": "CareerFoundry"
+    },
+    "organizer": {
+      "email": "fullstack-webdev@careerfoundry.com",
+      "displayName": "CareerFoundry"
+    },
+    "start": {
+      "dateTime": "2020-06-14T09:00:00+02:00",
+      "timeZone": "Europe/Warsaw"
+    },
+    "end": {
+      "dateTime": "2020-06-14T17:00:00+02:00",
+      "timeZone": "Europe/Warsaw"
+    },
+    "iCalUID": "26xyz7uvw2abc8def3ghi9jkl4mno@google.com",
+    "sequence": 0,
+    "reminders": {
+      "useDefault": true
+    },
+    "eventType": "default"
+  },
+  {
+    "kind": "calendar#event",
+    "etag": "\"3181159875584000\"",
+    "id": "27xyz7uvw2abc8def3ghi9jkl4mno",
+    "status": "confirmed",
+    "htmlLink": "https://www.google.com/calendar/event",
+    "created": "2020-05-19T19:14:30.000Z",
+    "updated": "2020-05-27T11:45:37.792Z",
+    "summary": "Machine Learning with JavaScript",
+    "description": "Explore ML with JavaScript using TensorFlow.js. Neural networks, training models, and browser-based AI applications.",
+    "location": "Lisbon, Portugal",
+    "creator": {
+      "email": "fullstack-webdev@careerfoundry.com",
+      "displayName": "CareerFoundry"
+    },
+    "organizer": {
+      "email": "fullstack-webdev@careerfoundry.com",
+      "displayName": "CareerFoundry"
+    },
+    "start": {
+      "dateTime": "2020-06-15T11:00:00+01:00",
+      "timeZone": "Europe/Lisbon"
+    },
+    "end": {
+      "dateTime": "2020-06-15T18:00:00+01:00",
+      "timeZone": "Europe/Lisbon"
+    },
+    "iCalUID": "27xyz7uvw2abc8def3ghi9jkl4mno@google.com",
+    "sequence": 0,
+    "reminders": {
+      "useDefault": true
+    },
+    "eventType": "default"
+  },
+  {
+    "kind": "calendar#event",
+    "etag": "\"3181159875584000\"",
+    "id": "28xyz7uvw2abc8def3ghi9jkl4mno",
+    "status": "confirmed",
+    "htmlLink": "https://www.google.com/calendar/event",
+    "created": "2020-05-19T19:14:30.000Z",
+    "updated": "2020-05-27T11:45:37.792Z",
+    "summary": "Blockchain Development",
+    "description": "Introduction to blockchain development. Smart contracts, Web3, DeFi protocols, and decentralized applications.",
+    "location": "Athens, Greece",
+    "creator": {
+      "email": "fullstack-webdev@careerfoundry.com",
+      "displayName": "CareerFoundry"
+    },
+    "organizer": {
+      "email": "fullstack-webdev@careerfoundry.com",
+      "displayName": "CareerFoundry"
+    },
+    "start": {
+      "dateTime": "2020-06-16T14:00:00+03:00",
+      "timeZone": "Europe/Athens"
+    },
+    "end": {
+      "dateTime": "2020-06-16T19:00:00+03:00",
+      "timeZone": "Europe/Athens"
+    },
+    "iCalUID": "28xyz7uvw2abc8def3ghi9jkl4mno@google.com",
+    "sequence": 0,
+    "reminders": {
+      "useDefault": true
+    },
+    "eventType": "default"
+  },
+  {
+    "kind": "calendar#event",
+    "etag": "\"3181159875584000\"",
+    "id": "29xyz7uvw2abc8def3ghi9jkl4mno",
+    "status": "confirmed",
+    "htmlLink": "https://www.google.com/calendar/event",
+    "created": "2020-05-19T19:14:30.000Z",
+    "updated": "2020-05-27T11:45:37.792Z",
+    "summary": "Serverless Architecture with AWS",
+    "description": "Build serverless applications with AWS Lambda, API Gateway, DynamoDB, and other AWS services.",
+    "location": "Dublin, Ireland",
+    "creator": {
+      "email": "fullstack-webdev@careerfoundry.com",
+      "displayName": "CareerFoundry"
+    },
+    "organizer": {
+      "email": "fullstack-webdev@careerfoundry.com",
+      "displayName": "CareerFoundry"
+    },
+    "start": {
+      "dateTime": "2020-06-17T10:00:00+01:00",
+      "timeZone": "Europe/Dublin"
+    },
+    "end": {
+      "dateTime": "2020-06-17T17:00:00+01:00",
+      "timeZone": "Europe/Dublin"
+    },
+    "iCalUID": "29xyz7uvw2abc8def3ghi9jkl4mno@google.com",
+    "sequence": 0,
+    "reminders": {
+      "useDefault": true
+    },
+    "eventType": "default"
+  },
+  {
+    "kind": "calendar#event",
+    "etag": "\"3181159875584000\"",
+    "id": "30xyz7uvw2abc8def3ghi9jkl4mno",
+    "status": "confirmed",
+    "htmlLink": "https://www.google.com/calendar/event",
+    "created": "2020-05-19T19:14:30.000Z",
+    "updated": "2020-05-27T11:45:37.792Z",
+    "summary": "Advanced CSS Animations",
+    "description": "Create stunning web animations with CSS. Keyframes, transforms, transitions, and performance best practices.",
+    "location": "Edinburgh, Scotland",
+    "creator": {
+      "email": "fullstack-webdev@careerfoundry.com",
+      "displayName": "CareerFoundry"
+    },
+    "organizer": {
+      "email": "fullstack-webdev@careerfoundry.com",
+      "displayName": "CareerFoundry"
+    },
+    "start": {
+      "dateTime": "2020-06-18T13:00:00+01:00",
+      "timeZone": "Europe/London"
+    },
+    "end": {
+      "dateTime": "2020-06-18T18:00:00+01:00",
+      "timeZone": "Europe/London"
+    },
+    "iCalUID": "30xyz7uvw2abc8def3ghi9jkl4mno@google.com",
+    "sequence": 0,
+    "reminders": {
+      "useDefault": true
+    },
+    "eventType": "default"
+  },
+  {
+    "kind": "calendar#event",
+    "etag": "\"3181159875584000\"",
+    "id": "31xyz7uvw2abc8def3ghi9jkl4mno",
+    "status": "confirmed",
+    "htmlLink": "https://www.google.com/calendar/event",
+    "created": "2020-05-19T19:14:30.000Z",
+    "updated": "2020-05-27T11:45:37.792Z",
+    "summary": "React Testing Strategies",
+    "description": "Comprehensive testing for React applications. Unit tests, integration tests, end-to-end testing with Jest and Cypress.",
+    "location": "Cardiff, Wales",
+    "creator": {
+      "email": "fullstack-webdev@careerfoundry.com",
+      "displayName": "CareerFoundry"
+    },
+    "organizer": {
+      "email": "fullstack-webdev@careerfoundry.com",
+      "displayName": "CareerFoundry"
+    },
+    "start": {
+      "dateTime": "2020-06-19T09:00:00+01:00",
+      "timeZone": "Europe/London"
+    },
+    "end": {
+      "dateTime": "2020-06-19T16:00:00+01:00",
+      "timeZone": "Europe/London"
+    },
+    "iCalUID": "31xyz7uvw2abc8def3ghi9jkl4mno@google.com",
+    "sequence": 0,
+    "reminders": {
+      "useDefault": true
+    },
+    "eventType": "default"
+  },
+  {
+    "kind": "calendar#event",
+    "etag": "\"3181159875584000\"",
+    "id": "32xyz7uvw2abc8def3ghi9jkl4mno",
+    "status": "confirmed",
+    "htmlLink": "https://www.google.com/calendar/event",
+    "created": "2020-05-19T19:14:30.000Z",
+    "updated": "2020-05-27T11:45:37.792Z",
+    "summary": "Full-Stack JavaScript Capstone",
+    "description": "Build a complete full-stack application using the MERN stack. From concept to deployment with best practices.",
+    "location": "Belfast, Northern Ireland",
+    "creator": {
+      "email": "fullstack-webdev@careerfoundry.com",
+      "displayName": "CareerFoundry"
+    },
+    "organizer": {
+      "email": "fullstack-webdev@careerfoundry.com",
+      "displayName": "CareerFoundry"
+    },
+    "start": {
+      "dateTime": "2020-06-20T11:00:00+01:00",
+      "timeZone": "Europe/London"
+    },
+    "end": {
+      "dateTime": "2020-06-20T18:00:00+01:00",
+      "timeZone": "Europe/London"
+    },
+    "iCalUID": "32xyz7uvw2abc8def3ghi9jkl4mno@google.com",
+    "sequence": 0,
+    "reminders": {
+      "useDefault": true
+    },
+    "eventType": "default"
   }
 ];
 
@@ -485,62 +1233,30 @@ const mockEvents = [
  * Fetch events from API or return cached data when offline
  */
 export const getEvents = async () => {
-  // Check if user is offline and return cached events
-  if (!navigator.onLine) {
-    const cachedEvents = localStorage.getItem("lastEvents");
-    if (cachedEvents) {
-      console.log('Loading events from cache (offline mode)');
-      try {
-        const parsedEvents = JSON.parse(cachedEvents);
-        return Array.isArray(parsedEvents) ? parsedEvents : mockEvents;
-      } catch (error) {
-        console.error('Error parsing cached events:', error);
-        return mockEvents;
-      }
-    }
-    // If no cached events, return mock data as fallback
-    console.log('No cached events found, using mock data');
-    return mockEvents;
-  }
-
-  // Check if there's an authorization code in the URL
-  const searchParams = new URLSearchParams(window.location.search);
-  const code = searchParams.get("code");
-
-  if (code) {
-    removeQuery();
-    const token = await getToken(code);
-    return await getEventsFromAPI(token);
-  }
-
-  // Check if we have a stored access token
-  const token = localStorage.getItem("access_token");
+  console.log('🚀 getEvents called - FORCING MOCK DATA FOR TESTING');
+  console.log('� Mock events count:', mockEvents.length);
   
-  if (token) {
-    const tokenCheck = await checkToken(token);
-    if (tokenCheck.error) {
-      // Token is invalid, remove it and redirect to OAuth
-      localStorage.removeItem("access_token");
-      return await redirectToOAuth();
-    } else {
-      // Token is valid, fetch events
-      return await getEventsFromAPI(token);
-    }
-  } else {
-    // No token, redirect to OAuth
-    return await redirectToOAuth();
-  }
+  // TEMPORARY: Always return mock data for testing
+  localStorage.setItem("lastEvents", JSON.stringify(mockEvents));
+  return mockEvents;
 };
 
 // Helper function to redirect to OAuth
+// eslint-disable-next-line no-unused-vars
 const redirectToOAuth = async () => {
-  // Always use real OAuth for proper GitHub integration
-  const authUrl = await getAuthURL();
-  window.location.href = authUrl;
-  return [];
+  // For development/demo purposes, return mock events instead of redirecting
+  // This allows the app to show 32 events even without authentication
+  console.log('No authentication token found, using mock data for demo');
+  return mockEvents;
+  
+  // Uncomment below lines for production OAuth flow:
+  // const authUrl = await getAuthURL();
+  // window.location.href = authUrl;
+  // return [];
 };
 
 // Helper function to fetch events from Google Calendar API
+// eslint-disable-next-line no-unused-vars
 const getEventsFromAPI = async (accessToken) => {
   try {
     const response = await fetch(`${AUTH_SERVER_URL}/api/get-events/${accessToken}`);
