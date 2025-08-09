@@ -1233,30 +1233,80 @@ const mockEvents = [
  * Fetch events from API or return cached data when offline
  */
 export const getEvents = async () => {
-  console.log('🚀 getEvents called - FORCING MOCK DATA FOR TESTING');
-  console.log('� Mock events count:', mockEvents.length);
+  console.log('🚀 getEvents called');
   
-  // TEMPORARY: Always return mock data for testing
-  localStorage.setItem("lastEvents", JSON.stringify(mockEvents));
-  return mockEvents;
+  // Check if user is offline and return cached events
+  if (!navigator.onLine) {
+    console.log('📵 User is offline');
+    const cachedEvents = localStorage.getItem("lastEvents");
+    if (cachedEvents) {
+      console.log('💾 Loading events from cache (offline mode)');
+      try {
+        const parsedEvents = JSON.parse(cachedEvents);
+        return Array.isArray(parsedEvents) ? parsedEvents : mockEvents;
+      } catch (error) {
+        console.error('Error parsing cached events:', error);
+        return mockEvents;
+      }
+    }
+    // If no cached events, return mock data as fallback
+    console.log('📂 No cached events found, using mock data (offline)');
+    return mockEvents;
+  }
+
+  console.log('🌐 User is online');
+  
+  // Check if there's an authorization code in the URL
+  const searchParams = new URLSearchParams(window.location.search);
+  const code = searchParams.get("code");
+
+  if (code) {
+    console.log('🔑 Authorization code found in URL');
+    removeQuery();
+    const token = await getToken(code);
+    return await getEventsFromAPI(token);
+  }
+
+  // Check if we have a stored access token
+  const token = localStorage.getItem("access_token");
+  console.log('🔍 Checking for stored token:', token ? 'Found' : 'Not found');
+  
+  if (token) {
+    console.log('✅ Token found, checking validity');
+    const tokenCheck = await checkToken(token);
+    if (tokenCheck.error) {
+      // Token is invalid, remove it and redirect to OAuth
+      console.log('❌ Token is invalid, removing and redirecting to OAuth');
+      localStorage.removeItem("access_token");
+      return await redirectToOAuth();
+    } else {
+      // Token is valid, fetch events
+      console.log('✅ Token is valid, fetching events from API');
+      return await getEventsFromAPI(token);
+    }
+  } else {
+    // No token, redirect to OAuth
+    console.log('🚫 No token found, redirecting to OAuth');
+    return await redirectToOAuth();
+  }
 };
 
 // Helper function to redirect to OAuth
-// eslint-disable-next-line no-unused-vars
 const redirectToOAuth = async () => {
-  // For development/demo purposes, return mock events instead of redirecting
-  // This allows the app to show 32 events even without authentication
-  console.log('No authentication token found, using mock data for demo');
-  return mockEvents;
-  
-  // Uncomment below lines for production OAuth flow:
-  // const authUrl = await getAuthURL();
-  // window.location.href = authUrl;
-  // return [];
+  try {
+    console.log('Initiating OAuth flow...');
+    const authUrl = await getAuthURL();
+    window.location.href = authUrl;
+    return []; // Return empty array while redirecting
+  } catch (error) {
+    console.error('Error during OAuth redirect:', error);
+    // Fallback to mock data if OAuth fails
+    console.log('OAuth failed, falling back to mock data');
+    return mockEvents;
+  }
 };
 
 // Helper function to fetch events from Google Calendar API
-// eslint-disable-next-line no-unused-vars
 const getEventsFromAPI = async (accessToken) => {
   try {
     const response = await fetch(`${AUTH_SERVER_URL}/api/get-events/${accessToken}`);
