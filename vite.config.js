@@ -8,8 +8,11 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: 'autoUpdate',
+      injectRegister: 'auto',
+      devOptions: {
+        enabled: false
+      },
       includeAssets: ['meet-app-144.png', 'meet-app-192.png', 'meet-app-512.png'],
-      // Ensure the service worker respects the base path
       workbox: {
         cleanupOutdatedCaches: true,
         globPatterns: ['**/*.{js,css,html,ico,png,svg,json,woff2}'],

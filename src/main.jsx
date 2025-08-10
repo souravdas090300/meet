@@ -46,11 +46,25 @@ ReactDOM.createRoot(document.getElementById('root')).render(
   </React.StrictMode>
 );
 
-// VitePWA handles service worker registration automatically via registerSW.js
-// Log when real events are cached for offline use
+// VitePWA handles service worker registration automatically
+// Import VitePWA's registration function for better control
+import { registerSW } from 'virtual:pwa-register';
+
+// Register service worker with VitePWA
 if ('serviceWorker' in navigator && import.meta.env.PROD) {
-  navigator.serviceWorker.ready.then(() => {
-    console.log('Real events cached for offline use');
+  registerSW({
+    onNeedRefresh() {
+      console.log('New content available, please refresh');
+    },
+    onOfflineReady() {
+      console.log('Real events cached for offline use');
+    },
+    onRegisterError(error) {
+      console.error('Service worker registration failed:', error);
+    },
+    onRegistered() {
+      console.log('Service worker registered successfully');
+    }
   });
 }
 

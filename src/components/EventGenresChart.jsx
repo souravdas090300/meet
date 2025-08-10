@@ -42,10 +42,10 @@ const EventGenresChart = ({ events = [] }) => {
   }, [events, genres]);
 
   const renderCustomizedLabel = ({ cx, cy, midAngle, outerRadius, percent, index }) => {
-    if (!percent || percent < 0.05 || !genres || !genres[index]) return null; // Don't show labels for very small slices or missing data
+    if (!percent || percent < 0.08 || !genres || !genres[index]) return null; // Increased threshold for mobile
 
-    // For mobile, don't show labels if they might cause overflow
-    if (windowWidth <= 480 && percent < 0.15) return null;
+    // For mobile, only show labels for significant slices
+    if (windowWidth <= 480 && percent < 0.12) return null;
 
     const RADIAN = Math.PI / 180;
     // Use a more conservative radius calculation to prevent cutoff
@@ -53,9 +53,9 @@ const EventGenresChart = ({ events = [] }) => {
     const isSmallMobile = windowWidth <= 480;
     
     // More conservative label positioning for mobile
-    const labelRadius = isSmallMobile ? outerRadius * 1.05 : 
-                       isMobile ? outerRadius * 1.08 : 
-                       outerRadius * 1.15;
+    const labelRadius = isSmallMobile ? outerRadius * 0.95 : 
+                       isMobile ? outerRadius * 1.05 : 
+                       outerRadius * 1.12;
     
     const x = cx + labelRadius * Math.cos(-midAngle * RADIAN);
     const y = cy + labelRadius * Math.sin(-midAngle * RADIAN);
@@ -67,7 +67,7 @@ const EventGenresChart = ({ events = [] }) => {
         fill="#8884d8"
         textAnchor={x > cx ? 'start' : 'end'}
         dominantBaseline="central"
-        fontSize={isSmallMobile ? '9px' : isMobile ? '10px' : '12px'}
+        fontSize={isSmallMobile ? '8px' : isMobile ? '9px' : '11px'}
         fontWeight="500"
       >
         {isSmallMobile ? `${(percent * 100).toFixed(0)}%` : `${genres[index]} ${(percent * 100).toFixed(0)}%`}
@@ -77,26 +77,26 @@ const EventGenresChart = ({ events = [] }) => {
 
   // Dynamic outer radius based on screen size with more conservative sizing
   const getOuterRadius = () => {
-    if (windowWidth <= 480) return 50;  // Small mobile - very conservative
-    if (windowWidth <= 768) return 65;  // Large mobile/tablet - conservative
-    return 85; // Desktop - conservative
+    if (windowWidth <= 480) return 45;  // Small mobile - very conservative
+    if (windowWidth <= 768) return 60;  // Large mobile/tablet - conservative
+    return 80; // Desktop - conservative
   };
 
   return (
     <div>
       <h4>Events by Genre</h4>
       {data && data.length > 0 && data.some(item => item.value > 0) ? (
-        <ResponsiveContainer width="100%" height={windowWidth <= 480 ? 350 : 400}>
+        <ResponsiveContainer width="100%" height={windowWidth <= 480 ? 320 : 380}>
           <PieChart margin={{ 
-            top: windowWidth <= 480 ? 10 : 20, 
-            right: windowWidth <= 480 ? 40 : 80, 
-            bottom: windowWidth <= 480 ? 60 : 80, 
-            left: windowWidth <= 480 ? 40 : 80 
+            top: 10, 
+            right: windowWidth <= 480 ? 20 : 50, 
+            bottom: windowWidth <= 480 ? 80 : 70, 
+            left: windowWidth <= 480 ? 20 : 50 
           }}>
             <Pie
               data={data}
               cx="50%"
-              cy={windowWidth <= 480 ? "40%" : "45%"}
+              cy={windowWidth <= 480 ? "35%" : "40%"}
               dataKey="value"
               fill="#8884d8"
               labelLine={false}
@@ -111,9 +111,11 @@ const EventGenresChart = ({ events = [] }) => {
               verticalAlign="bottom" 
               align="center" 
               wrapperStyle={{ 
-                paddingTop: windowWidth <= 480 ? '10px' : '20px',
-                fontSize: windowWidth <= 480 ? '12px' : '14px'
+                paddingTop: windowWidth <= 480 ? '10px' : '15px',
+                fontSize: windowWidth <= 480 ? '11px' : '12px',
+                lineHeight: '1.2'
               }}
+              iconType="circle"
             />
           </PieChart>
         </ResponsiveContainer>

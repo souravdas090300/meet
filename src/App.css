@@ -309,6 +309,7 @@ p {
   .chart-container {
     padding: 12px;
     margin: 15px 0;
+    overflow: hidden; /* Prevent chart overflow */
   }
   
   .chart-container h4 {
@@ -318,19 +319,36 @@ p {
   .charts-container > div {
     padding: 15px;
     margin: 10px 0;
+    overflow: hidden; /* Prevent chart overflow */
   }
 
   .charts-container h4 {
     font-size: 1.1rem;
     margin-bottom: 10px;
   }
+
+  /* Ensure chart containers don't overflow */
+  .recharts-wrapper {
+    max-width: 100% !important;
+    overflow: visible !important;
+  }
 }
 
 /* Extra small mobile devices */
 @media (max-width: 480px) {
+  .App {
+    padding: 1% 2%; /* Reduce padding on very small screens */
+  }
+
+  .event-charts {
+    padding: 12px;
+    margin: 8px 0;
+  }
+
   .charts-container > div {
-    padding: 10px;
-    margin: 5px 0;
+    padding: 8px;
+    margin: 8px 0;
+    overflow: hidden;
   }
 
   .charts-container h4 {
@@ -341,15 +359,33 @@ p {
   .chart-container {
     padding: 8px;
     margin: 10px 0;
+    overflow: hidden;
   }
 
   .chart-container h4 {
     font-size: 1rem;
   }
 
-  /* Override any potential fixed heights on mobile */
+  /* Ensure charts fit properly on mobile */
   .recharts-wrapper {
     min-height: auto !important;
+    max-width: 100% !important;
+    overflow: visible !important;
+  }
+
+  /* Ensure pie chart text doesn't overflow */
+  .recharts-pie-label-text {
+    font-size: 10px !important;
+  }
+
+  .recharts-legend-wrapper {
+    max-width: 100% !important;
+    overflow: hidden !important;
+  }
+
+  .recharts-default-legend {
+    flex-wrap: wrap !important;
+    max-width: 100% !important;
   }
 }
 

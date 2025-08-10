@@ -43,23 +43,26 @@ const EventChart = ({ events = [] }) => {
       
       <div className="chart-container">
         <h4>Events by Location</h4>
-        <ResponsiveContainer width="100%" height={windowWidth <= 480 ? 300 : 320}>
+        <ResponsiveContainer width="100%" height={windowWidth <= 480 ? 320 : 350}>
           <PieChart margin={{ 
-            top: windowWidth <= 480 ? 10 : 20, 
-            right: windowWidth <= 480 ? 30 : 60, 
-            bottom: windowWidth <= 480 ? 50 : 60, 
-            left: windowWidth <= 480 ? 30 : 60 
+            top: 10, 
+            right: windowWidth <= 480 ? 20 : 40, 
+            bottom: windowWidth <= 480 ? 80 : 60, 
+            left: windowWidth <= 480 ? 20 : 40 
           }}>
             <Pie
               data={pieData}
               cx="50%"
-              cy={windowWidth <= 480 ? "40%" : "45%"}
+              cy={windowWidth <= 480 ? "35%" : "40%"}
               labelLine={false}
-              label={({ name, percent }) => percent > 0.05 ? 
-                (windowWidth <= 480 ? `${(percent * 100).toFixed(0)}%` : `${name} ${(percent * 100).toFixed(0)}%`) 
-                : null
-              }
-              outerRadius={windowWidth <= 480 ? 50 : 70}
+              label={({ name, percent }) => {
+                if (percent < 0.05) return null;
+                if (windowWidth <= 480) {
+                  return `${(percent * 100).toFixed(0)}%`;
+                }
+                return `${name.length > 8 ? name.substring(0, 8) + '...' : name} ${(percent * 100).toFixed(0)}%`;
+              }}
+              outerRadius={windowWidth <= 480 ? 40 : windowWidth <= 768 ? 55 : 70}
               fill="#8884d8"
               dataKey="value"
             >
@@ -67,14 +70,16 @@ const EventChart = ({ events = [] }) => {
                 <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
               ))}
             </Pie>
-            <Tooltip />
+            <Tooltip formatter={(value, name) => [value, name]} />
             <Legend 
               verticalAlign="bottom" 
               align="center" 
               wrapperStyle={{ 
                 paddingTop: '15px',
-                fontSize: windowWidth <= 480 ? '12px' : '14px'
+                fontSize: windowWidth <= 480 ? '11px' : '12px',
+                lineHeight: '1.2'
               }}
+              iconType="circle"
             />
           </PieChart>
         </ResponsiveContainer>
