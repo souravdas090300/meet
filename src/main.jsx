@@ -13,7 +13,9 @@ window.atatusInitialized = false; // Make it globally available
 try {
   const licenseKey = import.meta.env.VITE_ATATUS_LICENSE_KEY || '93a094075aa3483186cf248030fdad97';
 
+  // Re-enable Atatus with SPA-specific configuration
   if (licenseKey && licenseKey !== 'undefined' && typeof atatus.config === 'function') {
+    // For SPA applications, use atatus-spa which shouldn't register service workers
     atatus.config(licenseKey).install();
     atatusInitialized = true;
     window.atatusInitialized = true;

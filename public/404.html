@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Meet App - Page Not Found</title>
     <meta name="theme-color" content="#764ba2">
-    <link rel="manifest" href="/manifest.json">
-    <link rel="icon" href="/favicon.ico">
+    <link rel="manifest" href="/meet/manifest.json">
+    <link rel="icon" href="/meet/favicon.ico">
     <style>
         :root {
             --primary: #764ba2;
@@ -60,7 +60,7 @@
     <div class="container">
         <h1>404</h1>
         <p>We couldn't find that page</p>
-        <a href="/" class="home-link">Return Home</a>
+        <a href="/meet/" class="home-link">Return Home</a>
     </div>
 
     <script>
@@ -68,7 +68,7 @@
         if ('serviceWorker' in navigator) {
             const basePath = window.location.hostname === 'localhost' ? '/' : '/meet/';
             const swUrl = basePath + 'service-worker.js';
-            navigator.serviceWorker.register(swUrl)
+            navigator.serviceWorker.register(swUrl, { scope: basePath })
                 .then(registration => {
                     console.log('Service worker registered on 404 page:', registration);
                 })

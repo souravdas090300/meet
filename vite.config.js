@@ -7,7 +7,7 @@ export default defineConfig({
   plugins: [
     react(),
     VitePWA({
-      registerType: 'prompt',
+      registerType: 'autoUpdate',
       injectRegister: false, // We'll handle registration manually
       strategies: 'injectManifest',
       srcDir: 'src',
@@ -15,7 +15,8 @@ export default defineConfig({
       devOptions: {
         enabled: false
       },
-      includeAssets: ['meet-app-144.png', 'meet-app-192.png', 'meet-app-512.png'],
+      selfDestroying: false,
+      includeAssets: ['meet-app-144.png', 'meet-app-192.png', 'meet-app-512.png', 'favicon.ico'],
       workbox: {
         cleanupOutdatedCaches: true,
         globPatterns: ['**/*.{js,css,html,ico,png,svg,json,woff2}'],
@@ -56,62 +57,13 @@ export default defineConfig({
           },
         ],
       },
-      manifest: {
-        "id": process.env.VERCEL ? "/" : "/meet/",
-        "scope": process.env.VERCEL ? "/" : "/meet/",
-        "start_url": process.env.VERCEL ? "/" : "/meet/",
-        "short_name": "Meet App",
-        "name": "Meet - Event Discovery App",
-        "description": "Find events happening in your city",
-        "icons": [
-          {
-            "src": "meet-app-192.png",
-            "sizes": "192x192",
-            "type": "image/png",
-            "purpose": "any"
-          },
-          {
-            "src": "meet-app-144.png",
-            "type": "image/png",
-            "sizes": "144x144",
-            "purpose": "any"
-          },
-          {
-            "src": "meet-app-192.png",
-            "type": "image/png",
-            "sizes": "192x192",
-            "purpose": "any"
-          },
-          {
-            "src": "meet-app-512.png",
-            "type": "image/png",
-            "sizes": "512x512",
-            "purpose": "any maskable"
-          }
-        ],
-        "screenshots": [
-          {
-            "src": "meet-app-512.png",
-            "sizes": "512x512",
-            "type": "image/png",
-            "form_factor": "narrow",
-            "label": "Meet App mobile view"
-          },
-          {
-            "src": "meet-app-512.png",
-            "sizes": "512x512",
-            "type": "image/png",
-            "form_factor": "wide",
-            "label": "Meet App desktop view"
-          }
-        ],
-        "display": "standalone",
-        "orientation": "portrait-primary",
-        "theme_color": "#000000",
-        "background_color": "#ffffff",
-        "categories": ["productivity", "social", "entertainment"],
-        "lang": "en"
-      },
+      manifest: false, // We'll use our own manifest.json from public folder
+      injectManifest: {
+        globPatterns: ['**/*.{js,css,html,ico,png,svg,json,woff2}'],
+        swSrc: 'src/service-worker.js',
+        swDest: 'dist/service-worker.js',
+        dontCacheBustURLsMatching: /\.\w{8}\./,
+      }
     })
   ],
   // Use different base paths for different environments
