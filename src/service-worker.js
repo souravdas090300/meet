@@ -16,14 +16,20 @@ precacheAndRoute(self.__WB_MANIFEST);
 // are fulfilled with your index.html shell. Learn more at
 // https://developers.google.com/web/fundamentals/architecture/app-shell
 const fileExtensionRegexp = new RegExp('/[^/?]+\\.[^/]+$');
-const handler = createHandlerBoundToURL('/index.html');
+// Use proper base path for GitHub Pages
+const basePath = process.env.NODE_ENV === 'production' ? '/meet/' : '/';
+const handler = createHandlerBoundToURL(basePath + 'index.html');
 
 registerRoute(
   ({ request, url }) => {
     if (request.mode !== 'navigate') return false;
     if (url.pathname.startsWith('/_')) return false;
     if (url.pathname.match(fileExtensionRegexp)) return false;
-    return true;
+    // Handle both local development and GitHub Pages paths
+    const isValidPath = url.pathname === '/' || 
+                       url.pathname.startsWith('/meet/') || 
+                       url.pathname.startsWith('/meet');
+    return isValidPath;
   },
   handler
 );

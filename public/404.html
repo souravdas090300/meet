@@ -64,8 +64,18 @@
     </div>
 
     <script>
-        // VitePWA handles service worker registration automatically
-        // No manual registration needed
+        // Register service worker manually for 404 page
+        if ('serviceWorker' in navigator) {
+            const basePath = window.location.hostname === 'localhost' ? '/' : '/meet/';
+            const swUrl = basePath + 'service-worker.js';
+            navigator.serviceWorker.register(swUrl)
+                .then(registration => {
+                    console.log('Service worker registered on 404 page:', registration);
+                })
+                .catch(error => {
+                    console.log('Service worker registration failed on 404 page:', error);
+                });
+        }
 
         // SPA-style redirection
         const currentPath = window.location.pathname;

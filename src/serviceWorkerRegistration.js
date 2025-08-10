@@ -10,7 +10,10 @@ const isLocalhost = Boolean(
     if (import.meta.env.PROD && 'serviceWorker' in navigator) {
         window.addEventListener('load', () => {
           // Use the correct path based on environment
-          const swUrl = import.meta.env.BASE_URL + 'sw.js';
+          const swUrl = import.meta.env.BASE_URL + 'service-worker.js';
+          console.log('Attempting to register service worker at:', swUrl);
+          console.log('Base URL:', import.meta.env.BASE_URL);
+          console.log('Production mode:', import.meta.env.PROD);
     
           if (isLocalhost) {
             // Check if a service worker still exists or not.
@@ -31,8 +34,11 @@ const isLocalhost = Boolean(
   }
   
   function registerValidSW(swUrl, config) {
+    // Register with proper scope for GitHub Pages
+    const scope = import.meta.env.BASE_URL;
+    console.log('Registering service worker with scope:', scope, 'and URL:', swUrl);
     navigator.serviceWorker
-      .register(swUrl)
+      .register(swUrl, { scope: scope })
       .then((registration) => {
         registration.onupdatefound = () => {
           const installingWorker = registration.installing;

@@ -7,8 +7,11 @@ export default defineConfig({
   plugins: [
     react(),
     VitePWA({
-      registerType: 'autoUpdate',
-      injectRegister: 'auto',
+      registerType: 'prompt',
+      injectRegister: false, // We'll handle registration manually
+      strategies: 'injectManifest',
+      srcDir: 'src',
+      filename: 'service-worker.js',
       devOptions: {
         enabled: false
       },

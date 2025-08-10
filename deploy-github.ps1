@@ -16,7 +16,7 @@ if ($LASTEXITCODE -eq 0) {
     Write-Host "Build successful!" -ForegroundColor Green
     
     # Verify service worker exists
-    if (Test-Path "dist\sw.js") {
+    if (Test-Path "dist\service-worker.js") {
         Write-Host "Service worker generated successfully" -ForegroundColor Green
     } else {
         Write-Host "Service worker not found!" -ForegroundColor Red
@@ -30,7 +30,7 @@ if ($LASTEXITCODE -eq 0) {
     if ($LASTEXITCODE -eq 0) {
         Write-Host "Deployment successful!" -ForegroundColor Green
         Write-Host "App should be available at: https://souravdas090300.github.io/meet/" -ForegroundColor Cyan
-        Write-Host "Service worker will be available at: https://souravdas090300.github.io/meet/sw.js" -ForegroundColor Cyan
+        Write-Host "Service worker will be available at: https://souravdas090300.github.io/meet/service-worker.js" -ForegroundColor Cyan
     } else {
         Write-Host "Deployment failed!" -ForegroundColor Red
         exit 1
