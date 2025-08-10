@@ -1,7 +1,18 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
 import { PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
 const EventChart = ({ events = [] }) => {
+  const [windowWidth, setWindowWidth] = useState(typeof window !== 'undefined' ? window.innerWidth : 1024);
+
+  // Handle window resize for responsive design
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    
+    const handleResize = () => setWindowWidth(window.innerWidth);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
   if (!events || events.length === 0) {
     return (
       <div className="event-charts">
@@ -32,15 +43,23 @@ const EventChart = ({ events = [] }) => {
       
       <div className="chart-container">
         <h4>Events by Location</h4>
-        <ResponsiveContainer width="100%" height={300}>
-          <PieChart>
+        <ResponsiveContainer width="100%" height={windowWidth <= 480 ? 300 : 320}>
+          <PieChart margin={{ 
+            top: windowWidth <= 480 ? 10 : 20, 
+            right: windowWidth <= 480 ? 30 : 60, 
+            bottom: windowWidth <= 480 ? 50 : 60, 
+            left: windowWidth <= 480 ? 30 : 60 
+          }}>
             <Pie
               data={pieData}
               cx="50%"
-              cy="50%"
+              cy={windowWidth <= 480 ? "40%" : "45%"}
               labelLine={false}
-              label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
-              outerRadius={80}
+              label={({ name, percent }) => percent > 0.05 ? 
+                (windowWidth <= 480 ? `${(percent * 100).toFixed(0)}%` : `${name} ${(percent * 100).toFixed(0)}%`) 
+                : null
+              }
+              outerRadius={windowWidth <= 480 ? 50 : 70}
               fill="#8884d8"
               dataKey="value"
             >
@@ -49,6 +68,14 @@ const EventChart = ({ events = [] }) => {
               ))}
             </Pie>
             <Tooltip />
+            <Legend 
+              verticalAlign="bottom" 
+              align="center" 
+              wrapperStyle={{ 
+                paddingTop: '15px',
+                fontSize: windowWidth <= 480 ? '12px' : '14px'
+              }}
+            />
           </PieChart>
         </ResponsiveContainer>
       </div>
@@ -68,6 +95,14 @@ const EventChart = ({ events = [] }) => {
       </div>
     </div>
   );
+};
+
+EventChart.propTypes = {
+  events: PropTypes.arrayOf(
+    PropTypes.shape({
+      location: PropTypes.string
+    })
+  )
 };
 
 export default EventChart;

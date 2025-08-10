@@ -28,15 +28,15 @@ describe('<CityEventsChart /> and <EventGenresChart />', () => {
     test('CityEventsChart renders with empty events array', () => {
       render(<CityEventsChart allLocations={[]} events={[]} />);
       
-      // Should render the chart container even with empty data
-      expect(document.querySelector('.recharts-responsive-container')).toBeInTheDocument();
+      // Should render the "No city data available" message with empty data
+      expect(document.querySelector('p')).toHaveTextContent('No city data available');
     });
 
     test('EventGenresChart renders with empty events array', () => {
       render(<EventGenresChart events={[]} />);
       
-      // Should render the chart container even with empty data
-      expect(document.querySelector('.recharts-responsive-container')).toBeInTheDocument();
+      // Should render the "No genre data available" message with empty data
+      expect(document.querySelector('p')).toHaveTextContent('No genre data available');
     });
   });
 });

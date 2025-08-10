@@ -5,7 +5,6 @@ import ErrorBoundary from './components/ErrorBoundary.jsx';
 import './App.css';
 import * as atatus from 'atatus-spa';
 import { safeNotify, setAtatusUser } from './utils/atatus-helpers.js';
-import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 
 // Initialize Atatus with proper error handling
 let atatusInitialized = false;
@@ -47,11 +46,12 @@ ReactDOM.createRoot(document.getElementById('root')).render(
   </React.StrictMode>
 );
 
-// Register service worker
-if (typeof serviceWorkerRegistration.register === 'function') {
-  serviceWorkerRegistration.register();
-} else {
-  console.warn('Service worker registration function not available');
+// VitePWA handles service worker registration automatically via registerSW.js
+// Log when real events are cached for offline use
+if ('serviceWorker' in navigator && import.meta.env.PROD) {
+  navigator.serviceWorker.ready.then(() => {
+    console.log('Real events cached for offline use');
+  });
 }
 
 // Test Atatus in development

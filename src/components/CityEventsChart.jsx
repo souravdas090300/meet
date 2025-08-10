@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import PropTypes from 'prop-types';
 import {
   ScatterChart,
   Scatter,
@@ -12,11 +13,11 @@ const CityEventsChart = ({ allLocations, events }) => {
   const [data, setData] = useState([]);
 
   const getData = useCallback(() => {
-    if (!allLocations || !events) {
+    if (!allLocations || !events || !Array.isArray(allLocations) || !Array.isArray(events)) {
       return [];
     }
     const data = allLocations.map((location) => {
-      const count = events.filter((event) => event.location === location).length;
+      const count = events.filter((event) => event && event.location === location).length;
       const city = location.split(/, | - /)[0];
       return { city, count };
     });
@@ -30,36 +31,52 @@ const CityEventsChart = ({ allLocations, events }) => {
   return (
     <div>
       <h4>Events by City</h4>
-      <ResponsiveContainer width="99%" height={400}>
-        <ScatterChart
-          margin={{
-            top: 20,
-            right: 20,
-            bottom: 60,
-            left: -30,
-          }}
-        >
-          <CartesianGrid />
-          <XAxis
-            type="category" 
-            dataKey="city" 
-            name="City"
-            angle={60} 
-            interval={0} 
-            tick={{ dx: 20, dy: 40, fontSize: 14 }}
-          />
-          <YAxis 
-            type="number" 
-            dataKey="count" 
-            name="Number of events"
-            allowDecimals={false}
-          />
-          <Tooltip cursor={{ strokeDasharray: '3 3' }} />
-          <Scatter name="Events" data={data} fill="#8884d8" />
-        </ScatterChart>
-      </ResponsiveContainer>
+      {data && data.length > 0 ? (
+        <ResponsiveContainer width="99%" height={400}>
+          <ScatterChart
+            data={data}
+            margin={{
+              top: 20,
+              right: 20,
+              bottom: 60,
+              left: -30,
+            }}
+          >
+            <CartesianGrid />
+            <XAxis
+              type="category" 
+              dataKey="city" 
+              name="City"
+              angle={60} 
+              interval={0} 
+              tick={{ dx: 20, dy: 40, fontSize: 14 }}
+            />
+            <YAxis 
+              type="number" 
+              dataKey="count" 
+              name="Number of events"
+              allowDecimals={false}
+            />
+            <Tooltip cursor={{ strokeDasharray: '3 3' }} />
+            <Scatter name="Events" data={data} fill="#8884d8" />
+          </ScatterChart>
+        </ResponsiveContainer>
+      ) : (
+        <div style={{ textAlign: 'center', padding: '40px', color: '#666' }}>
+          <p>No city data available</p>
+        </div>
+      )}
     </div>
   );
+};
+
+CityEventsChart.propTypes = {
+  allLocations: PropTypes.arrayOf(PropTypes.string),
+  events: PropTypes.arrayOf(
+    PropTypes.shape({
+      location: PropTypes.string
+    })
+  )
 };
 
 export default CityEventsChart;

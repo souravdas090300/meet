@@ -7,16 +7,61 @@ export default defineConfig({
   plugins: [
     react(),
     VitePWA({
+      registerType: 'autoUpdate',
+      includeAssets: ['meet-app-144.png', 'meet-app-192.png', 'meet-app-512.png'],
+      // Ensure the service worker respects the base path
+      workbox: {
+        cleanupOutdatedCaches: true,
+        globPatterns: ['**/*.{js,css,html,ico,png,svg,json,woff2}'],
+        navigateFallback: null, // Prevent issues with GitHub Pages
+        runtimeCaching: [
+          {
+            urlPattern: /\/.*\.png$/,
+            handler: 'StaleWhileRevalidate',
+            options: {
+              cacheName: 'images',
+              expiration: {
+                maxEntries: 50,
+              },
+            },
+          },
+          {
+            urlPattern: /^https:\/\/.*\.googleapis\.com\//,
+            handler: 'StaleWhileRevalidate',
+            options: {
+              cacheName: 'google-apis',
+              expiration: {
+                maxEntries: 30,
+                maxAgeSeconds: 60 * 60 * 24, // 24 hours
+              },
+            },
+          },
+          {
+            urlPattern: /^https:\/\/.*\.vercel\.app\//,
+            handler: 'NetworkFirst',
+            options: {
+              cacheName: 'api-cache',
+              expiration: {
+                maxEntries: 50,
+                maxAgeSeconds: 60 * 60, // 1 hour
+              },
+              networkTimeoutSeconds: 10,
+            },
+          },
+        ],
+      },
       manifest: {
         "id": process.env.VERCEL ? "/" : "/meet/",
+        "scope": process.env.VERCEL ? "/" : "/meet/",
+        "start_url": process.env.VERCEL ? "/" : "/meet/",
         "short_name": "Meet App",
         "name": "Meet - Event Discovery App",
         "description": "Find events happening in your city",
         "icons": [
           {
-            "src": "favicon.ico",
-            "sizes": "48x48",
-            "type": "image/x-icon",
+            "src": "meet-app-192.png",
+            "sizes": "192x192",
+            "type": "image/png",
             "purpose": "any"
           },
           {
@@ -54,54 +99,12 @@ export default defineConfig({
             "label": "Meet App desktop view"
           }
         ],
-        "start_url": process.env.VERCEL ? "/" : "/meet/",
-        "scope": process.env.VERCEL ? "/" : "/meet/",
         "display": "standalone",
         "orientation": "portrait-primary",
         "theme_color": "#000000",
         "background_color": "#ffffff",
         "categories": ["productivity", "social", "entertainment"],
         "lang": "en"
-      },
-      srcDir: 'src',
-      filename: 'service-worker.js',
-      registerType: 'autoUpdate',
-      workbox: {
-        runtimeCaching: [
-          {
-            urlPattern: /\/.*\.png$/,
-            handler: 'StaleWhileRevalidate',
-            options: {
-              cacheName: 'images',
-              expiration: {
-                maxEntries: 50,
-              },
-            },
-          },
-          {
-            urlPattern: /^https:\/\/.*\.googleapis\.com\//,
-            handler: 'StaleWhileRevalidate',
-            options: {
-              cacheName: 'google-apis',
-              expiration: {
-                maxEntries: 30,
-                maxAgeSeconds: 60 * 60 * 24, // 24 hours
-              },
-            },
-          },
-          {
-            urlPattern: /^https:\/\/.*\.vercel\.app\//,
-            handler: 'NetworkFirst',
-            options: {
-              cacheName: 'api-cache',
-              expiration: {
-                maxEntries: 50,
-                maxAgeSeconds: 60 * 60, // 1 hour
-              },
-              networkTimeoutSeconds: 10,
-            },
-          },
-        ],
       },
     })
   ],
