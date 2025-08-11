@@ -39,27 +39,28 @@ const CityEventsChart = ({ allLocations, events }) => {
   }, [getData]);
 
   return (
-    <div>
+    <div style={{ width: '100%', minHeight: '350px' }}>
       <h4>Events by City</h4>
       {data && data.length > 0 ? (
-        <ResponsiveContainer width="100%" height={windowWidth <= 480 ? 300 : 400}>
+        <ResponsiveContainer width="100%" height={windowWidth <= 480 ? 300 : 400} minHeight={280}>
           <ScatterChart
             data={data}
             margin={{
               top: 20,
               right: windowWidth <= 480 ? 10 : 20,
-              bottom: windowWidth <= 480 ? 40 : 60,
-              left: windowWidth <= 480 ? -20 : -30,
+              bottom: windowWidth <= 480 ? 50 : 60,
+              left: windowWidth <= 480 ? -10 : -30,
             }}
           >
-            <CartesianGrid />
+            <CartesianGrid strokeDasharray="3 3" />
             <XAxis
               type="category" 
               dataKey="city" 
               name="City"
-              angle={windowWidth <= 480 ? 45 : 60} 
+              angle={windowWidth <= 480 ? 35 : 60} 
               interval={0} 
-              tick={{ dx: 20, dy: 40, fontSize: windowWidth <= 480 ? 10 : 14 }}
+              tick={{ dx: 10, dy: 30, fontSize: windowWidth <= 480 ? 9 : 14 }}
+              height={windowWidth <= 480 ? 60 : 80}
             />
             <YAxis 
               type="number" 
@@ -67,6 +68,7 @@ const CityEventsChart = ({ allLocations, events }) => {
               name="Number of events"
               allowDecimals={false}
               tick={{ fontSize: windowWidth <= 480 ? 10 : 12 }}
+              width={windowWidth <= 480 ? 30 : 40}
             />
             <Tooltip cursor={{ strokeDasharray: '3 3' }} />
             <Scatter name="Events" data={data} fill="#8884d8" />

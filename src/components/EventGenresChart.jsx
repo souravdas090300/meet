@@ -83,10 +83,10 @@ const EventGenresChart = ({ events = [] }) => {
   };
 
   return (
-    <div>
+    <div style={{ width: '100%', minHeight: '350px' }}>
       <h4>Events by Genre</h4>
       {data && data.length > 0 && data.some(item => item.value > 0) ? (
-        <ResponsiveContainer width="100%" height={windowWidth <= 480 ? 320 : 380}>
+        <ResponsiveContainer width="100%" height={windowWidth <= 480 ? 320 : 380} minHeight={300}>
           <PieChart margin={{ 
             top: 10, 
             right: windowWidth <= 480 ? 20 : 50, 
@@ -100,7 +100,7 @@ const EventGenresChart = ({ events = [] }) => {
               dataKey="value"
               fill="#8884d8"
               labelLine={false}
-              label={renderCustomizedLabel}
+              label={windowWidth <= 480 ? false : renderCustomizedLabel}
               outerRadius={getOuterRadius()}
             >
               {data.map((entry, index) => (
