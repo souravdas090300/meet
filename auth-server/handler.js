@@ -79,20 +79,32 @@ module.exports.getCalendarEvents = async (event) => {
       calendarId: CALENDAR_ID,
       auth: oAuth2Client,
       timeMin: new Date().toISOString(),
-      maxResults: 10,
+      maxResults: 32,
       singleEvents: true,
       orderBy: "startTime",
     });
 
     const events = response.data.items.map(event => ({
+      kind: event.kind,
+      etag: event.etag,
       id: event.id,
+      status: event.status,
+      htmlLink: event.htmlLink,
+      created: event.created,
+      updated: event.updated,
       summary: event.summary,
       description: event.description,
       location: event.location,
-      start: event.start.dateTime || event.start.date,
-      end: event.end.dateTime || event.end.date,
-      htmlLink: event.htmlLink,
-      status: event.status,
+      creator: event.creator,
+      organizer: event.organizer,
+      start: event.start,
+      end: event.end,
+      recurringEventId: event.recurringEventId,
+      originalStartTime: event.originalStartTime,
+      iCalUID: event.iCalUID,
+      sequence: event.sequence,
+      reminders: event.reminders,
+      eventType: event.eventType
     }));
 
     return {

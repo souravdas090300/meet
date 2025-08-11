@@ -8,8 +8,6 @@
   position: relative;
   margin: 0 auto;
   box-sizing: border-box;
-  transform: scale(0.9);
-  transform-origin: top center;
 }
 
 .App * {
@@ -32,22 +30,6 @@ p, div, span {
   word-wrap: break-word;
   -webkit-text-size-adjust: 100%;
   -ms-text-size-adjust: 100%;
-}
-
-/* Global size control */
-body {
-  zoom: 0.9;
-  -webkit-zoom: 0.9;
-}
-
-/* Force smaller scaling on all major containers */
-.charts-container,
-.app-controls,
-.event-list,
-.event {
-  transform: scale(0.95);
-  transform-origin: center top;
-  margin-bottom: 1rem;
 }
 
 /* Error Boundary Styles */
@@ -182,10 +164,34 @@ p {
 
 .app-controls {
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
+  align-items: center;
   gap: 1.5rem;
   margin-bottom: 2rem;
   flex-wrap: wrap;
+  max-width: 1400px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0 1rem;
+}
+
+/* Ensure search stays on left, number of events on right */
+.app-controls > *:first-child {
+  order: 1;
+  flex: 0 0 auto;
+}
+
+.app-controls > *:last-child {
+  order: 2;
+  flex: 0 0 auto;
+  margin-left: auto;
+}
+
+@media (min-width: 769px) {
+  .app-controls {
+    flex-direction: row;
+    justify-content: space-between;
+  }
 }
 
 .charts-container {
@@ -193,18 +199,19 @@ p {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 2rem;
-  min-height: 400px;
-  align-items: start;
   width: 100%;
-  max-width: 100%;
-  contain: layout;
+  max-width: 1400px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0 1rem;
 }
 
-@media (max-width: 1024px) {
+@media (max-width: 768px) {
   .charts-container {
     grid-template-columns: 1fr;
     gap: 1.5rem;
-    min-height: auto;
+    margin: 1rem 0;
+    padding: 0 0.5rem;
   }
 }
 
@@ -213,25 +220,21 @@ p {
   background: white;
   border: 1px solid #e1e5e9;
   border-radius: 0.5rem;
-  padding: 1.25rem;
+  padding: 1.5rem;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  min-width: 0;
-  width: 100%;
-  height: 100%;
-  position: relative;
-  max-width: 100%;
-  contain: layout style;
-  will-change: auto;
+  height: 500px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
 }
 
 .charts-container h4 {
   color: #333;
-  font-size: 1rem;
-  margin-bottom: 0.75rem;
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
   text-align: center;
   font-weight: 600;
-  border-bottom: 2px solid #8884d8;
-  padding-bottom: 0.25rem;
+  flex-shrink: 0;
 }
 
 .chart {
@@ -352,34 +355,33 @@ p {
 /* Responsive design for charts */
 @media (max-width: 768px) {
   .App {
-    padding: 0.5rem 1rem;
-    transform: scale(0.85);
+    padding: 0.5rem;
   }
 
   .app-header h1 {
-    font-size: 1.25rem;
+    font-size: 1.5rem;
   }
 
   .app-header p {
-    font-size: 0.75rem;
+    font-size: 0.9rem;
   }
 
   .charts-container {
     margin: 1rem 0;
-    gap: 0.75rem;
-    padding: 0 0.25rem;
-    transform: scale(0.9);
+    gap: 1rem;
+    padding: 0;
   }
 
   .charts-container > div {
-    padding: 0.75rem;
+    padding: 1rem;
     margin: 0.5rem 0;
+    height: auto;
     min-height: 300px;
   }
 
   .charts-container h4 {
     font-size: 1.1rem;
-    margin-bottom: 10px;
+    margin-bottom: 0.5rem;
   }
 
   /* Ensure chart containers don't overflow */
@@ -452,33 +454,101 @@ p {
   }
 }
 
-/* Extra small mobile devices */
+/* Additional responsive rules for smaller screens */
 @media (max-width: 480px) {
   .App {
-    padding: 0.25rem 0.5rem;
-    transform: scale(0.8);
+    padding: 0.5rem;
   }
 
   .app-header h1 {
-    font-size: 1.1rem;
+    font-size: 1.4rem;
   }
 
   .app-header p {
-    font-size: 0.7rem;
+    font-size: 0.85rem;
+  }
+
+  .app-controls {
+    flex-direction: column;
+    gap: 1rem;
+    align-items: center;
   }
 
   .charts-container {
-    margin: 0.75rem 0;
-    gap: 0.5rem;
-    padding: 0 0.125rem;
-    transform: scale(0.85);
+    margin: 0.5rem 0;
+    gap: 1rem;
+    grid-template-columns: 1fr;
   }
 
   .charts-container > div {
-    padding: 0.5rem;
-    margin: 0.25rem 0;
-    min-height: 280px;
+    padding: 1rem;
+    height: auto;
+    min-height: 300px;
   }
+
+  .charts-container h4 {
+    font-size: 1.1rem;
+  }
+
+  .auth-controls {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .auth-button {
+    padding: 0.5rem 1rem;
+    font-size: 0.85rem;
+  }
+}
+
+/* Very small screens */
+@media (max-width: 320px) {
+  .App {
+    padding: 0.25rem;
+  }
+
+  .app-header h1 {
+    font-size: 1.2rem;
+  }
+
+  .app-header p {
+    font-size: 0.75rem;
+  }
+
+  .charts-container > div {
+    padding: 0.75rem;
+    min-height: 250px;
+  }
+
+  .charts-container h4 {
+    font-size: 1rem;
+  }
+
+  .event {
+    padding: 0.75rem;
+    margin: 0.75rem 0;
+  }
+
+  .event h1 {
+    font-size: 1.1rem;
+  }
+}
+
+/* Event list container styles */
+.event-list-container {
+  margin: 2rem 0;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0 1rem;
+}
+
+@media (max-width: 768px) {
+  .event-list-container {
+    margin: 1rem 0;
+    padding: 0 0.5rem;
+  }
+}
 
   .charts-container h4 {
     font-size: 0.9rem;

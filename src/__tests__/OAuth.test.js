@@ -8,7 +8,8 @@ import {
   checkToken, 
   isLoggedIn, 
   logout, 
-  removeQuery 
+  removeQuery,
+  getEvents
 } from '../api';
 
 // Mock the API functions
@@ -245,6 +246,10 @@ describe('OAuth Integration in App Component', () => {
   beforeEach(() => {
     jest.clearAllMocks();
     localStorageMock.getItem.mockReturnValue(null);
+    
+    // Mock getEvents to return empty array by default
+    getEvents.mockResolvedValue([]);
+    
     // Save original location
     originalLocation = window.location;
   });
@@ -330,7 +335,7 @@ describe('OAuth Integration in App Component', () => {
     await user.click(loginButton);
     
     await waitFor(() => {
-      expect(screen.getByText('Failed to initiate login. Please try again.')).toBeInTheDocument();
+      expect(screen.getByText('Authentication failed: Network error')).toBeInTheDocument();
     });
   });
 

@@ -5,7 +5,7 @@ import NumberOfEvents from './components/NumberOfEvents';
 import CityEventsChart from './components/CityEventsChart';
 import EventGenresChart from './components/EventGenresChart';
 import { InfoAlert, ErrorAlert, WarningAlert } from './components/Alert';
-import { getEvents, extractLocations, getAuthURL, logout, isLoggedIn } from './api';
+import { getEvents, extractLocations, getAuthURL, getToken, extractAuthCode, removeQuery, logout, isLoggedIn } from './api';
 import { logAtatusEvent } from './utils/atatus-helpers';
 import './App.css';
 
@@ -20,6 +20,48 @@ function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
+  // Handle OAuth callback
+  useEffect(() => {
+    const handleOAuthCallback = async () => {
+      const authResult = extractAuthCode();
+      
+      if (authResult?.error) {
+        console.error('❌ OAuth error detected:', authResult.error);
+        setErrorAlert(`Authentication error: ${authResult.error}. Please try again.`);
+        setTimeout(() => setErrorAlert(''), 5000);
+        return;
+      }
+      
+      if (authResult?.code) {
+        console.log('🔑 OAuth callback detected, exchanging code for token');
+        setInfoAlert('Processing authentication...');
+        
+        try {
+          const accessToken = await getToken(authResult.code);
+          if (accessToken) {
+            setIsAuthenticated(true);
+            setInfoAlert('Successfully authenticated with Google!');
+            console.log('✅ Authentication successful');
+            
+            // Remove the code parameter from URL
+            removeQuery();
+            
+            // Clear success message after 3 seconds
+            setTimeout(() => setInfoAlert(''), 3000);
+          }
+        } catch (error) {
+          console.error('❌ OAuth callback error:', error);
+          setErrorAlert('Authentication failed. Please try again.');
+          
+          // Clear error message after 5 seconds
+          setTimeout(() => setErrorAlert(''), 5000);
+        }
+      }
+    };
+
+    handleOAuthCallback();
+  }, []);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -29,6 +71,12 @@ function App() {
         const authStatus = isLoggedIn();
         setIsAuthenticated(authStatus);
         
+        if (authStatus) {
+          console.log('👤 User is authenticated');
+        } else {
+          console.log('🔓 User is not authenticated');
+        }
+        
         // Check online status and set warning alert accordingly
         if (navigator.onLine) {
           setWarningAlert("");
@@ -37,10 +85,24 @@ function App() {
         }
 
         const allEvents = await getEvents();
+        console.log('📊 All events received:', allEvents);
+        console.log('📊 Number of events:', allEvents?.length);
+        console.log('📊 Event data type:', typeof allEvents);
+        console.log('📊 Is array:', Array.isArray(allEvents));
         
         // Ensure allEvents is an array and has valid data
         if (!allEvents || !Array.isArray(allEvents)) {
+          console.error('❌ Invalid data received:', allEvents);
           setErrorAlert('Invalid data received. Please try again later.');
+          setIsLoading(false);
+          return;
+        }
+
+        if (allEvents.length === 0) {
+          console.warn('⚠️ No events in the received data');
+          setEvents([]);
+          setAllLocations([]);
+          setErrorAlert('No events available at this time.');
           setIsLoading(false);
           return;
         }
@@ -49,8 +111,16 @@ function App() {
           allEvents : 
           allEvents.filter(event => event && event.location === currentCity);
         
-        setEvents(filteredEvents.slice(0, currentNOE));
+        console.log('🔍 Filtered events:', filteredEvents.length);
+        console.log('🔢 Current NOE:', currentNOE);
+        console.log('🏙️ Current city:', currentCity);
+        
+        const finalEvents = filteredEvents.slice(0, currentNOE);
+        console.log('✅ Final events to display:', finalEvents.length);
+        
+        setEvents(finalEvents);
         setAllLocations(extractLocations(allEvents));
+        setErrorAlert(''); // Clear any previous errors
         setIsLoading(false);
       } catch (error) {
         console.error('Error fetching events:', error);
@@ -93,19 +163,50 @@ function App() {
 
   const handleLogin = async () => {
     try {
+      setInfoAlert('Connecting to authentication server...');
+      setErrorAlert(''); // Clear any previous errors
+      
       const authUrl = await getAuthURL();
-      window.location.href = authUrl;
-    } catch {
-      setErrorAlert('Failed to initiate login. Please try again.');
+      console.log('🔗 Redirecting to auth URL:', authUrl);
+      
+      setInfoAlert('Redirecting to Google for authentication...');
+      
+      // Add a small delay to show the info message
+      setTimeout(() => {
+        window.location.href = authUrl;
+      }, 800);
+    } catch (error) {
+      console.error('❌ Login error:', error);
+      setInfoAlert('');
+      
+      if (error.message.includes('Failed to fetch')) {
+        setErrorAlert('Unable to connect to authentication server. Please check your internet connection and try again.');
+      } else if (error.message.includes('404')) {
+        setErrorAlert('Authentication service not found. Please contact support.');
+      } else if (error.message.includes('500')) {
+        setErrorAlert('Authentication server error. Please try again later.');
+      } else {
+        setErrorAlert(`Authentication failed: ${error.message}`);
+      }
+      
+      // Clear error message after 8 seconds
+      setTimeout(() => setErrorAlert(''), 8000);
     }
   };
 
   const handleLogout = () => {
+    console.log('🚪 Logging out user');
     logout();
     setIsAuthenticated(false);
     setInfoAlert('You have been logged out successfully.');
-    // Refresh the page to reset the app state
-    window.location.reload();
+    
+    // Clear the info message after 3 seconds
+    setTimeout(() => setInfoAlert(''), 3000);
+    
+    // Force a page reload to reset the app state and fetch new data
+    setTimeout(() => {
+      window.location.reload();
+    }, 1000);
   };
 
   return (
@@ -119,17 +220,30 @@ function App() {
       <header className="app-header">
         <h1>Meet App</h1>
         <p>Find events in your city</p>
+        {!isAuthenticated && (
+          <div style={{ 
+            background: '#e7f3ff', 
+            border: '1px solid #b3d9ff', 
+            borderRadius: '8px', 
+            padding: '1rem', 
+            margin: '1rem 0',
+            fontSize: '14px'
+          }}>
+            <strong>📋 Currently showing demo events.</strong><br/>
+            <span>To see real Google Calendar events, please log in with your Google account below.</span>
+          </div>
+        )}
         <div className="auth-controls">
           {isAuthenticated ? (
             <>
-              <span className="auth-status">✓ Logged in with Google</span>
+              <span className="auth-status">✓ Logged in with Google - Showing real events</span>
               <button className="auth-button logout" onClick={handleLogout}>
                 Logout
               </button>
             </>
           ) : (
             <button className="auth-button login" onClick={handleLogin}>
-              Login with Google
+              Login with Google to see real events
             </button>
           )}
         </div>
@@ -152,6 +266,18 @@ function App() {
               setCurrentNOE={setCurrentNOE} 
               setErrorAlert={setErrorAlert}
             />
+          </div>
+
+          {/* Debug info */}
+          <div style={{ margin: '1rem', padding: '1rem', background: '#f0f0f0', borderRadius: '4px', fontSize: '12px' }}>
+            <strong>Debug Info:</strong> 
+            Events: {events?.length || 0} | 
+            Locations: {allLocations?.length || 0} | 
+            Authenticated: {isAuthenticated ? '✅ Yes' : '❌ No'} | 
+            Current City: {currentCity} | 
+            Number of Events: {currentNOE} | 
+            Event Source: {isAuthenticated ? '🌐 Real Google Calendar' : '📋 Demo/Mock Data'} |
+            Online: {navigator.onLine ? '✅' : '❌'}
           </div>
 
           <div className="charts-container">
