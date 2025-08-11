@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { ResponsiveContainer, PieChart, Pie, Cell, Legend } from 'recharts';
 
@@ -6,46 +6,55 @@ const EventGenresChart = ({ events = [] }) => {
   const [data, setData] = useState([]);
   const [windowWidth, setWindowWidth] = useState(typeof window !== 'undefined' ? window.innerWidth : 1024);
   const genres = useMemo(() => ['React', 'JavaScript', 'Node', 'jQuery', 'Angular'], []);
-  const colors = ['#DD0000', '#00DD00', '#0000DD', '#DDDD00', '#DD00DD'];
+  const colors = useMemo(() => ['#DD0000', '#00DD00', '#0000DD', '#DDDD00', '#DD00DD'], []);
+
+  // Debounced resize handler for better performance
+  const handleResize = useCallback(() => {
+    const timeoutId = setTimeout(() => {
+      setWindowWidth(window.innerWidth);
+    }, 100);
+    return () => clearTimeout(timeoutId);
+  }, []);
 
   // Handle window resize for responsive design
   useEffect(() => {
     if (typeof window === 'undefined') return;
     
-    const handleResize = () => setWindowWidth(window.innerWidth);
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
-  }, []);
+  }, [handleResize]);
 
-  useEffect(() => {
-    const getData = () => {
-      if (!events || !Array.isArray(events)) {
-        return [];
-      }
-      
-      const data = genres.map(genre => {
-        const filteredEvents = events.filter(event => 
-          event && 
-          event.summary && 
-          typeof event.summary === 'string' && 
-          event.summary.includes(genre)
-        );
-        return {
-          name: genre,
-          value: filteredEvents.length
-        };
-      });
-      return data;
-    };
-
-    setData(getData());
+  // Memoized data calculation
+  const chartData = useMemo(() => {
+    if (!events || !Array.isArray(events)) {
+      return [];
+    }
+    
+    const data = genres.map(genre => {
+      const filteredEvents = events.filter(event => 
+        event && 
+        event.summary && 
+        typeof event.summary === 'string' && 
+        event.summary.includes(genre)
+      );
+      return {
+        name: genre,
+        value: filteredEvents.length
+      };
+    });
+    return data;
   }, [events, genres]);
 
-  const renderCustomizedLabel = ({ cx, cy, midAngle, outerRadius, percent, index }) => {
-    if (!percent || percent < 0.08 || !genres || !genres[index]) return null; // Increased threshold for mobile
+  useEffect(() => {
+    setData(chartData);
+  }, [chartData]);
+
+  // Memoized label renderer for performance
+  const renderCustomizedLabel = useCallback(({ cx, cy, midAngle, outerRadius, percent, index }) => {
+    if (!percent || percent < 0.08 || !genres || !genres[index]) return null;
 
     // For mobile, only show labels for significant slices
-    if (windowWidth <= 480 && percent < 0.12) return null;
+    if (windowWidth <= 480 && percent < 0.15) return null;
 
     const RADIAN = Math.PI / 180;
     // Use a more conservative radius calculation to prevent cutoff
@@ -73,30 +82,30 @@ const EventGenresChart = ({ events = [] }) => {
         {isSmallMobile ? `${(percent * 100).toFixed(0)}%` : `${genres[index]} ${(percent * 100).toFixed(0)}%`}
       </text>
     );
-  };
+  }, [windowWidth, genres]);
 
   // Dynamic outer radius based on screen size with more conservative sizing
-  const getOuterRadius = () => {
-    if (windowWidth <= 480) return 45;  // Small mobile - very conservative
-    if (windowWidth <= 768) return 60;  // Large mobile/tablet - conservative
-    return 80; // Desktop - conservative
-  };
+  const getOuterRadius = useCallback(() => {
+    if (windowWidth <= 480) return 50;  // Small mobile - increased size
+    if (windowWidth <= 768) return 70;  // Large mobile/tablet
+    return 90; // Desktop
+  }, [windowWidth]);
 
   return (
     <div style={{ width: '100%', minHeight: '350px' }}>
       <h4>Events by Genre</h4>
       {data && data.length > 0 && data.some(item => item.value > 0) ? (
-        <ResponsiveContainer width="100%" height={windowWidth <= 480 ? 320 : 380} minHeight={300}>
+        <ResponsiveContainer width="100%" height={windowWidth <= 480 ? 350 : 400} minHeight={320}>
           <PieChart margin={{ 
-            top: 10, 
-            right: windowWidth <= 480 ? 20 : 50, 
-            bottom: windowWidth <= 480 ? 80 : 70, 
-            left: windowWidth <= 480 ? 20 : 50 
+            top: 20, 
+            right: windowWidth <= 480 ? 30 : 50, 
+            bottom: windowWidth <= 480 ? 90 : 80, 
+            left: windowWidth <= 480 ? 30 : 50 
           }}>
             <Pie
               data={data}
               cx="50%"
-              cy={windowWidth <= 480 ? "35%" : "40%"}
+              cy={windowWidth <= 480 ? "40%" : "45%"}
               dataKey="value"
               fill="#8884d8"
               labelLine={false}
@@ -111,9 +120,9 @@ const EventGenresChart = ({ events = [] }) => {
               verticalAlign="bottom" 
               align="center" 
               wrapperStyle={{ 
-                paddingTop: windowWidth <= 480 ? '10px' : '15px',
-                fontSize: windowWidth <= 480 ? '11px' : '12px',
-                lineHeight: '1.2'
+                paddingTop: windowWidth <= 480 ? '15px' : '20px',
+                fontSize: windowWidth <= 480 ? '12px' : '14px',
+                lineHeight: '1.4'
               }}
               iconType="circle"
             />
