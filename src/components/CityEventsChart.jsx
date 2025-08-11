@@ -11,6 +11,16 @@ import {
 
 const CityEventsChart = ({ allLocations, events }) => {
   const [data, setData] = useState([]);
+  const [windowWidth, setWindowWidth] = useState(typeof window !== 'undefined' ? window.innerWidth : 1024);
+
+  // Handle window resize for responsive design
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    
+    const handleResize = () => setWindowWidth(window.innerWidth);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const getData = useCallback(() => {
     if (!allLocations || !events || !Array.isArray(allLocations) || !Array.isArray(events)) {
@@ -32,14 +42,14 @@ const CityEventsChart = ({ allLocations, events }) => {
     <div>
       <h4>Events by City</h4>
       {data && data.length > 0 ? (
-        <ResponsiveContainer width="99%" height={400}>
+        <ResponsiveContainer width="100%" height={windowWidth <= 480 ? 300 : 400}>
           <ScatterChart
             data={data}
             margin={{
               top: 20,
-              right: 20,
-              bottom: 60,
-              left: -30,
+              right: windowWidth <= 480 ? 10 : 20,
+              bottom: windowWidth <= 480 ? 40 : 60,
+              left: windowWidth <= 480 ? -20 : -30,
             }}
           >
             <CartesianGrid />
@@ -47,15 +57,16 @@ const CityEventsChart = ({ allLocations, events }) => {
               type="category" 
               dataKey="city" 
               name="City"
-              angle={60} 
+              angle={windowWidth <= 480 ? 45 : 60} 
               interval={0} 
-              tick={{ dx: 20, dy: 40, fontSize: 14 }}
+              tick={{ dx: 20, dy: 40, fontSize: windowWidth <= 480 ? 10 : 14 }}
             />
             <YAxis 
               type="number" 
               dataKey="count" 
               name="Number of events"
               allowDecimals={false}
+              tick={{ fontSize: windowWidth <= 480 ? 10 : 12 }}
             />
             <Tooltip cursor={{ strokeDasharray: '3 3' }} />
             <Scatter name="Events" data={data} fill="#8884d8" />

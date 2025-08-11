@@ -5,6 +5,7 @@
   width: 100%;
   max-width: 100vw;
   overflow-x: hidden;
+  position: relative;
 }
 
 .App * {
@@ -155,12 +156,16 @@ p {
   gap: 30px;
   min-height: 450px;
   align-items: start;
+  width: 100%;
+  max-width: 100%;
+  overflow: hidden;
 }
 
 @media (max-width: 1024px) {
   .charts-container {
     grid-template-columns: 1fr;
     gap: 20px;
+    min-height: auto;
   }
 }
 
@@ -172,10 +177,11 @@ p {
   padding: 20px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   min-width: 0; /* Allows charts to shrink properly */
-  overflow: visible; /* Allow labels to show outside container if needed */
+  overflow: hidden; /* Prevent content overflow */
   width: 100%;
   height: 100%;
   position: relative; /* For proper positioning of overflow content */
+  max-width: 100%;
 }
 
 .charts-container h4 {
@@ -305,6 +311,18 @@ p {
 
 /* Responsive design for charts */
 @media (max-width: 768px) {
+  .App {
+    padding: 1% 3%;
+  }
+
+  .app-header h1 {
+    font-size: 2rem;
+  }
+
+  .app-header p {
+    font-size: 1rem;
+  }
+
   .event-charts {
     padding: 16px;
     margin: 10px 0;
@@ -320,10 +338,18 @@ p {
     font-size: 1.1rem;
   }
 
+  .charts-container {
+    margin: 20px 0;
+    gap: 15px;
+    padding: 0 10px;
+  }
+
   .charts-container > div {
     padding: 15px;
     margin: 10px 0;
     overflow: hidden; /* Prevent chart overflow */
+    max-width: 100%;
+    box-sizing: border-box;
   }
 
   .charts-container h4 {
@@ -334,7 +360,12 @@ p {
   /* Ensure chart containers don't overflow */
   .recharts-wrapper {
     max-width: 100% !important;
-    overflow: visible !important;
+    overflow: hidden !important;
+  }
+
+  .recharts-responsive-container {
+    max-width: 100% !important;
+    overflow: hidden !important;
   }
 
   /* Mobile responsive fixes for input elements */
@@ -353,6 +384,7 @@ p {
     flex-direction: column;
     gap: 15px;
     align-items: center;
+    padding: 0 10px;
   }
 
   #number-of-events {
@@ -373,7 +405,7 @@ p {
   .recharts-wrapper,
   .recharts-responsive-container {
     max-width: 100% !important;
-    overflow: visible !important;
+    overflow: hidden !important;
   }
 
   /* Prevent text overflow */
@@ -381,12 +413,19 @@ p {
     word-wrap: break-word;
     word-break: break-word;
     hyphens: auto;
+    max-width: 100%;
   }
 
   /* Ensure images are responsive */
   img {
     max-width: 100%;
     height: auto;
+  }
+
+  /* Ensure all containers respect mobile width */
+  .App, .charts-container, .app-controls, .event-list, .event {
+    max-width: 100vw;
+    overflow-x: hidden;
   }
 }
 
@@ -396,13 +435,27 @@ p {
     padding: 1% 2%; /* Reduce padding on very small screens */
   }
 
+  .app-header h1 {
+    font-size: 1.8rem;
+  }
+
+  .app-header p {
+    font-size: 0.9rem;
+  }
+
   .event-charts {
     padding: 12px;
     margin: 8px 0;
   }
 
+  .charts-container {
+    margin: 15px 0;
+    gap: 10px;
+    padding: 0 5px;
+  }
+
   .charts-container > div {
-    padding: 8px;
+    padding: 10px;
     margin: 8px 0;
     overflow: hidden;
   }
@@ -426,7 +479,12 @@ p {
   .recharts-wrapper {
     min-height: auto !important;
     max-width: 100% !important;
-    overflow: visible !important;
+    overflow: hidden !important;
+  }
+
+  .recharts-responsive-container {
+    max-width: 100% !important;
+    overflow: hidden !important;
   }
 
   /* Ensure pie chart text doesn't overflow */
@@ -462,6 +520,7 @@ p {
   .app-controls {
     flex-direction: column;
     gap: 15px;
+    padding: 0 5px;
   }
 
   #city-search,
@@ -485,6 +544,13 @@ p {
   /* Ensure body doesn't overflow */
   body {
     overflow-x: hidden;
+  }
+
+  /* Force all containers to stay within viewport */
+  .App, .charts-container, .app-controls, .event-list, .event, 
+  .recharts-wrapper, .recharts-responsive-container {
+    max-width: 100vw !important;
+    overflow-x: hidden !important;
   }
 }
 
@@ -617,4 +683,68 @@ p {
   text-align: center;
   font-size: 12px;
   font-weight: 500;
+}
+
+/* Additional Mobile Fixes */
+@media (max-width: 768px) {
+  /* Ensure all text inputs are mobile-friendly */
+  input[type="text"], input[type="number"], select, textarea {
+    font-size: 16px; /* Prevents zoom on iOS */
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  /* Improve touch targets */
+  button, .details-btn, .auth-button {
+    min-height: 44px;
+    min-width: 44px;
+    padding: 12px 16px;
+  }
+
+  /* Ensure proper spacing on mobile */
+  .app-header {
+    margin-bottom: 20px;
+  }
+
+  /* Fix potential layout shifts */
+  .loading-container {
+    min-height: 150px;
+  }
+}
+
+/* Very small devices (landscape phones) */
+@media (max-width: 576px) {
+  .App {
+    padding: 0.5% 1%;
+  }
+
+  .app-header h1 {
+    font-size: 1.5rem;
+    line-height: 1.2;
+  }
+
+  .app-header p {
+    font-size: 0.85rem;
+  }
+
+  .charts-container {
+    gap: 8px;
+    margin: 10px 0;
+    padding: 0 2px;
+  }
+
+  .charts-container > div {
+    padding: 8px;
+    margin: 5px 0;
+  }
+
+  .event {
+    padding: 12px;
+    margin: 12px 0;
+  }
+
+  .event h1 {
+    font-size: 1.2rem;
+  }
 }
