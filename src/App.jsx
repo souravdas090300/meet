@@ -141,22 +141,27 @@ function App() {
         </div>
       ) : (
         <>
-          <div className="app-controls">
-            <CitySearch 
-              allLocations={allLocations} 
-              setCurrentCity={setCurrentCity}
-              setInfoAlert={setInfoAlert}
-            />
-            <NumberOfEvents 
-              currentNOE={currentNOE}
-              setCurrentNOE={setCurrentNOE} 
-              setErrorAlert={setErrorAlert}
-            />
-          </div>
-
           <div className="charts-container">
-            <CityEventsChart allLocations={allLocations} events={events} />
-            <EventGenresChart events={events} />
+            <div className="chart-section">
+              <div className="chart-control">
+                <CitySearch 
+                  allLocations={allLocations} 
+                  setCurrentCity={setCurrentCity}
+                  setInfoAlert={setInfoAlert}
+                />
+              </div>
+              <CityEventsChart allLocations={allLocations} events={events} />
+            </div>
+            <div className="chart-section">
+              <div className="chart-control">
+                <NumberOfEvents 
+                  currentNOE={currentNOE}
+                  setCurrentNOE={setCurrentNOE} 
+                  setErrorAlert={setErrorAlert}
+                />
+              </div>
+              <EventGenresChart events={events} />
+            </div>
           </div>
           
           <div className="event-list-container">

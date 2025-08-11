@@ -136,13 +136,7 @@ p {
   }
 }
 
-.app-controls {
-  display: flex;
-  justify-content: center;
-  gap: 20px;
-  margin-bottom: 30px;
-  flex-wrap: wrap;
-}
+/* Charts and Controls Layout */
 
 .charts-container {
   margin: 30px 0;
@@ -153,10 +147,32 @@ p {
   align-items: start;
 }
 
+.chart-section {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.chart-control {
+  background: #f8f9fa;
+  border: 1px solid #e1e5e9;
+  border-radius: 8px;
+  padding: 15px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
 @media (max-width: 1024px) {
   .charts-container {
     grid-template-columns: 1fr;
     gap: 20px;
+  }
+  
+  .chart-section {
+    gap: 10px;
+  }
+  
+  .chart-control {
+    padding: 12px;
   }
 }
 
