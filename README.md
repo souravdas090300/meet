@@ -998,8 +998,8 @@ SOFTWARE.
 
 ### Author
 **Sourav Das** - Full-Stack Developer
-- 🌐 **Portfolio**: [https://souravdas090300.github.io/meet/](https://souravdas090300.github.io/meet/)
-- 💼 **LinkedIn**: [Connect with me](https://linkedin.com/in/sourav-das-dev)
+- 🌐 **Portfolio**: [https://souravdas090300.github.io/website-portfolio/](https://souravdas090300.github.io/website-portfolio/)
+- 💼 **LinkedIn**: [Connect with me](www.linkedin.com/in/sourav-das-150b89355)
 - 🐙 **GitHub**: [@souravdas090300](https://github.com/souravdas090300)
 - 📧 **Email**: souravdas090300@gmail.com
 - 🏆 **Certification**: CareerFoundry Full-Stack Web Development Graduate
