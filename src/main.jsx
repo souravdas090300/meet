@@ -13,6 +13,7 @@ window.atatusInitialized = false; // Make it globally available
 try {
   const licenseKey = import.meta.env.VITE_ATATUS_LICENSE_KEY || '93a094075aa3483186cf248030fdad97';
 
+  // Re-enable Atatus with SPA-specific configuration
   if (licenseKey && licenseKey !== 'undefined' && typeof atatus.config === 'function') {
     atatus.config(licenseKey).install();
     atatusInitialized = true;
@@ -46,29 +47,55 @@ ReactDOM.createRoot(document.getElementById('root')).render(
   </React.StrictMode>
 );
 
-// VitePWA handles service worker registration automatically
-// Import VitePWA's registration function for better control
-import { registerSW } from 'virtual:pwa-register';
+// Custom Service Worker Registration
+const registerServiceWorker = () => {
+  if ('serviceWorker' in navigator && import.meta.env.PROD) {
+    window.addEventListener('load', () => {
+      // Handle GitHub Pages deployment with custom domain or project path
+      const baseUrl = import.meta.env.BASE_URL || '/';
+      const swUrl = `${baseUrl}service-worker.js`;
+      
+      console.log(`Attempting to register Service Worker at: ${swUrl}`);
 
-// Register service worker with VitePWA
-if ('serviceWorker' in navigator && import.meta.env.PROD) {
-  registerSW({
-    onNeedRefresh() {
-      console.log('New content available, please refresh');
-    },
-    onOfflineReady() {
-      console.log('Real events cached for offline use');
-    },
-    onRegisterError(error) {
-      console.error('Service worker registration failed:', error);
-    },
-    onRegistered() {
-      console.log('Service worker registered successfully');
-    }
-  });
-}
+      navigator.serviceWorker.register(swUrl)
+        .then(registration => {
+          console.log('✅ Service Worker registered successfully:', registration);
+          console.log('Real events cached for offline use');
 
-// Test Atatus in development
+          registration.onupdatefound = () => {
+            const installingWorker = registration.installing;
+            if (installingWorker == null) return;
+            
+            installingWorker.onstatechange = () => {
+              if (installingWorker.state === 'installed') {
+                if (navigator.serviceWorker.controller) {
+                  console.log('🔄 New content available; please refresh.');
+                  // Optional: Add UI notification to prompt user to refresh
+                } else {
+                  console.log('📦 Content is cached for offline use.');
+                }
+              }
+            };
+          };
+        })
+        .catch(error => {
+          console.error('❌ Service Worker registration failed:', error);
+          
+          // If registration fails, ensure no broken SW is left behind
+          navigator.serviceWorker.ready.then(registration => {
+            registration?.unregister().then(() => {
+              console.log('🧹 Cleaned up previous Service Worker registration');
+            });
+          });
+        });
+    });
+  }
+};
+
+// Register service worker in production
+registerServiceWorker();
+
+// Development-only Atatus test
 if (import.meta.env.DEV && window.location.hostname === 'localhost') {
   setTimeout(() => {
     try {
