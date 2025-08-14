@@ -14,25 +14,19 @@ export default defineConfig({
         "description": "Find events happening in your city",
         "icons": [
           {
-            "src": "favicon.ico",
-            "sizes": "48x48",
-            "type": "image/x-icon",
-            "purpose": "any"
-          },
-          {
-            "src": "meet-app-144.png",
+            "src": "./meet-app-144.png",
             "type": "image/png",
             "sizes": "144x144",
             "purpose": "any"
           },
           {
-            "src": "meet-app-192.png",
+            "src": "./meet-app-192.png",
             "type": "image/png",
             "sizes": "192x192",
             "purpose": "any"
           },
           {
-            "src": "meet-app-512.png",
+            "src": "./meet-app-512.png",
             "type": "image/png",
             "sizes": "512x512",
             "purpose": "any maskable"
@@ -40,14 +34,14 @@ export default defineConfig({
         ],
         "screenshots": [
           {
-            "src": "meet-app-512.png",
+            "src": "./meet-app-512.png",
             "sizes": "512x512",
             "type": "image/png",
             "form_factor": "narrow",
             "label": "Meet App mobile view"
           },
           {
-            "src": "meet-app-512.png",
+            "src": "./meet-app-512.png",
             "sizes": "512x512",
             "type": "image/png",
             "form_factor": "wide",
@@ -57,7 +51,7 @@ export default defineConfig({
         "start_url": process.env.NODE_ENV === 'production' ? "/meet/" : "/",
         "scope": process.env.NODE_ENV === 'production' ? "/meet/" : "/",
         "display": "standalone",
-        "orientation": "portrait-primary",
+        "orientation": "any",
         "theme_color": "#000000",
         "background_color": "#ffffff",
         "categories": ["productivity", "social", "entertainment"],

@@ -5,7 +5,7 @@ import NumberOfEvents from './components/NumberOfEvents';
 import CityEventsChart from './components/CityEventsChart';
 import EventGenresChart from './components/EventGenresChart';
 import { InfoAlert, ErrorAlert, WarningAlert } from './components/Alert';
-import { getEvents, extractLocations, getAuthURL, logout, isLoggedIn } from './api';
+import { getEvents, extractLocations, getAuthURL, logout, isLoggedIn, getToken, removeQuery } from './api';
 import { logAtatusEvent } from './utils/atatus-helpers';
 import './App.css';
 
@@ -20,14 +20,38 @@ function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
+  // Handle OAuth redirect on mount
+  useEffect(() => {
+    const handleOAuthRedirect = async () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const code = urlParams.get('code');
+      
+      if (code) {
+        try {
+          // Exchange authorization code for access token
+          await getToken(code);
+          setIsAuthenticated(true);
+          setInfoAlert('Successfully logged in with Google!');
+          // Remove the code from URL
+          removeQuery();
+        } catch (error) {
+          console.error('OAuth token exchange failed:', error);
+          setErrorAlert('Login failed. Please try again.');
+        }
+      } else {
+        // Check existing authentication status
+        const authStatus = isLoggedIn();
+        setIsAuthenticated(authStatus);
+      }
+    };
+
+    handleOAuthRedirect();
+  }, []); // Run only once on mount
+
   useEffect(() => {
     const fetchData = async () => {
       try {
         setIsLoading(true);
-        
-        // Check authentication status
-        const authStatus = isLoggedIn();
-        setIsAuthenticated(authStatus);
         
         // Check online status and set warning alert accordingly
         if (navigator.onLine) {
@@ -155,8 +179,12 @@ function App() {
           </div>
 
           <div className="charts-container">
-            <CityEventsChart allLocations={allLocations} events={events} />
-            <EventGenresChart events={events} />
+            <div className="chart-section">
+              <CityEventsChart allLocations={allLocations} events={events} />
+            </div>
+            <div className="chart-section">
+              <EventGenresChart events={events} />
+            </div>
           </div>
           
           <div className="event-list-container">

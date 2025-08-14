@@ -5,12 +5,12 @@ describe('show/hide event details', () => {
   let page;
   beforeAll(async () => {
     browser = await puppeteer.launch({
-      headless: false,
-      slowMo: 250, // slow down by 250ms,
+      headless: true, // Run in headless mode for faster testing
+      slowMo: 100, // Reduced slow down for faster execution
       timeout: 0 // removes any puppeteer/browser timeout limitations (this isn't the same as the timeout of jest)
     });
     page = await browser.newPage();
-    await page.goto('http://localhost:5173/');
+    await page.goto('http://localhost:5173/meet/');
     await page.waitForSelector('.event');
   });
 
@@ -49,12 +49,12 @@ describe('filter events by city', () => {
 
   beforeAll(async () => {
     browser = await puppeteer.launch({
-      headless: false,
-      slowMo: 250,
+      headless: true, // Run in headless mode for faster testing
+      slowMo: 100, // Reduced slow down for faster execution
       timeout: 0
     });
     page = await browser.newPage();
-    await page.goto('http://localhost:5173/');
+    await page.goto('http://localhost:5173/meet/');
     await page.waitForSelector('.event');
   });
 
