@@ -6,7 +6,8 @@ const SCOPES = ["https://www.googleapis.com/auth/calendar.events.public.readonly
 const { CLIENT_SECRET, CLIENT_ID, CALENDAR_ID } = process.env;
 
 // Ensure trailing slash is present (matches Google Cloud Console)
-const REDIRECT_URI = "https://souravdas090300.github.io/meet/";
+const REDIRECT_URI = "https://souravdas090300.github.io/meet/"
+" http://localhost:5173";
 
 const oAuth2Client = new google.auth.OAuth2(
   CLIENT_ID,

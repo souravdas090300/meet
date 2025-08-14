@@ -5,11 +5,6 @@
   "description": "Find events happening in your city",
   "icons": [
     {
-      "src": "favicon.ico",
-      "sizes": "64x64 32x32 24x24 16x16",
-      "type": "image/x-icon"
-    },
-    {
       "src": "meet-app-144.png",
       "type": "image/png",
       "sizes": "144x144",
@@ -46,9 +41,9 @@
   ],
   "start_url": "/meet/",
   "display": "standalone",
-  "orientation": "portrait-primary",
-  "theme_color": "#1976d2",
-  "background_color": "#fafafa",
+  "orientation": "any",
+  "theme_color": "#000000",
+  "background_color": "#ffffff",
   "categories": ["productivity", "social", "entertainment"],
   "lang": "en",
   "scope": "/meet/",

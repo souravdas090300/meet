@@ -14,12 +14,6 @@ export default defineConfig({
         "description": "Find events happening in your city",
         "icons": [
           {
-            "src": "favicon.ico",
-            "sizes": "48x48",
-            "type": "image/x-icon",
-            "purpose": "any"
-          },
-          {
             "src": "meet-app-144.png",
             "type": "image/png",
             "sizes": "144x144",
@@ -57,7 +51,7 @@ export default defineConfig({
         "start_url": process.env.VERCEL ? "/" : "/meet/",
         "scope": process.env.VERCEL ? "/" : "/meet/",
         "display": "standalone",
-        "orientation": "portrait-primary",
+        "orientation": "any",
         "theme_color": "#000000",
         "background_color": "#ffffff",
         "categories": ["productivity", "social", "entertainment"],

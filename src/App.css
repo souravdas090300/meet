@@ -39,6 +39,359 @@
   background-color: #0056b3;
 }
 
+/* ... (keep all your existing styles until .charts-container) ... */
+
+/* Charts Container - Consolidated */
+.charts-container {
+  margin: 30px 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 30px;
+  min-height: 450px;
+  align-items: start;
+}
+
+.charts-container > div {
+  background: white;
+  border: 1px solid #e1e5e9;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  min-width: 0;
+  overflow: visible;
+  width: 100%;
+  height: auto;
+  position: relative;
+}
+
+.charts-container h4 {
+  color: #333;
+  font-size: 1.3rem;
+  margin-bottom: 15px;
+  text-align: center;
+  font-weight: 600;
+  border-bottom: 2px solid #8884d8;
+  padding-bottom: 8px;
+}
+
+/* Chart Container Styles */
+.chart-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 400px;
+}
+
+/* Recharts Specific Styles - Consolidated */
+.recharts-responsive-container {
+  width: 100% !important;
+  height: 100% !important;
+  min-height: 400px;
+  position: relative !important;
+}
+
+.recharts-wrapper {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.recharts-surface {
+  overflow: visible !important;
+}
+
+.recharts-tooltip-wrapper {
+  background: white !important;
+  border: 1px solid #ccc !important;
+  border-radius: 4px !important;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+}
+
+.recharts-default-tooltip {
+  background: white !important;
+  border: none !important;
+  border-radius: 4px !important;
+}
+
+/* Responsive Design - Consolidated */
+@media (max-width: 1024px) {
+  .charts-container {
+    grid-template-columns: 1fr;
+    gap: 20px;
+    min-height: auto;
+  }
+}
+
+/* Mobile 768px Optimized Media Query */
+@media (max-width: 768px) {
+  /* Container Layout for Mobile */
+  .charts-container {
+    margin: 25px 0;
+    gap: 20px;
+    grid-template-columns: 1fr !important;
+    display: grid !important;
+    padding: 0 10px;
+  }
+  
+  /* Chart Container Styling */
+  .charts-container > div {
+    padding: 20px;
+    min-height: 350px;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    background: white;
+    overflow: visible !important;
+  }
+  
+  /* Chart Headers */
+  .charts-container h4 {
+    font-size: 1.2rem;
+    margin-bottom: 15px;
+    padding-bottom: 8px;
+    text-align: center;
+    color: #333;
+    font-weight: 600;
+    border-bottom: 2px solid #8884d8;
+  }
+
+  /* Force Chart Visibility on Mobile */
+  .charts-container,
+  .charts-container > div,
+  [data-testid*="chart"] {
+    visibility: visible !important;
+    display: block !important;
+    opacity: 1 !important;
+  }
+
+  /* ResponsiveContainer Mobile Optimization */
+  .recharts-responsive-container {
+    min-width: 300px !important;
+    min-height: 320px !important;
+    width: 100% !important;
+    display: block !important;
+    position: relative !important;
+    overflow: visible !important;
+  }
+  
+  /* SVG and Wrapper Mobile Fixes */
+  .recharts-surface {
+    width: 100% !important;
+    height: 100% !important;
+    overflow: visible !important;
+  }
+  
+  .recharts-wrapper {
+    display: block !important;
+    width: 100% !important;
+    height: 100% !important;
+    position: relative !important;
+  }
+
+  /* Legend Mobile Optimization */
+  .recharts-legend-wrapper {
+    position: relative !important;
+    bottom: auto !important;
+    margin-top: 15px !important;
+  }
+  
+  .recharts-default-legend {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    justify-content: center !important;
+    align-items: center !important;
+    gap: 10px !important;
+  }
+  
+  /* Text Size for Mobile Readability */
+  .recharts-text {
+    font-size: 11px !important;
+    font-weight: 500 !important;
+  }
+  
+  /* Tooltip Mobile Optimization */
+  .recharts-tooltip-wrapper {
+    z-index: 1000 !important;
+  }
+  
+  /* Touch Interaction Improvements */
+  .recharts-surface {
+    touch-action: pan-x pan-y !important;
+  }
+}
+
+/* Specific 768px Width Target */
+@media (width: 768px), (max-width: 768px) and (min-width: 768px) {
+  .charts-container {
+    gap: 22px !important;
+  }
+  
+  .charts-container > div {
+    min-height: 360px !important;
+    padding: 22px !important;
+  }
+  
+  .recharts-responsive-container {
+    min-height: 330px !important;
+  }
+}
+
+@media (min-width: 481px) and (max-width: 767px) {
+  /* Specific fixes for tablets and larger mobile screens */
+  .charts-container {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 20px;
+  }
+  
+  .charts-container > div {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    min-height: 350px;
+  }
+  
+  .recharts-responsive-container {
+    display: block !important;
+    width: 100% !important;
+    min-width: 300px !important;
+    min-height: 320px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .charts-container {
+    margin: 15px 0;
+    gap: 15px;
+    grid-template-columns: 1fr !important;
+    display: grid !important;
+  }
+  
+  .charts-container > div {
+    padding: 15px;
+    min-height: 300px;
+  }
+
+  .recharts-responsive-container {
+    min-width: 250px !important;
+    min-height: 280px !important;
+  }
+  
+  .recharts-text {
+    font-size: 9px !important;
+  }
+  
+  .recharts-legend-item {
+    margin: 5px 8px !important;
+  }
+}
+
+@media (max-width: 400px) {
+  .charts-container > div {
+    padding: 10px;
+    min-height: 280px;
+  }
+  
+  .charts-container h4 {
+    font-size: 1rem;
+    margin-bottom: 8px;
+  }
+}
+
+@media (max-width: 768px) and (orientation: landscape) {
+  .charts-container {
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+  
+  .charts-container > div {
+    min-height: 250px;
+    padding: 10px;
+  }
+}
+
+@media (max-width: 320px) {
+  .charts-container > div {
+    padding: 8px;
+    min-height: 240px;
+  }
+  
+  .charts-container h4 {
+    font-size: 1rem;
+    margin-bottom: 8px;
+  }
+}
+
+/* Touch device optimizations */
+@media (hover: none) and (pointer: coarse) {
+  .recharts-tooltip-wrapper {
+    pointer-events: none !important;
+  }
+  
+  .recharts-surface {
+    touch-action: pan-x pan-y !important;
+  }
+  
+  /* Improve touch targets for mobile */
+  .charts-container > div {
+    touch-action: manipulation !important;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  }
+  
+  /* Prevent double-tap zoom on charts */
+  .recharts-wrapper {
+    touch-action: pan-x pan-y !important;
+  }
+}
+
+/* ... (keep all your remaining existing styles) ... */
+
+
+
+.App {
+  text-align: center;
+  padding: 2% 5%;
+}
+
+.App * {
+  box-sizing: border-box;
+}
+
+/* Error Boundary Styles */
+.error-boundary {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 20px;
+}
+
+.error-boundary-content {
+  max-width: 500px;
+  text-align: center;
+  padding: 40px 20px;
+  border: 1px solid #e1e5e9;
+  border-radius: 8px;
+  background-color: #f8f9fa;
+}
+
+.error-boundary-button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 15px;
+}
+
+.error-boundary-button:hover {
+  background-color: #0056b3;
+}
+
 ul {
   padding: 0;
   list-style: none;
@@ -144,45 +497,6 @@ p {
   flex-wrap: wrap;
 }
 
-.charts-container {
-  margin: 30px 0;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 30px;
-  min-height: 450px;
-  align-items: start;
-}
-
-@media (max-width: 1024px) {
-  .charts-container {
-    grid-template-columns: 1fr;
-    gap: 20px;
-  }
-}
-
-/* Individual Chart Styles */
-.charts-container > div {
-  background: white;
-  border: 1px solid #e1e5e9;
-  border-radius: 8px;
-  padding: 20px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  min-width: 0; /* Allows charts to shrink properly */
-  overflow: hidden; /* Prevents content overflow */
-  width: 100%;
-  height: 100%;
-}
-
-.charts-container h4 {
-  color: #333;
-  font-size: 1.3rem;
-  margin-bottom: 15px;
-  text-align: center;
-  font-weight: 600;
-  border-bottom: 2px solid #8884d8;
-  padding-bottom: 8px;
-}
-
 .chart {
   margin: 20px 0;
 }
@@ -268,6 +582,12 @@ p {
 /* Recharts responsive styling */
 .recharts-wrapper {
   margin: 0 auto;
+}
+
+/* Ensure Recharts containers can shrink within grid/flex parents */
+.recharts-responsive-container {
+  min-width: 0 !important;
+  min-height: 200px !important;
 }
 
 .recharts-tooltip-wrapper {
@@ -426,4 +746,42 @@ p {
   text-align: center;
   font-size: 12px;
   font-weight: 500;
+}
+
+/* Add these to your existing App.css */
+
+/* Chart Container Enhancements */
+.chart-container {
+  position: relative;
+  min-height: 320px;
+  padding: 15px;
+}
+
+.no-data-message {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  color: #666;
+  font-style: italic;
+  padding: 20px;
+  text-align: center;
+}
+
+/* Mobile-specific chart adjustments */
+@media (max-width: 768px) {
+  .chart-container {
+    min-height: 280px;
+  }
+  
+  .recharts-legend-wrapper {
+    position: relative !important;
+    bottom: auto !important;
+  }
+  
+  .recharts-default-legend {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center !important;
+  }
 }
