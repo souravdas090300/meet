@@ -6,12 +6,12 @@ const isLocalhost = Boolean(
       window.location.hostname.match(/^127(?:\.(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)){3}$/)
   );
   
-  export function register(config) {
-    if (import.meta.env.PROD && 'serviceWorker' in navigator) {
-        window.addEventListener('load', () => {
-          const swUrl = '/sw.js'; // Updated to point to the correct service worker file
-    
-          if (isLocalhost) {
+export function register(config) {
+  if (import.meta.env.PROD && 'serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        // Use the correct base path and filename for service worker
+        const basePath = import.meta.env.DEV ? '/' : '/meet/';
+        const swUrl = `${basePath}service-worker.js`;          if (isLocalhost) {
             // Check if a service worker still exists or not.
             checkValidServiceWorker(swUrl, config);
     
@@ -30,8 +30,9 @@ const isLocalhost = Boolean(
   }
   
   function registerValidSW(swUrl, config) {
+    const basePath = import.meta.env.DEV ? '/' : '/meet/';
     navigator.serviceWorker
-      .register(swUrl)
+      .register(swUrl, { scope: basePath })
       .then((registration) => {
         registration.onupdatefound = () => {
           const installingWorker = registration.installing;
