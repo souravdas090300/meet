@@ -14,19 +14,19 @@ export default defineConfig({
         "description": "Find events happening in your city",
         "icons": [
           {
-            "src": "meet-app-144.png",
+            "src": "./meet-app-144.png",
             "type": "image/png",
             "sizes": "144x144",
             "purpose": "any"
           },
           {
-            "src": "meet-app-192.png",
+            "src": "./meet-app-192.png",
             "type": "image/png",
             "sizes": "192x192",
             "purpose": "any"
           },
           {
-            "src": "meet-app-512.png",
+            "src": "./meet-app-512.png",
             "type": "image/png",
             "sizes": "512x512",
             "purpose": "any maskable"
@@ -34,14 +34,14 @@ export default defineConfig({
         ],
         "screenshots": [
           {
-            "src": "meet-app-512.png",
+            "src": "./meet-app-512.png",
             "sizes": "512x512",
             "type": "image/png",
             "form_factor": "narrow",
             "label": "Meet App mobile view"
           },
           {
-            "src": "meet-app-512.png",
+            "src": "./meet-app-512.png",
             "sizes": "512x512",
             "type": "image/png",
             "form_factor": "wide",
