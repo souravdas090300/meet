@@ -5,19 +5,24 @@
   "description": "Find events happening in your city",
   "icons": [
     {
-      "src": "./meet-app-144.png",
+      "src": "favicon.ico",
+      "sizes": "64x64 32x32 24x24 16x16",
+      "type": "image/x-icon"
+    },
+    {
+      "src": "meet-app-144.png",
       "type": "image/png",
       "sizes": "144x144",
       "purpose": "any"
     },
     {
-      "src": "./meet-app-192.png",
+      "src": "meet-app-192.png",
       "type": "image/png",
       "sizes": "192x192",
       "purpose": "any"
     },
     {
-      "src": "./meet-app-512.png",
+      "src": "meet-app-512.png",
       "type": "image/png",
       "sizes": "512x512",
       "purpose": "any maskable"
@@ -25,14 +30,14 @@
   ],
   "screenshots": [
     {
-      "src": "./meet-app-512.png",
+      "src": "meet-app-512.png",
       "sizes": "512x512",
       "type": "image/png",
       "form_factor": "narrow",
       "label": "Meet App mobile view"
     },
     {
-      "src": "./meet-app-512.png",
+      "src": "meet-app-512.png",
       "sizes": "512x512",
       "type": "image/png",
       "form_factor": "wide", 
@@ -41,9 +46,9 @@
   ],
   "start_url": "/meet/",
   "display": "standalone",
-  "orientation": "any",
-  "theme_color": "#000000",
-  "background_color": "#ffffff",
+  "orientation": "portrait-primary",
+  "theme_color": "#1976d2",
+  "background_color": "#fafafa",
   "categories": ["productivity", "social", "entertainment"],
   "lang": "en",
   "scope": "/meet/",

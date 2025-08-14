@@ -1,1 +1,173 @@
-if(!self.define){let e,s={};const i=(i,n)=>(i=new URL(i+".js",n).href,s[i]||new Promise(s=>{if("document"in self){const e=document.createElement("script");e.src=i,e.onload=s,document.head.appendChild(e)}else e=i,importScripts(i),s()}).then(()=>{let e=s[i];if(!e)throw new Error(`Module ${i} didn’t register its module`);return e}));self.define=(n,r)=>{const c=e||("document"in self?document.currentScript.src:"")||location.href;if(s[c])return;let o={};const a=e=>i(e,c),t={module:{uri:c},exports:o,require:a};s[c]=Promise.all(n.map(e=>t[e]||a(e))).then(e=>(r(...e),o))}}define(["./workbox-91c88bff"],function(e){"use strict";self.skipWaiting(),e.clientsClaim(),e.precacheAndRoute([{url:"404.html",revision:"6737085dc1ce0f8eabe8c1dbf9b609af"},{url:"assets/charts-DJ0x-L6K.js",revision:null},{url:"assets/index-Go5MS2QG.js",revision:null},{url:"assets/index-sbvg8_DH.css",revision:null},{url:"assets/vendor-C6Ba5J37.js",revision:null},{url:"assets/workbox-window.prod.es5-B9K5rw8f.js",revision:null},{url:"favicon.ico",revision:"4ad85c7f381794f8fc16e5ba53cd1f8f"},{url:"googlea962b821893d70d8.html",revision:"d4521fda448c9f0ec43c191e0fea9080"},{url:"index.html",revision:"1c07fdc29d154e17cb86b21829017862"},{url:"manifest.json",revision:"05b1ad77df347ab6b72b10564f908e69"},{url:"meet-app-144.png",revision:"dae5f3d5d35396e6e3c04e8ef6e70cb6"},{url:"meet-app-192.png",revision:"4ad85c7f381794f8fc16e5ba53cd1f8f"},{url:"meet-app-512.png",revision:"365b42cb16441d855f01d1c094011c15"},{url:"vite.svg",revision:"8e3a10e157f75ada21ab742c022d5430"},{url:"meet-app-144.png",revision:"dae5f3d5d35396e6e3c04e8ef6e70cb6"},{url:"meet-app-192.png",revision:"4ad85c7f381794f8fc16e5ba53cd1f8f"},{url:"meet-app-512.png",revision:"365b42cb16441d855f01d1c094011c15"},{url:"manifest.webmanifest",revision:"297193470fd4cdc437b6bdf27d348536"}],{}),e.cleanupOutdatedCaches(),e.registerRoute(/\/.*\.png$/,new e.StaleWhileRevalidate({cacheName:"images",plugins:[new e.ExpirationPlugin({maxEntries:50})]}),"GET"),e.registerRoute(/^https:\/\/.*\.googleapis\.com\//,new e.StaleWhileRevalidate({cacheName:"google-apis",plugins:[new e.ExpirationPlugin({maxEntries:30,maxAgeSeconds:86400})]}),"GET"),e.registerRoute(/^https:\/\/.*\.vercel\.app\//,new e.NetworkFirst({cacheName:"api-cache",networkTimeoutSeconds:10,plugins:[new e.ExpirationPlugin({maxEntries:50,maxAgeSeconds:3600})]}),"GET")});
+const CACHE_NAME = 'meet-app-v1';
+
+// Define specific assets to cache
+const urlsToCache = [
+  '/',
+  '/index.html',
+  '/manifest.json',
+  // These will be dynamically added after build
+];
+
+// Install event
+self.addEventListener('install', (event) => {
+  console.log('Service Worker installing...');
+  event.waitUntil(
+    caches.open(CACHE_NAME)
+      .then((cache) => {
+        console.log('Opened cache');
+        // Cache basic files - assets will be cached on demand
+        return cache.addAll([
+          '/',
+          '/index.html',
+          '/manifest.json'
+        ]).catch((error) => {
+          console.error('Failed to cache some resources:', error);
+          // Continue with installation even if some resources fail
+          return Promise.resolve();
+        });
+      })
+      .then(() => {
+        // Force the waiting service worker to become the active service worker
+        return self.skipWaiting();
+      })
+      .catch((error) => {
+        console.error('Failed to install service worker:', error);
+      })
+  );
+});
+
+// Fetch event
+self.addEventListener('fetch', (event) => {
+  const requestUrl = new URL(event.request.url);
+  
+  // Only handle requests for our domain
+  if (requestUrl.origin !== location.origin) {
+    return; // Let browser handle external requests
+  }
+
+  event.respondWith(
+    caches.match(event.request)
+      .then((response) => {
+        // Return cached response if available
+        if (response) {
+          console.log('Serving from cache:', event.request.url);
+          return response;
+        }
+
+        // Network fallback with caching
+        return fetch(event.request)
+          .then(response => {
+            // Only cache successful responses for same-origin requests
+            if (response && response.status === 200 && response.url.startsWith(location.origin)) {
+              const responseToCache = response.clone();
+              caches.open(CACHE_NAME)
+                .then(cache => {
+                  // Cache the new response
+                  cache.put(event.request, responseToCache);
+                  console.log('Cached new resource:', event.request.url);
+                });
+            }
+            return response;
+          })
+          .catch(() => {
+            console.log('Network failed for:', event.request.url);
+            // Offline fallback - return index.html for navigation requests
+            if (event.request.mode === 'navigate') {
+              return caches.match('/index.html');
+            }
+            // For other requests, try to find a cached version
+            return caches.match(event.request);
+          });
+      })
+  );
+});
+
+// Activate event
+self.addEventListener('activate', (event) => {
+  console.log('Service Worker activating...');
+  const cacheWhitelist = [CACHE_NAME];
+  
+  event.waitUntil(
+    caches.keys().then((cacheNames) => {
+      return Promise.all(
+        cacheNames.map((cacheName) => {
+          if (cacheWhitelist.indexOf(cacheName) === -1) {
+            console.log('Deleting old cache:', cacheName);
+            return caches.delete(cacheName);
+          }
+        })
+      );
+    }).then(() => {
+      // Take control of all pages immediately
+      return self.clients.claim();
+    })
+  );
+});
+
+// Fetch event
+self.addEventListener('fetch', (event) => {
+  const requestUrl = new URL(event.request.url);
+  
+  // Only handle requests for our domain
+  if (requestUrl.origin !== location.origin) {
+    return; // Let browser handle external requests
+  }
+
+  event.respondWith(
+    caches.match(event.request)
+      .then((response) => {
+        // Return cached response if available
+        if (response) {
+          console.log('Serving from cache:', event.request.url);
+          return response;
+        }
+
+        // Network fallback with caching
+        return fetch(event.request)
+          .then(response => {
+            // Only cache successful responses
+            if (response && response.status === 200) {
+              const responseToCache = response.clone();
+              caches.open(CACHE_NAME)
+                .then(cache => {
+                  // Cache the new response
+                  cache.put(event.request, responseToCache);
+                  console.log('Cached new resource:', event.request.url);
+                });
+            }
+            return response;
+          })
+          .catch(() => {
+            console.log('Network failed for:', event.request.url);
+            // Offline fallback - return index.html for navigation requests
+            if (event.request.mode === 'navigate') {
+              return caches.match('/index.html');
+            }
+            // For other requests, try to find a cached version
+            return caches.match(event.request);
+          });
+      })
+  );
+});
+
+// Activate event
+self.addEventListener('activate', (event) => {
+  console.log('Service Worker activating...');
+  const cacheWhitelist = [CACHE_NAME];
+  
+  event.waitUntil(
+    caches.keys().then((cacheNames) => {
+      return Promise.all(
+        cacheNames.map((cacheName) => {
+          if (cacheWhitelist.indexOf(cacheName) === -1) {
+            console.log('Deleting old cache:', cacheName);
+            return caches.delete(cacheName);
+          }
+        })
+      );
+    }).then(() => {
+      // Take control of all pages immediately
+      return self.clients.claim();
+    })
+  );
+});
