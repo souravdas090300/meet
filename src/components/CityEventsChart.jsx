@@ -82,10 +82,11 @@ const CityEventsChart = ({ allLocations, events }) => {
       const count = events.filter((event) => event && event.location === location).length;
       return {
         city: location.split(/, | - /)[0],
-        count
+        count: Math.max(0, count) // Ensure count is never negative
       };
     });
-    return data;
+    // Filter out any invalid data
+    return data.filter(item => item.city && typeof item.count === 'number' && item.count >= 0);
   }, [allLocations, events]);
 
   useEffect(() => {
@@ -96,9 +97,10 @@ const CityEventsChart = ({ allLocations, events }) => {
   const isSmallMobile = windowWidth <= 480;
   const isTablet = windowWidth > 481 && windowWidth <= 767;
 
-  const chartHeight = isSmallMobile ? 280 : isMobile ? 320 : 400;
-  const bottomMargin = isSmallMobile ? 120 : isMobile ? 100 : 60;
-  const leftMargin = isMobile ? 15 : 20;
+  // Ensure minimum height to prevent negative values
+  const chartHeight = Math.max(300, isSmallMobile ? 350 : isMobile ? 400 : 500);
+  const bottomMargin = Math.max(80, isSmallMobile ? 140 : isMobile ? 120 : 80);
+  const leftMargin = Math.max(20, isMobile ? 20 : 25);
   
   const displayData = isSmallMobile && data.length > 6 ? data.slice(0, 6) : 
                      isMobile && data.length > 8 ? data.slice(0, 8) : data;
@@ -132,7 +134,7 @@ const CityEventsChart = ({ allLocations, events }) => {
         }}>
           <p>No city data available</p>
         </div>
-      ) : !isInitialized ? (
+      ) : !isInitialized || windowWidth < 200 || chartHeight < 200 ? (
         <div style={{
           textAlign: 'center',
           padding: '40px',
@@ -144,17 +146,20 @@ const CityEventsChart = ({ allLocations, events }) => {
         <ResponsiveContainer 
           width="100%" 
           height={chartHeight}
-          minWidth={isMobile ? 280 : 300}
+          minWidth={Math.max(320, isMobile ? 320 : 400)}
+          minHeight={300}
           debounceMs={50}
         >
           <BarChart
             data={displayData}
             margin={{
-              top: 20,
-              right: 20,
+              top: Math.max(30, 30),
+              right: Math.max(30, 30),
               bottom: bottomMargin,
-              left: leftMargin,
+              left: Math.max(25, leftMargin),
             }}
+            width={undefined}
+            height={undefined}
           >
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis
@@ -174,6 +179,8 @@ const CityEventsChart = ({ allLocations, events }) => {
               dataKey="count"
               name="Number of events"
               allowDecimals={false}
+              domain={[0, 'dataMax + 1']}
+              tickCount={5}
             />
             <Tooltip
               cursor={{ strokeDasharray: '3 3' }}

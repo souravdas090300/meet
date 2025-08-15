@@ -44,7 +44,20 @@ export const checkToken = async (accessToken) => {
 export const getToken = async (code) => {
   try {
     const encodeCode = encodeURIComponent(code);
-    const response = await fetch(`${AUTH_SERVER_URL}/api/token/${encodeCode}`);
+    const url = `${AUTH_SERVER_URL}/api/token/${encodeCode}`;
+    
+    console.log('Requesting token from:', url);
+    
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
+    });
+    
+    console.log('Response status:', response.status);
+    console.log('Response headers:', Object.fromEntries(response.headers.entries()));
     
     if (!response.ok) {
       let errorMessage = `Failed to get access token: ${response.status}`;
@@ -72,6 +85,16 @@ export const getToken = async (code) => {
       stack: error.stack,
       name: error.name
     });
+    
+    // Check if it's a network/CORS error
+    if (error instanceof TypeError && error.message.includes('Failed to fetch')) {
+      console.error('This appears to be a CORS or network connectivity issue');
+      console.error('Check:');
+      console.error('1. Network connectivity');
+      console.error('2. CORS configuration on the server');
+      console.error('3. Server availability');
+    }
+    
     throw error;
   }
 };
@@ -79,7 +102,19 @@ export const getToken = async (code) => {
 // Get authorization URL
 export const getAuthURL = async () => {
   try {
-    const response = await fetch(`${AUTH_SERVER_URL}/api/get-auth-url`);
+    const url = `${AUTH_SERVER_URL}/api/get-auth-url`;
+    console.log('Requesting auth URL from:', url);
+    
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
+    });
+    
+    console.log('Auth URL response status:', response.status);
+    console.log('Auth URL response headers:', Object.fromEntries(response.headers.entries()));
     
     if (!response.ok) {
       throw new Error(`Failed to get auth URL: ${response.status}`);
@@ -91,6 +126,16 @@ export const getAuthURL = async () => {
     return authUrl;
   } catch (error) {
     console.error('Error getting auth URL:', error);
+    
+    // Check if it's a network/CORS error
+    if (error instanceof TypeError && error.message.includes('Failed to fetch')) {
+      console.error('This appears to be a CORS or network connectivity issue');
+      console.error('Check:');
+      console.error('1. Network connectivity');
+      console.error('2. CORS configuration on the server');
+      console.error('3. Server availability');
+    }
+    
     throw error;
   }
 };
@@ -606,7 +651,19 @@ const redirectToOAuth = async () => {
 // Helper function to fetch events from Google Calendar API
 const getEventsFromAPI = async (accessToken) => {
   try {
-    const response = await fetch(`${AUTH_SERVER_URL}/api/get-events/${accessToken}`);
+    const url = `${AUTH_SERVER_URL}/api/get-events/${accessToken}`;
+    console.log('Fetching events from:', url);
+    
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
+    });
+    
+    console.log('Events API response status:', response.status);
+    console.log('Events API response headers:', Object.fromEntries(response.headers.entries()));
     
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
@@ -627,6 +684,15 @@ const getEventsFromAPI = async (accessToken) => {
     return events;
   } catch (error) {
     console.error('Error fetching events from Google Calendar API:', error);
+    
+    // Check if it's a CORS/network error
+    if (error instanceof TypeError && error.message.includes('Failed to fetch')) {
+      console.error('This appears to be a CORS or network connectivity issue');
+      console.error('Check:');
+      console.error('1. Network connectivity');
+      console.error('2. CORS configuration on the server');
+      console.error('3. Server availability');
+    }
     
     // Try to return cached events if API fails
     const cachedEvents = localStorage.getItem("lastEvents");

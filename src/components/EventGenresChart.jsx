@@ -103,7 +103,8 @@ const EventGenresChart = ({ events = [] }) => {
   const isSmallMobile = windowWidth <= 480;
   const isTablet = windowWidth > 481 && windowWidth <= 767;
 
-  const chartHeight = isSmallMobile ? 300 : isMobile ? 340 : 380;
+  // Ensure minimum height to prevent negative values - increased for larger pie chart
+  const chartHeight = Math.max(400, isSmallMobile ? 450 : isMobile ? 500 : 580);
   
   const renderCustomizedLabel = ({ cx, cy, midAngle, outerRadius, percent, index }) => {
     if (!percent || percent < 0.08 || !genres || !genres[index] || (isMobile && percent < 0.12)) {
@@ -124,7 +125,7 @@ const EventGenresChart = ({ events = [] }) => {
         fill="#8884d8"
         textAnchor={x > cx ? 'start' : 'end'}
         dominantBaseline="central"
-        fontSize={isVerySmallDevice ? '8px' : isMobileDevice ? '9px' : '11px'}
+        fontSize={isVerySmallDevice ? '10px' : isMobileDevice ? '12px' : '14px'}  // Increased font sizes
         fontWeight="500"
       >
         {isVerySmallDevice ? `${(percent * 100).toFixed(0)}%` : `${genres[index]} ${(percent * 100).toFixed(0)}%`}
@@ -133,9 +134,9 @@ const EventGenresChart = ({ events = [] }) => {
   };
 
   const getRadius = () => {
-    if (isSmallMobile) return 35;
-    if (isMobile) return 55;
-    return 80;
+    if (isSmallMobile) return 70;  // Increased from 60
+    if (isMobile) return 105;      // Increased from 90
+    return 150;                    // Increased from 130
   };
 
   const hasData = data && data.length > 0 && data.some(item => item.value > 0);
@@ -171,7 +172,7 @@ const EventGenresChart = ({ events = [] }) => {
         }} data-testid="no-data">
           <p>No genre data available</p>
         </div>
-      ) : !isInitialized ? (
+      ) : !isInitialized || windowWidth < 200 || chartHeight < 400 ? (  // Updated minimum height check
         <div style={{
           textAlign: 'center',
           padding: '40px',
@@ -184,21 +185,22 @@ const EventGenresChart = ({ events = [] }) => {
           <ResponsiveContainer 
             width="100%" 
             height={chartHeight}
-            minWidth={isMobile ? 250 : 300}
+            minWidth={Math.max(350, isMobile ? 350 : 450)}  // Increased minimum width
+            minHeight={400}  // Increased minimum height
             debounceMs={50}
           >
             <PieChart
             margin={{
-              top: 10,
-              right: isMobile ? 20 : 50,
-              bottom: isMobile ? 80 : 70,
-              left: isMobile ? 20 : 50
+              top: Math.max(15, 15),  // Increased top margin
+              right: Math.max(30, isMobile ? 30 : 60),  // Increased right margin
+              bottom: Math.max(90, isMobile ? 100 : 90),  // Increased bottom margin
+              left: Math.max(30, isMobile ? 30 : 60)  // Increased left margin
             }}
           >
             <Pie
               data={data}
               cx="50%"
-              cy={isMobile ? "35%" : "40%"}
+              cy={isMobile ? "40%" : "45%"}  // Adjusted center position for larger chart
               dataKey="value"
               fill="#8884d8"
               labelLine={false}
@@ -213,8 +215,8 @@ const EventGenresChart = ({ events = [] }) => {
               verticalAlign="bottom"
               align="center"
               wrapperStyle={{
-                paddingTop: isMobile ? '10px' : '15px',
-                fontSize: isMobile ? '11px' : '12px',
+                paddingTop: isMobile ? '15px' : '20px',  // Increased padding
+                fontSize: isMobile ? '13px' : '14px',    // Increased font size
                 lineHeight: '1.2'
               }}
               iconType="circle"

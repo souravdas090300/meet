@@ -14,6 +14,16 @@ const oAuth2Client = new google.auth.OAuth2(
   REDIRECT_URI  // Use the exact URI registered in Google Cloud Console
 );
 
+// CORS headers helper function
+const getCorsHeaders = () => ({
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+  'Access-Control-Allow-Headers': 'Content-Type, X-Amz-Date, Authorization, X-Api-Key, X-Amz-Security-Token, X-Amz-User-Agent, Accept, Origin',
+  'Access-Control-Allow-Credentials': 'false',
+  'Access-Control-Max-Age': '86400', // 24 hours
+  'Content-Type': 'application/json'
+});
+
 module.exports.getAuthURL = async () => {
   const authUrl = oAuth2Client.generateAuthUrl({
     access_type: "offline",
@@ -24,10 +34,7 @@ module.exports.getAuthURL = async () => {
 
   return {
     statusCode: 200,
-    headers: {
-      'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Credentials': true,
-    },
+    headers: getCorsHeaders(),
     body: JSON.stringify({
       authUrl,
     }),
@@ -42,10 +49,7 @@ module.exports.getAccessToken = async (event) => {
       if (err) {
         return reject({
           statusCode: 400,
-          headers: {
-            'Access-Control-Allow-Origin': '*',
-            'Access-Control-Allow-Credentials': true,
-          },
+          headers: getCorsHeaders(),
           body: JSON.stringify({
             error: "Failed to get access token",
             details: err.message,
@@ -55,10 +59,7 @@ module.exports.getAccessToken = async (event) => {
 
       resolve({
         statusCode: 200,
-        headers: {
-          'Access-Control-Allow-Origin': '*',
-          'Access-Control-Allow-Credentials': true,
-        },
+        headers: getCorsHeaders(),
         body: JSON.stringify({
           access_token: token.access_token,
           refresh_token: token.refresh_token,
@@ -97,10 +98,7 @@ module.exports.getCalendarEvents = async (event) => {
 
     return {
       statusCode: 200,
-      headers: {
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Credentials': true,
-      },
+      headers: getCorsHeaders(),
       body: JSON.stringify({
         events,
       }),
@@ -109,10 +107,7 @@ module.exports.getCalendarEvents = async (event) => {
     console.error("Error fetching calendar events:", err);
     return {
       statusCode: 500,
-      headers: {
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Credentials': true,
-      },
+      headers: getCorsHeaders(),
       body: JSON.stringify({
         error: "Failed to fetch calendar events",
         details: err.message,
@@ -130,10 +125,7 @@ module.exports.refreshAccessToken = async (event) => {
       if (err) {
         return reject({
           statusCode: 400,
-          headers: {
-            'Access-Control-Allow-Origin': '*',
-            'Access-Control-Allow-Credentials': true,
-          },
+          headers: getCorsHeaders(),
           body: JSON.stringify({
             error: "Failed to refresh access token",
             details: err.message,
@@ -143,10 +135,7 @@ module.exports.refreshAccessToken = async (event) => {
 
       resolve({
         statusCode: 200,
-        headers: {
-          'Access-Control-Allow-Origin': '*',
-          'Access-Control-Allow-Credentials': true,
-        },
+        headers: getCorsHeaders(),
         body: JSON.stringify({
           access_token: tokens.access_token,
           expiry_date: tokens.expiry_date,
@@ -200,10 +189,7 @@ module.exports.authCallback = async (event) => {
     console.error('Error during OAuth callback:', err);
     return {
       statusCode: 500,
-      headers: {
-        'Access-Control-Allow-Origin': '*',
-        'Content-Type': 'text/html',
-      },
+      headers: getCorsHeaders(),
       body: `
         <html>
           <head>
@@ -221,4 +207,13 @@ module.exports.authCallback = async (event) => {
       `,
     };
   }
+};
+
+// Handle CORS preflight requests
+module.exports.corsHandler = async () => {
+  return {
+    statusCode: 200,
+    headers: getCorsHeaders(),
+    body: '',
+  };
 };

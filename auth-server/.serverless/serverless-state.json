@@ -107,6 +107,24 @@
               "LogGroupName": "/aws/lambda/auth-server-dev-getCalendarEvents"
             }
           },
+          "CorsPreflightAuthURLLogGroup": {
+            "Type": "AWS::Logs::LogGroup",
+            "Properties": {
+              "LogGroupName": "/aws/lambda/auth-server-dev-corsPreflightAuthURL"
+            }
+          },
+          "CorsPreflightTokenLogGroup": {
+            "Type": "AWS::Logs::LogGroup",
+            "Properties": {
+              "LogGroupName": "/aws/lambda/auth-server-dev-corsPreflightToken"
+            }
+          },
+          "CorsPreflightEventsLogGroup": {
+            "Type": "AWS::Logs::LogGroup",
+            "Properties": {
+              "LogGroupName": "/aws/lambda/auth-server-dev-corsPreflightEvents"
+            }
+          },
           "IamRoleLambdaExecution": {
             "Type": "AWS::IAM::Role",
             "Properties": {
@@ -192,7 +210,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/auth-server/dev/1754323314677-2025-08-04T16:01:54.677Z/auth-server.zip"
+                "S3Key": "serverless/auth-server/dev/1755293229411-2025-08-15T21:27:09.411Z/auth-server.zip"
               },
               "Handler": "handler.getAuthURL",
               "Runtime": "nodejs18.x",
@@ -225,7 +243,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/auth-server/dev/1754323314677-2025-08-04T16:01:54.677Z/auth-server.zip"
+                "S3Key": "serverless/auth-server/dev/1755293229411-2025-08-15T21:27:09.411Z/auth-server.zip"
               },
               "Handler": "handler.getAccessToken",
               "Runtime": "nodejs18.x",
@@ -258,7 +276,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/auth-server/dev/1754323314677-2025-08-04T16:01:54.677Z/auth-server.zip"
+                "S3Key": "serverless/auth-server/dev/1755293229411-2025-08-15T21:27:09.411Z/auth-server.zip"
               },
               "Handler": "handler.getCalendarEvents",
               "Runtime": "nodejs18.x",
@@ -284,37 +302,169 @@
               "GetCalendarEventsLogGroup"
             ]
           },
-          "GetAuthURLLambdaVersionpZzJlA9dFsxa7zXMTBT9EGb0uXDuVuH12rOxpDgNits": {
+          "CorsPreflightAuthURLLambdaFunction": {
+            "Type": "AWS::Lambda::Function",
+            "Properties": {
+              "Code": {
+                "S3Bucket": {
+                  "Ref": "ServerlessDeploymentBucket"
+                },
+                "S3Key": "serverless/auth-server/dev/1755293229411-2025-08-15T21:27:09.411Z/auth-server.zip"
+              },
+              "Handler": "handler.corsHandler",
+              "Runtime": "nodejs18.x",
+              "FunctionName": "auth-server-dev-corsPreflightAuthURL",
+              "MemorySize": 1024,
+              "Timeout": 30,
+              "Description": "Handle CORS preflight for auth URL endpoint",
+              "Environment": {
+                "Variables": {
+                  "CLIENT_ID": "961599722416-tiplg88mr59klc33o1rp27vhp3goee8t.apps.googleusercontent.com",
+                  "CLIENT_SECRET": "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",
+                  "CALENDAR_ID": "fullstackwebdev@careerfoundry.com"
+                }
+              },
+              "Role": {
+                "Fn::GetAtt": [
+                  "IamRoleLambdaExecution",
+                  "Arn"
+                ]
+              }
+            },
+            "DependsOn": [
+              "CorsPreflightAuthURLLogGroup"
+            ]
+          },
+          "CorsPreflightTokenLambdaFunction": {
+            "Type": "AWS::Lambda::Function",
+            "Properties": {
+              "Code": {
+                "S3Bucket": {
+                  "Ref": "ServerlessDeploymentBucket"
+                },
+                "S3Key": "serverless/auth-server/dev/1755293229411-2025-08-15T21:27:09.411Z/auth-server.zip"
+              },
+              "Handler": "handler.corsHandler",
+              "Runtime": "nodejs18.x",
+              "FunctionName": "auth-server-dev-corsPreflightToken",
+              "MemorySize": 1024,
+              "Timeout": 30,
+              "Description": "Handle CORS preflight for token endpoint",
+              "Environment": {
+                "Variables": {
+                  "CLIENT_ID": "961599722416-tiplg88mr59klc33o1rp27vhp3goee8t.apps.googleusercontent.com",
+                  "CLIENT_SECRET": "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",
+                  "CALENDAR_ID": "fullstackwebdev@careerfoundry.com"
+                }
+              },
+              "Role": {
+                "Fn::GetAtt": [
+                  "IamRoleLambdaExecution",
+                  "Arn"
+                ]
+              }
+            },
+            "DependsOn": [
+              "CorsPreflightTokenLogGroup"
+            ]
+          },
+          "CorsPreflightEventsLambdaFunction": {
+            "Type": "AWS::Lambda::Function",
+            "Properties": {
+              "Code": {
+                "S3Bucket": {
+                  "Ref": "ServerlessDeploymentBucket"
+                },
+                "S3Key": "serverless/auth-server/dev/1755293229411-2025-08-15T21:27:09.411Z/auth-server.zip"
+              },
+              "Handler": "handler.corsHandler",
+              "Runtime": "nodejs18.x",
+              "FunctionName": "auth-server-dev-corsPreflightEvents",
+              "MemorySize": 1024,
+              "Timeout": 30,
+              "Description": "Handle CORS preflight for events endpoint",
+              "Environment": {
+                "Variables": {
+                  "CLIENT_ID": "961599722416-tiplg88mr59klc33o1rp27vhp3goee8t.apps.googleusercontent.com",
+                  "CLIENT_SECRET": "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",
+                  "CALENDAR_ID": "fullstackwebdev@careerfoundry.com"
+                }
+              },
+              "Role": {
+                "Fn::GetAtt": [
+                  "IamRoleLambdaExecution",
+                  "Arn"
+                ]
+              }
+            },
+            "DependsOn": [
+              "CorsPreflightEventsLogGroup"
+            ]
+          },
+          "GetAuthURLLambdaVersionPKOS6WIOiCPM93EUg4VZgn7M5fg9YSVj3tEmqauOeo": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "GetAuthURLLambdaFunction"
               },
-              "CodeSha256": "3bjL9c4by0fUO0X76tX7/2XI/FsSTp6DyG3yrYgLWXc=",
+              "CodeSha256": "Itw19YLGe1PbDOPvomb7CoW8pCwG2KL2ArOGnL/MXj0=",
               "Description": "Generate Google OAuth authorization URL"
             }
           },
-          "GetAccessTokenLambdaVersionFAXNPXxkJtKkOhSOrNotod71WllhfQS3tcmFbdbk": {
+          "GetAccessTokenLambdaVersionY1uky7T7yUcCrA6mpGV5H7SCkHXS6akcgS2oG8M8SA": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "GetAccessTokenLambdaFunction"
               },
-              "CodeSha256": "3bjL9c4by0fUO0X76tX7/2XI/FsSTp6DyG3yrYgLWXc=",
+              "CodeSha256": "Itw19YLGe1PbDOPvomb7CoW8pCwG2KL2ArOGnL/MXj0=",
               "Description": "Exchange authorization code for access token"
             }
           },
-          "GetCalendarEventsLambdaVersionPxU5ytspVxH3ypWDWLapzsfU8UQ5ZffAXJJ6pr0Y": {
+          "GetCalendarEventsLambdaVersionkVZT8HXaxg4yt1eFRvSqZinoEDIVPjDgdkfnJk2lTWM": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "GetCalendarEventsLambdaFunction"
               },
-              "CodeSha256": "3bjL9c4by0fUO0X76tX7/2XI/FsSTp6DyG3yrYgLWXc=",
+              "CodeSha256": "Itw19YLGe1PbDOPvomb7CoW8pCwG2KL2ArOGnL/MXj0=",
               "Description": "Get calendar events using access token"
+            }
+          },
+          "CorsPreflightAuthURLLambdaVersionuDMeI7dYCWzKxx7se2BUcGdqyeCODpzANW1jJvk9W3Y": {
+            "Type": "AWS::Lambda::Version",
+            "DeletionPolicy": "Retain",
+            "Properties": {
+              "FunctionName": {
+                "Ref": "CorsPreflightAuthURLLambdaFunction"
+              },
+              "CodeSha256": "Itw19YLGe1PbDOPvomb7CoW8pCwG2KL2ArOGnL/MXj0=",
+              "Description": "Handle CORS preflight for auth URL endpoint"
+            }
+          },
+          "CorsPreflightTokenLambdaVersioniaR1SHn0yuFpnKoknZy4VFDbmQizqg1wfRfQhMDnk": {
+            "Type": "AWS::Lambda::Version",
+            "DeletionPolicy": "Retain",
+            "Properties": {
+              "FunctionName": {
+                "Ref": "CorsPreflightTokenLambdaFunction"
+              },
+              "CodeSha256": "Itw19YLGe1PbDOPvomb7CoW8pCwG2KL2ArOGnL/MXj0=",
+              "Description": "Handle CORS preflight for token endpoint"
+            }
+          },
+          "CorsPreflightEventsLambdaVersionHeMbvvtQHjYTuzR6LYdUf0v3N4ug43cgjuXnhef6QcA": {
+            "Type": "AWS::Lambda::Version",
+            "DeletionPolicy": "Retain",
+            "Properties": {
+              "FunctionName": {
+                "Ref": "CorsPreflightEventsLambdaFunction"
+              },
+              "CodeSha256": "Itw19YLGe1PbDOPvomb7CoW8pCwG2KL2ArOGnL/MXj0=",
+              "Description": "Handle CORS preflight for events endpoint"
             }
           },
           "ApiGatewayRestApi": {
@@ -422,7 +572,7 @@
               ],
               "RequestParameters": {},
               "Integration": {
-                "Type": "MOCK",
+                "Type": "AWS_PROXY",
                 "RequestTemplates": {
                   "application/json": "{statusCode:200}"
                 },
@@ -432,22 +582,50 @@
                     "StatusCode": "200",
                     "ResponseParameters": {
                       "method.response.header.Access-Control-Allow-Origin": "'*'",
-                      "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent,X-Amzn-Trace-Id'",
+                      "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent,Accept,Origin'",
                       "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,GET'"
                     },
                     "ResponseTemplates": {
                       "application/json": ""
                     }
                   }
-                ]
+                ],
+                "IntegrationHttpMethod": "POST",
+                "Uri": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":apigateway:",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      ":lambda:path/2015-03-31/functions/",
+                      {
+                        "Fn::GetAtt": [
+                          "CorsPreflightAuthURLLambdaFunction",
+                          "Arn"
+                        ]
+                      },
+                      "/invocations"
+                    ]
+                  ]
+                }
               },
               "ResourceId": {
                 "Ref": "ApiGatewayResourceApiGetDashauthDashurl"
               },
               "RestApiId": {
                 "Ref": "ApiGatewayRestApi"
-              }
-            }
+              },
+              "ApiKeyRequired": false
+            },
+            "DependsOn": [
+              "CorsPreflightAuthURLLambdaPermissionApiGateway"
+            ]
           },
           "ApiGatewayMethodApiTokenCodeVarOptions": {
             "Type": "AWS::ApiGateway::Method",
@@ -467,7 +645,7 @@
               ],
               "RequestParameters": {},
               "Integration": {
-                "Type": "MOCK",
+                "Type": "AWS_PROXY",
                 "RequestTemplates": {
                   "application/json": "{statusCode:200}"
                 },
@@ -477,22 +655,50 @@
                     "StatusCode": "200",
                     "ResponseParameters": {
                       "method.response.header.Access-Control-Allow-Origin": "'*'",
-                      "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent,X-Amzn-Trace-Id'",
+                      "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent,Accept,Origin'",
                       "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,GET'"
                     },
                     "ResponseTemplates": {
                       "application/json": ""
                     }
                   }
-                ]
+                ],
+                "IntegrationHttpMethod": "POST",
+                "Uri": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":apigateway:",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      ":lambda:path/2015-03-31/functions/",
+                      {
+                        "Fn::GetAtt": [
+                          "CorsPreflightTokenLambdaFunction",
+                          "Arn"
+                        ]
+                      },
+                      "/invocations"
+                    ]
+                  ]
+                }
               },
               "ResourceId": {
                 "Ref": "ApiGatewayResourceApiTokenCodeVar"
               },
               "RestApiId": {
                 "Ref": "ApiGatewayRestApi"
-              }
-            }
+              },
+              "ApiKeyRequired": false
+            },
+            "DependsOn": [
+              "CorsPreflightTokenLambdaPermissionApiGateway"
+            ]
           },
           "ApiGatewayMethodApiGetDasheventsAccesstokenVarOptions": {
             "Type": "AWS::ApiGateway::Method",
@@ -512,7 +718,7 @@
               ],
               "RequestParameters": {},
               "Integration": {
-                "Type": "MOCK",
+                "Type": "AWS_PROXY",
                 "RequestTemplates": {
                   "application/json": "{statusCode:200}"
                 },
@@ -522,22 +728,50 @@
                     "StatusCode": "200",
                     "ResponseParameters": {
                       "method.response.header.Access-Control-Allow-Origin": "'*'",
-                      "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent,X-Amzn-Trace-Id'",
+                      "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent,Accept,Origin'",
                       "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,GET'"
                     },
                     "ResponseTemplates": {
                       "application/json": ""
                     }
                   }
-                ]
+                ],
+                "IntegrationHttpMethod": "POST",
+                "Uri": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":apigateway:",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      ":lambda:path/2015-03-31/functions/",
+                      {
+                        "Fn::GetAtt": [
+                          "CorsPreflightEventsLambdaFunction",
+                          "Arn"
+                        ]
+                      },
+                      "/invocations"
+                    ]
+                  ]
+                }
               },
               "ResourceId": {
                 "Ref": "ApiGatewayResourceApiGetDasheventsAccesstokenVar"
               },
               "RestApiId": {
                 "Ref": "ApiGatewayRestApi"
-              }
-            }
+              },
+              "ApiKeyRequired": false
+            },
+            "DependsOn": [
+              "CorsPreflightEventsLambdaPermissionApiGateway"
+            ]
           },
           "ApiGatewayMethodApiGetDashauthDashurlGet": {
             "Type": "AWS::ApiGateway::Method",
@@ -677,7 +911,7 @@
               "GetCalendarEventsLambdaPermissionApiGateway"
             ]
           },
-          "ApiGatewayDeployment1754323292108": {
+          "ApiGatewayDeployment1755293205825": {
             "Type": "AWS::ApiGateway::Deployment",
             "Properties": {
               "RestApiId": {
@@ -691,7 +925,10 @@
               "ApiGatewayMethodApiGetDasheventsAccesstokenVarOptions",
               "ApiGatewayMethodApiGetDashauthDashurlGet",
               "ApiGatewayMethodApiTokenCodeVarGet",
-              "ApiGatewayMethodApiGetDasheventsAccesstokenVarGet"
+              "ApiGatewayMethodApiGetDasheventsAccesstokenVarGet",
+              "ApiGatewayMethodApiGetDashauthDashurlOptions",
+              "ApiGatewayMethodApiTokenCodeVarOptions",
+              "ApiGatewayMethodApiGetDasheventsAccesstokenVarOptions"
             ]
           },
           "GetAuthURLLambdaPermissionApiGateway": {
@@ -804,6 +1041,117 @@
                 ]
               }
             }
+          },
+          "CorsPreflightAuthURLLambdaPermissionApiGateway": {
+            "Type": "AWS::Lambda::Permission",
+            "Properties": {
+              "FunctionName": {
+                "Fn::GetAtt": [
+                  "CorsPreflightAuthURLLambdaFunction",
+                  "Arn"
+                ]
+              },
+              "Action": "lambda:InvokeFunction",
+              "Principal": "apigateway.amazonaws.com",
+              "SourceArn": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":execute-api:",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId"
+                    },
+                    ":",
+                    {
+                      "Ref": "ApiGatewayRestApi"
+                    },
+                    "/*/*"
+                  ]
+                ]
+              }
+            }
+          },
+          "CorsPreflightTokenLambdaPermissionApiGateway": {
+            "Type": "AWS::Lambda::Permission",
+            "Properties": {
+              "FunctionName": {
+                "Fn::GetAtt": [
+                  "CorsPreflightTokenLambdaFunction",
+                  "Arn"
+                ]
+              },
+              "Action": "lambda:InvokeFunction",
+              "Principal": "apigateway.amazonaws.com",
+              "SourceArn": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":execute-api:",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId"
+                    },
+                    ":",
+                    {
+                      "Ref": "ApiGatewayRestApi"
+                    },
+                    "/*/*"
+                  ]
+                ]
+              }
+            }
+          },
+          "CorsPreflightEventsLambdaPermissionApiGateway": {
+            "Type": "AWS::Lambda::Permission",
+            "Properties": {
+              "FunctionName": {
+                "Fn::GetAtt": [
+                  "CorsPreflightEventsLambdaFunction",
+                  "Arn"
+                ]
+              },
+              "Action": "lambda:InvokeFunction",
+              "Principal": "apigateway.amazonaws.com",
+              "SourceArn": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":execute-api:",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId"
+                    },
+                    ":",
+                    {
+                      "Ref": "ApiGatewayRestApi"
+                    },
+                    "/*/*"
+                  ]
+                ]
+              }
+            }
           }
         },
         "Outputs": {
@@ -818,7 +1166,7 @@
           "GetAuthURLLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "GetAuthURLLambdaVersionpZzJlA9dFsxa7zXMTBT9EGb0uXDuVuH12rOxpDgNits"
+              "Ref": "GetAuthURLLambdaVersionPKOS6WIOiCPM93EUg4VZgn7M5fg9YSVj3tEmqauOeo"
             },
             "Export": {
               "Name": "sls-auth-server-dev-GetAuthURLLambdaFunctionQualifiedArn"
@@ -827,7 +1175,7 @@
           "GetAccessTokenLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "GetAccessTokenLambdaVersionFAXNPXxkJtKkOhSOrNotod71WllhfQS3tcmFbdbk"
+              "Ref": "GetAccessTokenLambdaVersionY1uky7T7yUcCrA6mpGV5H7SCkHXS6akcgS2oG8M8SA"
             },
             "Export": {
               "Name": "sls-auth-server-dev-GetAccessTokenLambdaFunctionQualifiedArn"
@@ -836,10 +1184,37 @@
           "GetCalendarEventsLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "GetCalendarEventsLambdaVersionPxU5ytspVxH3ypWDWLapzsfU8UQ5ZffAXJJ6pr0Y"
+              "Ref": "GetCalendarEventsLambdaVersionkVZT8HXaxg4yt1eFRvSqZinoEDIVPjDgdkfnJk2lTWM"
             },
             "Export": {
               "Name": "sls-auth-server-dev-GetCalendarEventsLambdaFunctionQualifiedArn"
+            }
+          },
+          "CorsPreflightAuthURLLambdaFunctionQualifiedArn": {
+            "Description": "Current Lambda function version",
+            "Value": {
+              "Ref": "CorsPreflightAuthURLLambdaVersionuDMeI7dYCWzKxx7se2BUcGdqyeCODpzANW1jJvk9W3Y"
+            },
+            "Export": {
+              "Name": "sls-auth-server-dev-CorsPreflightAuthURLLambdaFunctionQualifiedArn"
+            }
+          },
+          "CorsPreflightTokenLambdaFunctionQualifiedArn": {
+            "Description": "Current Lambda function version",
+            "Value": {
+              "Ref": "CorsPreflightTokenLambdaVersioniaR1SHn0yuFpnKoknZy4VFDbmQizqg1wfRfQhMDnk"
+            },
+            "Export": {
+              "Name": "sls-auth-server-dev-CorsPreflightTokenLambdaFunctionQualifiedArn"
+            }
+          },
+          "CorsPreflightEventsLambdaFunctionQualifiedArn": {
+            "Description": "Current Lambda function version",
+            "Value": {
+              "Ref": "CorsPreflightEventsLambdaVersionHeMbvvtQHjYTuzR6LYdUf0v3N4ug43cgjuXnhef6QcA"
+            },
+            "Export": {
+              "Name": "sls-auth-server-dev-CorsPreflightEventsLambdaFunctionQualifiedArn"
             }
           },
           "ServiceEndpoint": {
@@ -977,7 +1352,8 @@
                   "X-Api-Key",
                   "X-Amz-Security-Token",
                   "X-Amz-User-Agent",
-                  "X-Amzn-Trace-Id"
+                  "Accept",
+                  "Origin"
                 ],
                 "allowCredentials": false
               },
@@ -991,7 +1367,7 @@
         "timeout": 30,
         "runtime": "nodejs18.x",
         "vpc": {},
-        "versionLogicalId": "GetAuthURLLambdaVersionpZzJlA9dFsxa7zXMTBT9EGb0uXDuVuH12rOxpDgNits"
+        "versionLogicalId": "GetAuthURLLambdaVersionPKOS6WIOiCPM93EUg4VZgn7M5fg9YSVj3tEmqauOeo"
       },
       "getAccessToken": {
         "handler": "handler.getAccessToken",
@@ -1014,7 +1390,8 @@
                   "X-Api-Key",
                   "X-Amz-Security-Token",
                   "X-Amz-User-Agent",
-                  "X-Amzn-Trace-Id"
+                  "Accept",
+                  "Origin"
                 ],
                 "allowCredentials": false
               },
@@ -1028,7 +1405,7 @@
         "timeout": 30,
         "runtime": "nodejs18.x",
         "vpc": {},
-        "versionLogicalId": "GetAccessTokenLambdaVersionFAXNPXxkJtKkOhSOrNotod71WllhfQS3tcmFbdbk"
+        "versionLogicalId": "GetAccessTokenLambdaVersionY1uky7T7yUcCrA6mpGV5H7SCkHXS6akcgS2oG8M8SA"
       },
       "getCalendarEvents": {
         "handler": "handler.getCalendarEvents",
@@ -1051,7 +1428,8 @@
                   "X-Api-Key",
                   "X-Amz-Security-Token",
                   "X-Amz-User-Agent",
-                  "X-Amzn-Trace-Id"
+                  "Accept",
+                  "Origin"
                 ],
                 "allowCredentials": false
               },
@@ -1065,7 +1443,118 @@
         "timeout": 30,
         "runtime": "nodejs18.x",
         "vpc": {},
-        "versionLogicalId": "GetCalendarEventsLambdaVersionPxU5ytspVxH3ypWDWLapzsfU8UQ5ZffAXJJ6pr0Y"
+        "versionLogicalId": "GetCalendarEventsLambdaVersionkVZT8HXaxg4yt1eFRvSqZinoEDIVPjDgdkfnJk2lTWM"
+      },
+      "corsPreflightAuthURL": {
+        "handler": "handler.corsHandler",
+        "description": "Handle CORS preflight for auth URL endpoint",
+        "events": [
+          {
+            "http": {
+              "path": "api/get-auth-url",
+              "method": "options",
+              "cors": {
+                "origin": "*",
+                "methods": [
+                  "OPTIONS"
+                ],
+                "headers": [
+                  "Content-Type",
+                  "X-Amz-Date",
+                  "Authorization",
+                  "X-Api-Key",
+                  "X-Amz-Security-Token",
+                  "X-Amz-User-Agent",
+                  "Accept",
+                  "Origin"
+                ],
+                "allowCredentials": false
+              },
+              "integration": "AWS_PROXY"
+            }
+          }
+        ],
+        "name": "auth-server-dev-corsPreflightAuthURL",
+        "package": {},
+        "memory": 1024,
+        "timeout": 30,
+        "runtime": "nodejs18.x",
+        "vpc": {},
+        "versionLogicalId": "CorsPreflightAuthURLLambdaVersionuDMeI7dYCWzKxx7se2BUcGdqyeCODpzANW1jJvk9W3Y"
+      },
+      "corsPreflightToken": {
+        "handler": "handler.corsHandler",
+        "description": "Handle CORS preflight for token endpoint",
+        "events": [
+          {
+            "http": {
+              "path": "api/token/{code}",
+              "method": "options",
+              "cors": {
+                "origin": "*",
+                "methods": [
+                  "OPTIONS"
+                ],
+                "headers": [
+                  "Content-Type",
+                  "X-Amz-Date",
+                  "Authorization",
+                  "X-Api-Key",
+                  "X-Amz-Security-Token",
+                  "X-Amz-User-Agent",
+                  "Accept",
+                  "Origin"
+                ],
+                "allowCredentials": false
+              },
+              "integration": "AWS_PROXY"
+            }
+          }
+        ],
+        "name": "auth-server-dev-corsPreflightToken",
+        "package": {},
+        "memory": 1024,
+        "timeout": 30,
+        "runtime": "nodejs18.x",
+        "vpc": {},
+        "versionLogicalId": "CorsPreflightTokenLambdaVersioniaR1SHn0yuFpnKoknZy4VFDbmQizqg1wfRfQhMDnk"
+      },
+      "corsPreflightEvents": {
+        "handler": "handler.corsHandler",
+        "description": "Handle CORS preflight for events endpoint",
+        "events": [
+          {
+            "http": {
+              "path": "api/get-events/{access_token}",
+              "method": "options",
+              "cors": {
+                "origin": "*",
+                "methods": [
+                  "OPTIONS"
+                ],
+                "headers": [
+                  "Content-Type",
+                  "X-Amz-Date",
+                  "Authorization",
+                  "X-Api-Key",
+                  "X-Amz-Security-Token",
+                  "X-Amz-User-Agent",
+                  "Accept",
+                  "Origin"
+                ],
+                "allowCredentials": false
+              },
+              "integration": "AWS_PROXY"
+            }
+          }
+        ],
+        "name": "auth-server-dev-corsPreflightEvents",
+        "package": {},
+        "memory": 1024,
+        "timeout": 30,
+        "runtime": "nodejs18.x",
+        "vpc": {},
+        "versionLogicalId": "CorsPreflightEventsLambdaVersionHeMbvvtQHjYTuzR6LYdUf0v3N4ug43cgjuXnhef6QcA"
       }
     },
     "configValidationMode": "warn",
@@ -1084,7 +1573,7 @@
     "artifact": "C:\\Users\\dasau\\meet\\auth-server\\.serverless\\auth-server.zip"
   },
   "package": {
-    "artifactDirectoryName": "serverless/auth-server/dev/1754323314677-2025-08-04T16:01:54.677Z",
+    "artifactDirectoryName": "serverless/auth-server/dev/1755293229411-2025-08-15T21:27:09.411Z",
     "artifact": "auth-server.zip"
   }
 }

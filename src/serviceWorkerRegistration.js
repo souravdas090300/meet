@@ -13,7 +13,7 @@ export function register(config) {
         // Detect if we're on Vercel (vercel.app domain) or GitHub Pages (github.io)
         const isVercel = window.location.hostname.includes('vercel.app');
         const isGitHubPages = window.location.hostname.includes('github.io');
-        const basePath = import.meta.env.DEV || isVercel ? '/' : '/meet/';
+        const basePath = import.meta.env.DEV || isVercel ? '/' : isGitHubPages ? '/meet/' : '/';
         const swUrl = `${basePath}service-worker.js`;          if (isLocalhost) {
             // Check if a service worker still exists or not.
             checkValidServiceWorker(swUrl, config);
@@ -36,7 +36,7 @@ export function register(config) {
     // Detect if we're on Vercel (vercel.app domain) or GitHub Pages (github.io)
     const isVercel = window.location.hostname.includes('vercel.app');
     const isGitHubPages = window.location.hostname.includes('github.io');
-    const basePath = import.meta.env.DEV || isVercel ? '/' : '/meet/';
+    const basePath = import.meta.env.DEV || isVercel ? '/' : isGitHubPages ? '/meet/' : '/';
     navigator.serviceWorker
       .register(swUrl, { scope: basePath })
       .then((registration) => {

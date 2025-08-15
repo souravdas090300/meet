@@ -32,7 +32,7 @@ const EventChart = ({ events = [] }) => {
       
       <div className="chart-container">
         <h4>Events by Location</h4>
-        <ResponsiveContainer width="100%" height={300}>
+        <ResponsiveContainer width="100%" height={Math.max(300, 300)} minHeight={200}>
           <PieChart>
             <Pie
               data={pieData}
@@ -40,7 +40,7 @@ const EventChart = ({ events = [] }) => {
               cy="50%"
               labelLine={false}
               label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
-              outerRadius={80}
+              outerRadius={Math.max(40, 80)}
               fill="#8884d8"
               dataKey="value"
             >
@@ -55,11 +55,11 @@ const EventChart = ({ events = [] }) => {
 
       <div className="chart-container">
         <h4>Event Count by Location</h4>
-        <ResponsiveContainer width="100%" height={300}>
-          <BarChart data={pieData}>
+        <ResponsiveContainer width="100%" height={Math.max(300, 300)} minHeight={200}>
+          <BarChart data={pieData} margin={{ top: 20, right: 20, bottom: 20, left: 20 }}>
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="name" />
-            <YAxis />
+            <YAxis allowDecimals={false} />
             <Tooltip />
             <Legend />
             <Bar dataKey="value" fill="#8884d8" />

@@ -18,7 +18,18 @@ functions:
       - http:
           path: api/get-auth-url
           method: get
-          cors: true
+          cors:
+            origin: '*'
+            headers:
+              - Content-Type
+              - X-Amz-Date
+              - Authorization
+              - X-Api-Key
+              - X-Amz-Security-Token
+              - X-Amz-User-Agent
+              - Accept
+              - Origin
+            allowCredentials: false
   getAccessToken:
     handler: handler.getAccessToken
     description: "Exchange authorization code for access token"
@@ -26,7 +37,18 @@ functions:
       - http:
           path: api/token/{code}
           method: get
-          cors: true
+          cors:
+            origin: '*'
+            headers:
+              - Content-Type
+              - X-Amz-Date
+              - Authorization
+              - X-Api-Key
+              - X-Amz-Security-Token
+              - X-Amz-User-Agent
+              - Accept
+              - Origin
+            allowCredentials: false
   getCalendarEvents:
     handler: handler.getCalendarEvents
     description: "Get calendar events using access token"
@@ -34,4 +56,72 @@ functions:
       - http:
           path: api/get-events/{access_token}
           method: get
-          cors: true
+          cors:
+            origin: '*'
+            headers:
+              - Content-Type
+              - X-Amz-Date
+              - Authorization
+              - X-Api-Key
+              - X-Amz-Security-Token
+              - X-Amz-User-Agent
+              - Accept
+              - Origin
+            allowCredentials: false
+  corsPreflightAuthURL:
+    handler: handler.corsHandler
+    description: "Handle CORS preflight for auth URL endpoint"
+    events:
+      - http:
+          path: api/get-auth-url
+          method: options
+          cors:
+            origin: '*'
+            headers:
+              - Content-Type
+              - X-Amz-Date
+              - Authorization
+              - X-Api-Key
+              - X-Amz-Security-Token
+              - X-Amz-User-Agent
+              - Accept
+              - Origin
+            allowCredentials: false
+  corsPreflightToken:
+    handler: handler.corsHandler
+    description: "Handle CORS preflight for token endpoint"
+    events:
+      - http:
+          path: api/token/{code}
+          method: options
+          cors:
+            origin: '*'
+            headers:
+              - Content-Type
+              - X-Amz-Date
+              - Authorization
+              - X-Api-Key
+              - X-Amz-Security-Token
+              - X-Amz-User-Agent
+              - Accept
+              - Origin
+            allowCredentials: false
+  corsPreflightEvents:
+    handler: handler.corsHandler
+    description: "Handle CORS preflight for events endpoint"
+    events:
+      - http:
+          path: api/get-events/{access_token}
+          method: options
+          cors:
+            origin: '*'
+            headers:
+              - Content-Type
+              - X-Amz-Date
+              - Authorization
+              - X-Api-Key
+              - X-Amz-Security-Token
+              - X-Amz-User-Agent
+              - Accept
+              - Origin
+            allowCredentials: false
