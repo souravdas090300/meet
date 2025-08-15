@@ -69,6 +69,9 @@ function App() {
           return;
         }
 
+        // Clear error alert on successful data fetch
+        setErrorAlert("");
+
         const filteredEvents = currentCity === "See all cities" ? 
           allEvents : 
           allEvents.filter(event => event && event.location === currentCity);

@@ -28,13 +28,16 @@ export const removeQuery = () => {
 
 // Check if user is authenticated
 export const checkToken = async (accessToken) => {
-  const result = await fetch(
-    `https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=${accessToken}`
-  )
-    .then((res) => res.json())
-    .catch((error) => error.json());
-
-  return result;
+  try {
+    const response = await fetch(
+      `https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=${accessToken}`
+    );
+    const result = await response.json();
+    return result;
+  } catch (error) {
+    console.error('Error checking token:', error);
+    return { error: 'Failed to validate token' };
+  }
 };
 
 // Get OAuth access token
@@ -44,7 +47,15 @@ export const getToken = async (code) => {
     const response = await fetch(`${AUTH_SERVER_URL}/api/token/${encodeCode}`);
     
     if (!response.ok) {
-      throw new Error(`Failed to get access token: ${response.status}`);
+      let errorMessage = `Failed to get access token: ${response.status}`;
+      try {
+        const errorData = await response.json();
+        console.error('Token error response:', errorData);
+        errorMessage += ` - ${JSON.stringify(errorData)}`;
+      } catch (parseError) {
+        console.error('Could not parse error response:', parseError);
+      }
+      throw new Error(errorMessage);
     }
     
     const { access_token } = await response.json();
@@ -56,6 +67,11 @@ export const getToken = async (code) => {
     return access_token;
   } catch (error) {
     console.error('Error getting access token:', error);
+    console.error('Error details:', {
+      message: error.message,
+      stack: error.stack,
+      name: error.name
+    });
     throw error;
   }
 };
@@ -84,6 +100,7 @@ export const logout = () => {
   localStorage.removeItem("access_token");
   localStorage.removeItem("lastEvents");
   localStorage.removeItem("lastEventsTimestamp");
+  localStorage.removeItem("lastOAuthRedirect");
 };
 
 // Check if user is logged in
@@ -507,10 +524,35 @@ export const getEvents = async () => {
   const searchParams = new URLSearchParams(window.location.search);
   const code = searchParams.get("code");
 
-  if (code) {
+  if (code && code.trim() !== '') {
     removeQuery();
-    const token = await getToken(code);
-    return await getEventsFromAPI(token);
+    try {
+      const token = await getToken(code);
+      // Clear redirect tracking on successful authentication
+      localStorage.removeItem('lastOAuthRedirect');
+      return await getEventsFromAPI(token);
+    } catch (error) {
+      console.error('Error fetching events:', error);
+      // If we get an invalid_grant error, the authorization code is invalid/expired
+      if (error.message && error.message.includes('invalid_grant')) {
+        console.log('Authorization code expired or invalid, redirecting to OAuth...');
+        localStorage.removeItem("access_token");
+        return await redirectToOAuth();
+      }
+      // For other errors, try to use cached data or mock data
+      const cachedEvents = localStorage.getItem("lastEvents");
+      if (cachedEvents) {
+        console.log('Using cached events due to API error');
+        try {
+          const parsedEvents = JSON.parse(cachedEvents);
+          return Array.isArray(parsedEvents) ? parsedEvents : mockEvents;
+        } catch (parseError) {
+          console.error('Error parsing cached events:', parseError);
+          return mockEvents;
+        }
+      }
+      return mockEvents;
+    }
   }
 
   // Check if we have a stored access token
@@ -534,10 +576,31 @@ export const getEvents = async () => {
 
 // Helper function to redirect to OAuth
 const redirectToOAuth = async () => {
-  // Always use real OAuth for proper GitHub integration
-  const authUrl = await getAuthURL();
-  window.location.href = authUrl;
-  return [];
+  // For development, return mock data and show a message
+  if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+    console.log('Development mode: Using mock data. In production, user would be redirected to OAuth.');
+    return mockEvents;
+  }
+  
+  // Check if we've recently redirected to prevent infinite loops
+  const lastRedirect = localStorage.getItem('lastOAuthRedirect');
+  const now = Date.now();
+  if (lastRedirect && (now - parseInt(lastRedirect)) < 10000) { // 10 seconds
+    console.warn('Recent OAuth redirect detected, using mock data to prevent infinite loop');
+    return mockEvents;
+  }
+  
+  try {
+    // In production, redirect to OAuth
+    localStorage.setItem('lastOAuthRedirect', now.toString());
+    const authUrl = await getAuthURL();
+    window.location.href = authUrl;
+    return [];
+  } catch (error) {
+    console.error('Failed to redirect to OAuth:', error);
+    localStorage.removeItem('lastOAuthRedirect');
+    return mockEvents;
+  }
 };
 
 // Helper function to fetch events from Google Calendar API
