@@ -10,7 +10,10 @@ export function register(config) {
   if (import.meta.env.PROD && 'serviceWorker' in navigator) {
       window.addEventListener('load', () => {
         // Use the correct base path and filename for service worker
-        const basePath = import.meta.env.DEV ? '/' : '/meet/';
+        // Detect if we're on Vercel (vercel.app domain) or GitHub Pages (github.io)
+        const isVercel = window.location.hostname.includes('vercel.app');
+        const isGitHubPages = window.location.hostname.includes('github.io');
+        const basePath = import.meta.env.DEV || isVercel ? '/' : '/meet/';
         const swUrl = `${basePath}service-worker.js`;          if (isLocalhost) {
             // Check if a service worker still exists or not.
             checkValidServiceWorker(swUrl, config);
@@ -30,7 +33,10 @@ export function register(config) {
   }
   
   function registerValidSW(swUrl, config) {
-    const basePath = import.meta.env.DEV ? '/' : '/meet/';
+    // Detect if we're on Vercel (vercel.app domain) or GitHub Pages (github.io)
+    const isVercel = window.location.hostname.includes('vercel.app');
+    const isGitHubPages = window.location.hostname.includes('github.io');
+    const basePath = import.meta.env.DEV || isVercel ? '/' : '/meet/';
     navigator.serviceWorker
       .register(swUrl, { scope: basePath })
       .then((registration) => {

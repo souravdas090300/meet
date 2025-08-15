@@ -29,6 +29,7 @@
     "@types/react-dom": "^18.2.22",
     "@vitejs/plugin-react-swc": "^3.5.0",
     "babel-jest": "^30.0.5",
+    "cross-env": "^10.0.0",
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-react-refresh": "^0.4.20",
@@ -44,6 +45,8 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
+    "build:vercel": "cross-env VERCEL=1 vite build",
+    "build:github": "vite build",
     "lint": "npx eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "lint:fix": "npx eslint . --ext js,jsx --fix",
     "preview": "vite preview",
@@ -52,7 +55,7 @@
     "test:watch": "jest --watch",
     "test:e2e": "jest --config=jest.e2e.config.cjs",
     "test:all": "npm run test && npm run test:e2e",
-    "deploy": "npm run build && gh-pages -d dist"
+    "deploy": "npm run build:github && gh-pages -d dist"
   },
   "browserslist": {
     "production": [
