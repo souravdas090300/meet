@@ -19,6 +19,53 @@ function App() {
   const [warningAlert, setWarningAlert] = useState("");
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [deferredPrompt, setDeferredPrompt] = useState(null);
+  const [showInstallButton, setShowInstallButton] = useState(false);
+
+  // PWA Install functionality
+  useEffect(() => {
+    const handleBeforeInstallPrompt = (e) => {
+      // Prevent the mini-infobar from appearing on mobile
+      e.preventDefault();
+      // Stash the event so it can be triggered later
+      setDeferredPrompt(e);
+      setShowInstallButton(true);
+    };
+
+    const handleAppInstalled = () => {
+      setDeferredPrompt(null);
+      setShowInstallButton(false);
+      setInfoAlert('Meet App installed successfully! 🎉');
+    };
+
+    window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+    window.addEventListener('appinstalled', handleAppInstalled);
+
+    return () => {
+      window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+      window.removeEventListener('appinstalled', handleAppInstalled);
+    };
+  }, []);
+
+  const handleInstallClick = async () => {
+    if (!deferredPrompt) return;
+
+    // Show the install prompt
+    deferredPrompt.prompt();
+
+    // Wait for the user to respond to the prompt
+    const { outcome } = await deferredPrompt.userChoice;
+
+    if (outcome === 'accepted') {
+      setInfoAlert('App installation started! 📱');
+    } else {
+      setInfoAlert('App installation cancelled.');
+    }
+
+    // Clear the deferredPrompt
+    setDeferredPrompt(null);
+    setShowInstallButton(false);
+  };
 
   // Handle OAuth redirect on mount
   useEffect(() => {
@@ -147,6 +194,11 @@ function App() {
         <h1>Meet App</h1>
         <p>Find events in your city</p>
         <div className="auth-controls">
+          {showInstallButton && (
+            <button className="auth-button install" onClick={handleInstallClick}>
+              📱 Install App
+            </button>
+          )}
           {isAuthenticated ? (
             <>
               <span className="auth-status">✓ Logged in with Google</span>

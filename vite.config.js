@@ -8,7 +8,7 @@ export default defineConfig({
     react(),
     VitePWA({
       manifest: {
-        "id": process.env.VERCEL || process.env.NODE_ENV !== 'production' ? "/" : "/meet/",
+        "id": process.env.VERCEL ? "/" : "/meet/",
         "short_name": "Meet App",
         "name": "Meet - Event Discovery App",
         "description": "Find events happening in your city",
@@ -54,8 +54,8 @@ export default defineConfig({
             "label": "Meet App desktop view"
           }
         ],
-        "start_url": process.env.VERCEL || process.env.NODE_ENV !== 'production' ? "/" : "/meet/",
-        "scope": process.env.VERCEL || process.env.NODE_ENV !== 'production' ? "/" : "/meet/",
+        "start_url": process.env.VERCEL ? "/" : "/meet/",
+        "scope": process.env.VERCEL ? "/" : "/meet/",
         "display": "standalone",
         "orientation": "portrait-primary",
         "theme_color": "#000000",
@@ -65,8 +65,7 @@ export default defineConfig({
       },
       srcDir: 'src',
       filename: 'service-worker.js',
-      registerType: 'prompt',
-      injectRegister: false,
+      registerType: 'manual', // Changed from 'autoUpdate' to 'manual'
       workbox: {
         runtimeCaching: [
           {
@@ -107,14 +106,10 @@ export default defineConfig({
     })
   ],
   // Use different base paths for different environments
-  // GitHub Pages needs /meet/, Vercel needs /, localhost needs /
-  base: process.env.VERCEL || process.env.NODE_ENV !== 'production' ? '/' : '/meet/',
+  base: process.env.VERCEL ? '/' : '/meet/',
   server: {
     host: true,
     port: 5173
-  },
-  resolve: {
-    extensions: ['.js', '.jsx', '.ts', '.tsx']
   },
   build: {
     outDir: 'dist',

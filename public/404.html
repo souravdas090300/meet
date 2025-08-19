@@ -67,7 +67,13 @@
         // Register service worker if available
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                navigator.serviceWorker.register('/sw.js')
+                // Use correct path and scope for GitHub Pages
+                const isGitHubPages = window.location.hostname === 'souravdas090300.github.io';
+                const swUrl = isGitHubPages ? '/meet/service-worker.js' : '/service-worker.js';
+                const scope = isGitHubPages ? '/meet/' : '/';
+                
+                navigator.serviceWorker.register(swUrl, { scope: scope })
+                    .then(registration => console.log('SW registered successfully'))
                     .catch(err => console.log('SW registration failed: ', err));
             });
         }

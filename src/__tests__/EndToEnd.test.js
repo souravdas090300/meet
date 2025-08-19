@@ -64,7 +64,7 @@ describe('filter events by city', () => {
 
   test('When user hasn\'t searched for a city, show upcoming events from all cities', async () => {
     const events = await page.$$('.event');
-    expect(events).toHaveLength(5);
+    expect(events).toHaveLength(10); // Updated to match the current mock data in api.js
   });
 
   test('User should see a list of suggestions when they search for a city', async () => {

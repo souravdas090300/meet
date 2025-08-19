@@ -463,6 +463,17 @@ p {
   transform: translateY(-1px);
 }
 
+.auth-button.install {
+  background-color: #28a745;
+  color: white;
+  margin-right: 10px;
+}
+
+.auth-button.install:hover {
+  background-color: #218838;
+  transform: translateY(-1px);
+}
+
 /* Loading Container */
 .loading-container {
   display: flex;
@@ -482,10 +493,17 @@ p {
     position: static;
     justify-content: center;
     margin-top: 15px;
+    flex-wrap: wrap;
+    gap: 10px;
   }
   
   .app-header {
     text-align: center;
+  }
+  
+  .auth-button {
+    font-size: 0.8rem;
+    padding: 6px 12px;
   }
 }
 
@@ -616,6 +634,14 @@ p {
   }
   
   .chart-container h4 {
+    font-size: 1.1rem;
+  }
+  
+  .charts-container > div {
+    padding: 15px;
+  }
+  
+  .charts-container h4 {
     font-size: 1.1rem;
   }
 }
