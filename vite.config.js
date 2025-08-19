@@ -65,7 +65,7 @@ export default defineConfig({
       },
       srcDir: 'src',
       filename: 'service-worker.js',
-      registerType: 'autoUpdate',
+      registerType: 'manual', // Changed from 'autoUpdate' to 'manual'
       workbox: {
         runtimeCaching: [
           {

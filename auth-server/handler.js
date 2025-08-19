@@ -26,6 +26,8 @@ module.exports.getAuthURL = async () => {
     statusCode: 200,
     headers: {
       'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Headers': 'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token',
+      'Access-Control-Allow-Methods': 'GET,HEAD,OPTIONS,POST,PUT',
       'Access-Control-Allow-Credentials': true,
     },
     body: JSON.stringify({
@@ -44,6 +46,8 @@ module.exports.getAccessToken = async (event) => {
           statusCode: 400,
           headers: {
             'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Headers': 'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token',
+            'Access-Control-Allow-Methods': 'GET,HEAD,OPTIONS,POST,PUT',
             'Access-Control-Allow-Credentials': true,
           },
           body: JSON.stringify({
@@ -57,6 +61,8 @@ module.exports.getAccessToken = async (event) => {
         statusCode: 200,
         headers: {
           'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Headers': 'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token',
+          'Access-Control-Allow-Methods': 'GET,HEAD,OPTIONS,POST,PUT',
           'Access-Control-Allow-Credentials': true,
         },
         body: JSON.stringify({
@@ -221,4 +227,18 @@ module.exports.authCallback = async (event) => {
       `,
     };
   }
+};
+
+// Handle CORS preflight OPTIONS requests
+module.exports.options = async () => {
+  return {
+    statusCode: 200,
+    headers: {
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Headers': 'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token',
+      'Access-Control-Allow-Methods': 'GET,HEAD,OPTIONS,POST,PUT',
+      'Access-Control-Allow-Credentials': true,
+    },
+    body: '',
+  };
 };
