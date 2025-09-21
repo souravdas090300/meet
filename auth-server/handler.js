@@ -15,72 +15,104 @@ const oAuth2Client = new google.auth.OAuth2(
 );
 
 module.exports.getAuthURL = async () => {
-  const authUrl = oAuth2Client.generateAuthUrl({
-    access_type: "offline",
-    scope: SCOPES,
-    prompt: "consent",
-    redirect_uri: REDIRECT_URI  // Explicitly set to ensure consistency
-  });
-
-  return {
-    statusCode: 200,
-    headers: {
-      'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Headers': 'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token',
-      'Access-Control-Allow-Methods': 'GET,HEAD,OPTIONS,POST,PUT',
-      'Access-Control-Allow-Credentials': false,
-    },
-    body: JSON.stringify({
-      authUrl,
-    }),
+  // Always return CORS headers, even on errors
+  const corsHeaders = {
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Headers': 'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token',
+    'Access-Control-Allow-Methods': 'GET,HEAD,OPTIONS,POST,PUT',
+    'Access-Control-Allow-Credentials': false,
   };
+
+  try {
+    const authUrl = oAuth2Client.generateAuthUrl({
+      access_type: "offline",
+      scope: SCOPES,
+      prompt: "consent",
+      redirect_uri: REDIRECT_URI  // Explicitly set to ensure consistency
+    });
+
+    return {
+      statusCode: 200,
+      headers: corsHeaders,
+      body: JSON.stringify({
+        authUrl,
+      }),
+    };
+  } catch (error) {
+    return {
+      statusCode: 500,
+      headers: corsHeaders,
+      body: JSON.stringify({
+        error: "Failed to generate auth URL",
+        details: error.message,
+      }),
+    };
+  }
 };
 
 module.exports.getAccessToken = async (event) => {
-  const code = decodeURIComponent(`${event.pathParameters.code}`);
+  // Always return CORS headers, even on errors
+  const corsHeaders = {
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Headers': 'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token',
+    'Access-Control-Allow-Methods': 'GET,HEAD,OPTIONS,POST,PUT',
+    'Access-Control-Allow-Credentials': false,
+  };
 
-  return new Promise((resolve, reject) => {
-    oAuth2Client.getToken(code, (err, token) => {
-      if (err) {
-        return reject({
-          statusCode: 400,
-          headers: {
-            'Access-Control-Allow-Origin': '*',
-            'Access-Control-Allow-Headers': 'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token',
-            'Access-Control-Allow-Methods': 'GET,HEAD,OPTIONS,POST,PUT',
-            'Access-Control-Allow-Credentials': false,
-          },
+  try {
+    const code = decodeURIComponent(`${event.pathParameters.code}`);
+
+    return new Promise((resolve, reject) => {
+      oAuth2Client.getToken(code, (err, token) => {
+        if (err) {
+          return resolve({
+            statusCode: 400,
+            headers: corsHeaders,
+            body: JSON.stringify({
+              error: "Failed to get access token",
+              details: err.message,
+            }),
+          });
+        }
+
+        resolve({
+          statusCode: 200,
+          headers: corsHeaders,
           body: JSON.stringify({
-            error: "Failed to get access token",
-            details: err.message,
+            access_token: token.access_token,
+            refresh_token: token.refresh_token,
+            expiry_date: token.expiry_date,
+            token_type: token.token_type,
           }),
         });
-      }
-
-      resolve({
-        statusCode: 200,
-        headers: {
-          'Access-Control-Allow-Origin': '*',
-          'Access-Control-Allow-Headers': 'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token',
-          'Access-Control-Allow-Methods': 'GET,HEAD,OPTIONS,POST,PUT',
-          'Access-Control-Allow-Credentials': false,
-        },
-        body: JSON.stringify({
-          access_token: token.access_token,
-          refresh_token: token.refresh_token,
-          expiry_date: token.expiry_date,
-          token_type: token.token_type,
-        }),
       });
     });
-  });
+  } catch (error) {
+    // Catch any synchronous errors and return with CORS headers
+    return {
+      statusCode: 500,
+      headers: corsHeaders,
+      body: JSON.stringify({
+        error: "Internal server error",
+        details: error.message,
+      }),
+    };
+  }
 };
 
 module.exports.getCalendarEvents = async (event) => {
-  const access_token = decodeURIComponent(`${event.pathParameters.access_token}`);
-  oAuth2Client.setCredentials({ access_token });
+  // Always return CORS headers, even on errors
+  const corsHeaders = {
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Headers': 'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token',
+    'Access-Control-Allow-Methods': 'GET,HEAD,OPTIONS,POST,PUT',
+    'Access-Control-Allow-Credentials': false,
+  };
 
   try {
+    const access_token = decodeURIComponent(`${event.pathParameters.access_token}`);
+    oAuth2Client.setCredentials({ access_token });
+
     const response = await calendar.events.list({
       calendarId: CALENDAR_ID,
       auth: oAuth2Client,
@@ -103,12 +135,7 @@ module.exports.getCalendarEvents = async (event) => {
 
     return {
       statusCode: 200,
-      headers: {
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Headers': 'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token',
-        'Access-Control-Allow-Methods': 'GET,HEAD,OPTIONS,POST,PUT',
-        'Access-Control-Allow-Credentials': false,
-      },
+      headers: corsHeaders,
       body: JSON.stringify({
         events,
       }),
@@ -117,12 +144,7 @@ module.exports.getCalendarEvents = async (event) => {
     console.error("Error fetching calendar events:", err);
     return {
       statusCode: 500,
-      headers: {
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Headers': 'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token',
-        'Access-Control-Allow-Methods': 'GET,HEAD,OPTIONS,POST,PUT',
-        'Access-Control-Allow-Credentials': false,
-      },
+      headers: corsHeaders,
       body: JSON.stringify({
         error: "Failed to fetch calendar events",
         details: err.message,
