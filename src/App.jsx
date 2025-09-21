@@ -69,18 +69,27 @@ function App() {
 
   // Handle OAuth redirect on mount
   useEffect(() => {
+    let isProcessing = false; // Local flag to prevent multiple simultaneous processing
+    
     const handleOAuthRedirect = async () => {
+      if (isProcessing) {
+        console.log('OAuth processing already in progress, skipping...');
+        return;
+      }
+      
       const urlParams = new URLSearchParams(window.location.search);
       const code = urlParams.get('code');
       
       if (code) {
-        // Check if we've already processed this code
+        // Check if we've already processed this specific code
         const processedCode = sessionStorage.getItem('processed_oauth_code');
         if (processedCode === code) {
           console.log('OAuth code already processed, skipping...');
           removeQuery();
           return;
         }
+        
+        isProcessing = true; // Set local processing flag
         
         try {
           // Mark this code as being processed
@@ -115,6 +124,8 @@ function App() {
           
           // Remove the invalid code from URL
           removeQuery();
+        } finally {
+          isProcessing = false; // Reset local processing flag
         }
       } else {
         // Check existing authentication status

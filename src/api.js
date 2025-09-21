@@ -43,12 +43,6 @@ export const checkToken = async (accessToken) => {
 // Get OAuth access token
 export const getToken = async (code) => {
   try {
-    // Check if we're already processing this code
-    const processingCode = sessionStorage.getItem('processing_oauth_code');
-    if (processingCode === code) {
-      throw new Error('OAuth code is already being processed');
-    }
-    
     const encodeCode = encodeURIComponent(code);
     const url = `${AUTH_SERVER_URL}/api/token/${encodeCode}`;
     
@@ -596,41 +590,6 @@ export const getEvents = async () => {
     // If no cached events, return mock data as fallback
     console.log('No cached events found, using mock data');
     return mockEvents;
-  }
-
-  // Check if there's an authorization code in the URL
-  const searchParams = new URLSearchParams(window.location.search);
-  const code = searchParams.get("code");
-
-  if (code && code.trim() !== '') {
-    removeQuery();
-    try {
-      const token = await getToken(code);
-      // Clear redirect tracking on successful authentication
-      localStorage.removeItem('lastOAuthRedirect');
-      return await getEventsFromAPI(token);
-    } catch (error) {
-      console.error('Error fetching events:', error);
-      // If we get an invalid_grant error, the authorization code is invalid/expired
-      if (error.message && error.message.includes('invalid_grant')) {
-        console.log('Authorization code expired or invalid, redirecting to OAuth...');
-        localStorage.removeItem("access_token");
-        return await redirectToOAuth();
-      }
-      // For other errors, try to use cached data or mock data
-      const cachedEvents = localStorage.getItem("lastEvents");
-      if (cachedEvents) {
-        console.log('Using cached events due to API error');
-        try {
-          const parsedEvents = JSON.parse(cachedEvents);
-          return Array.isArray(parsedEvents) ? parsedEvents : mockEvents;
-        } catch (parseError) {
-          console.error('Error parsing cached events:', parseError);
-          return mockEvents;
-        }
-      }
-      return mockEvents;
-    }
   }
 
   // Check if we have a stored access token
