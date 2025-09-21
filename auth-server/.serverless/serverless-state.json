@@ -210,7 +210,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/auth-server/dev/1758474093644-2025-09-21T17:01:33.644Z/auth-server.zip"
+                "S3Key": "serverless/auth-server/dev/1758477094205-2025-09-21T17:51:34.205Z/auth-server.zip"
               },
               "Handler": "handler.getAuthURL",
               "Runtime": "nodejs18.x",
@@ -243,7 +243,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/auth-server/dev/1758474093644-2025-09-21T17:01:33.644Z/auth-server.zip"
+                "S3Key": "serverless/auth-server/dev/1758477094205-2025-09-21T17:51:34.205Z/auth-server.zip"
               },
               "Handler": "handler.getAccessToken",
               "Runtime": "nodejs18.x",
@@ -276,7 +276,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/auth-server/dev/1758474093644-2025-09-21T17:01:33.644Z/auth-server.zip"
+                "S3Key": "serverless/auth-server/dev/1758477094205-2025-09-21T17:51:34.205Z/auth-server.zip"
               },
               "Handler": "handler.getCalendarEvents",
               "Runtime": "nodejs18.x",
@@ -309,7 +309,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/auth-server/dev/1758474093644-2025-09-21T17:01:33.644Z/auth-server.zip"
+                "S3Key": "serverless/auth-server/dev/1758477094205-2025-09-21T17:51:34.205Z/auth-server.zip"
               },
               "Handler": "handler.corsHandler",
               "Runtime": "nodejs18.x",
@@ -342,7 +342,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/auth-server/dev/1758474093644-2025-09-21T17:01:33.644Z/auth-server.zip"
+                "S3Key": "serverless/auth-server/dev/1758477094205-2025-09-21T17:51:34.205Z/auth-server.zip"
               },
               "Handler": "handler.corsHandler",
               "Runtime": "nodejs18.x",
@@ -375,7 +375,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/auth-server/dev/1758474093644-2025-09-21T17:01:33.644Z/auth-server.zip"
+                "S3Key": "serverless/auth-server/dev/1758477094205-2025-09-21T17:51:34.205Z/auth-server.zip"
               },
               "Handler": "handler.corsHandler",
               "Runtime": "nodejs18.x",
@@ -401,69 +401,69 @@
               "CorsPreflightEventsLogGroup"
             ]
           },
-          "GetAuthURLLambdaVersionEATmhuop4tzlPrrn0EVI64v1KVM3AoZU0MadWYPgEMU": {
+          "GetAuthURLLambdaVersion9WeqPLeLmHdtGrurjBywQbhoFxg6QuhT1l7o5wwZz0": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "GetAuthURLLambdaFunction"
               },
-              "CodeSha256": "A9COtCC3X0DfWDNHGABj9gUu9E2T9/k4p+OSPnV6gHk=",
+              "CodeSha256": "ndHkH5gx+scQyHktx/1aeQGgnAMNQA1qKvkTVgyUUoE=",
               "Description": "Generate Google OAuth authorization URL"
             }
           },
-          "GetAccessTokenLambdaVersionr6aowFBFSWO08zthKWyS7xOcbZgkNlU00cLcurC4hM0": {
+          "GetAccessTokenLambdaVersiond8Mq6TNtTDi0L9bTpcEI4aReqFzXHYo0bgHlqqbGQ": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "GetAccessTokenLambdaFunction"
               },
-              "CodeSha256": "A9COtCC3X0DfWDNHGABj9gUu9E2T9/k4p+OSPnV6gHk=",
+              "CodeSha256": "ndHkH5gx+scQyHktx/1aeQGgnAMNQA1qKvkTVgyUUoE=",
               "Description": "Exchange authorization code for access token"
             }
           },
-          "GetCalendarEventsLambdaVersionwlryvpJg2tGWqkeWd1GRGzcnHFoL6d4SatlozQ5umc": {
+          "GetCalendarEventsLambdaVersionY5aynIYkQ7i92cMffbDXptvznNsvaumwTI3Ls4oAM": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "GetCalendarEventsLambdaFunction"
               },
-              "CodeSha256": "A9COtCC3X0DfWDNHGABj9gUu9E2T9/k4p+OSPnV6gHk=",
+              "CodeSha256": "ndHkH5gx+scQyHktx/1aeQGgnAMNQA1qKvkTVgyUUoE=",
               "Description": "Get calendar events using access token"
             }
           },
-          "CorsPreflightAuthURLLambdaVersionY3r8vrfajc2Gtrmaz3I9q0U7UaLEB0tgpsvtGq7w1E": {
+          "CorsPreflightAuthURLLambdaVersionqdZTAfj0t4QAUPlUy2VMZ0tmvh93ogSEDX0oXIUUf14": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "CorsPreflightAuthURLLambdaFunction"
               },
-              "CodeSha256": "A9COtCC3X0DfWDNHGABj9gUu9E2T9/k4p+OSPnV6gHk=",
+              "CodeSha256": "ndHkH5gx+scQyHktx/1aeQGgnAMNQA1qKvkTVgyUUoE=",
               "Description": "Handle CORS preflight for auth URL endpoint"
             }
           },
-          "CorsPreflightTokenLambdaVersionvucwx5DTIQiN1tflWLvWWiZez0ZsePoYtYaFr0nXc": {
+          "CorsPreflightTokenLambdaVersion5CgT1YxyRVKZy1YXr0aC2AgSC9hapJpFsDvySZ8xqxo": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "CorsPreflightTokenLambdaFunction"
               },
-              "CodeSha256": "A9COtCC3X0DfWDNHGABj9gUu9E2T9/k4p+OSPnV6gHk=",
+              "CodeSha256": "ndHkH5gx+scQyHktx/1aeQGgnAMNQA1qKvkTVgyUUoE=",
               "Description": "Handle CORS preflight for token endpoint"
             }
           },
-          "CorsPreflightEventsLambdaVersion2dOBq929snKRRrwsgeyuzkX9P6gEh5aZc7x0DGeGE": {
+          "CorsPreflightEventsLambdaVersionti7gQbakrl43RCyrw2BmoGke6Vr8Diva9ntfhXw6RI": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "CorsPreflightEventsLambdaFunction"
               },
-              "CodeSha256": "A9COtCC3X0DfWDNHGABj9gUu9E2T9/k4p+OSPnV6gHk=",
+              "CodeSha256": "ndHkH5gx+scQyHktx/1aeQGgnAMNQA1qKvkTVgyUUoE=",
               "Description": "Handle CORS preflight for events endpoint"
             }
           },
@@ -911,7 +911,7 @@
               "GetCalendarEventsLambdaPermissionApiGateway"
             ]
           },
-          "ApiGatewayDeployment1758474067893": {
+          "ApiGatewayDeployment1758477071213": {
             "Type": "AWS::ApiGateway::Deployment",
             "Properties": {
               "RestApiId": {
@@ -1166,7 +1166,7 @@
           "GetAuthURLLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "GetAuthURLLambdaVersionEATmhuop4tzlPrrn0EVI64v1KVM3AoZU0MadWYPgEMU"
+              "Ref": "GetAuthURLLambdaVersion9WeqPLeLmHdtGrurjBywQbhoFxg6QuhT1l7o5wwZz0"
             },
             "Export": {
               "Name": "sls-auth-server-dev-GetAuthURLLambdaFunctionQualifiedArn"
@@ -1175,7 +1175,7 @@
           "GetAccessTokenLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "GetAccessTokenLambdaVersionr6aowFBFSWO08zthKWyS7xOcbZgkNlU00cLcurC4hM0"
+              "Ref": "GetAccessTokenLambdaVersiond8Mq6TNtTDi0L9bTpcEI4aReqFzXHYo0bgHlqqbGQ"
             },
             "Export": {
               "Name": "sls-auth-server-dev-GetAccessTokenLambdaFunctionQualifiedArn"
@@ -1184,7 +1184,7 @@
           "GetCalendarEventsLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "GetCalendarEventsLambdaVersionwlryvpJg2tGWqkeWd1GRGzcnHFoL6d4SatlozQ5umc"
+              "Ref": "GetCalendarEventsLambdaVersionY5aynIYkQ7i92cMffbDXptvznNsvaumwTI3Ls4oAM"
             },
             "Export": {
               "Name": "sls-auth-server-dev-GetCalendarEventsLambdaFunctionQualifiedArn"
@@ -1193,7 +1193,7 @@
           "CorsPreflightAuthURLLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "CorsPreflightAuthURLLambdaVersionY3r8vrfajc2Gtrmaz3I9q0U7UaLEB0tgpsvtGq7w1E"
+              "Ref": "CorsPreflightAuthURLLambdaVersionqdZTAfj0t4QAUPlUy2VMZ0tmvh93ogSEDX0oXIUUf14"
             },
             "Export": {
               "Name": "sls-auth-server-dev-CorsPreflightAuthURLLambdaFunctionQualifiedArn"
@@ -1202,7 +1202,7 @@
           "CorsPreflightTokenLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "CorsPreflightTokenLambdaVersionvucwx5DTIQiN1tflWLvWWiZez0ZsePoYtYaFr0nXc"
+              "Ref": "CorsPreflightTokenLambdaVersion5CgT1YxyRVKZy1YXr0aC2AgSC9hapJpFsDvySZ8xqxo"
             },
             "Export": {
               "Name": "sls-auth-server-dev-CorsPreflightTokenLambdaFunctionQualifiedArn"
@@ -1211,7 +1211,7 @@
           "CorsPreflightEventsLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "CorsPreflightEventsLambdaVersion2dOBq929snKRRrwsgeyuzkX9P6gEh5aZc7x0DGeGE"
+              "Ref": "CorsPreflightEventsLambdaVersionti7gQbakrl43RCyrw2BmoGke6Vr8Diva9ntfhXw6RI"
             },
             "Export": {
               "Name": "sls-auth-server-dev-CorsPreflightEventsLambdaFunctionQualifiedArn"
@@ -1367,7 +1367,7 @@
         "timeout": 30,
         "runtime": "nodejs18.x",
         "vpc": {},
-        "versionLogicalId": "GetAuthURLLambdaVersionEATmhuop4tzlPrrn0EVI64v1KVM3AoZU0MadWYPgEMU"
+        "versionLogicalId": "GetAuthURLLambdaVersion9WeqPLeLmHdtGrurjBywQbhoFxg6QuhT1l7o5wwZz0"
       },
       "getAccessToken": {
         "handler": "handler.getAccessToken",
@@ -1405,7 +1405,7 @@
         "timeout": 30,
         "runtime": "nodejs18.x",
         "vpc": {},
-        "versionLogicalId": "GetAccessTokenLambdaVersionr6aowFBFSWO08zthKWyS7xOcbZgkNlU00cLcurC4hM0"
+        "versionLogicalId": "GetAccessTokenLambdaVersiond8Mq6TNtTDi0L9bTpcEI4aReqFzXHYo0bgHlqqbGQ"
       },
       "getCalendarEvents": {
         "handler": "handler.getCalendarEvents",
@@ -1443,7 +1443,7 @@
         "timeout": 30,
         "runtime": "nodejs18.x",
         "vpc": {},
-        "versionLogicalId": "GetCalendarEventsLambdaVersionwlryvpJg2tGWqkeWd1GRGzcnHFoL6d4SatlozQ5umc"
+        "versionLogicalId": "GetCalendarEventsLambdaVersionY5aynIYkQ7i92cMffbDXptvznNsvaumwTI3Ls4oAM"
       },
       "corsPreflightAuthURL": {
         "handler": "handler.corsHandler",
@@ -1480,7 +1480,7 @@
         "timeout": 30,
         "runtime": "nodejs18.x",
         "vpc": {},
-        "versionLogicalId": "CorsPreflightAuthURLLambdaVersionY3r8vrfajc2Gtrmaz3I9q0U7UaLEB0tgpsvtGq7w1E"
+        "versionLogicalId": "CorsPreflightAuthURLLambdaVersionqdZTAfj0t4QAUPlUy2VMZ0tmvh93ogSEDX0oXIUUf14"
       },
       "corsPreflightToken": {
         "handler": "handler.corsHandler",
@@ -1517,7 +1517,7 @@
         "timeout": 30,
         "runtime": "nodejs18.x",
         "vpc": {},
-        "versionLogicalId": "CorsPreflightTokenLambdaVersionvucwx5DTIQiN1tflWLvWWiZez0ZsePoYtYaFr0nXc"
+        "versionLogicalId": "CorsPreflightTokenLambdaVersion5CgT1YxyRVKZy1YXr0aC2AgSC9hapJpFsDvySZ8xqxo"
       },
       "corsPreflightEvents": {
         "handler": "handler.corsHandler",
@@ -1554,7 +1554,7 @@
         "timeout": 30,
         "runtime": "nodejs18.x",
         "vpc": {},
-        "versionLogicalId": "CorsPreflightEventsLambdaVersion2dOBq929snKRRrwsgeyuzkX9P6gEh5aZc7x0DGeGE"
+        "versionLogicalId": "CorsPreflightEventsLambdaVersionti7gQbakrl43RCyrw2BmoGke6Vr8Diva9ntfhXw6RI"
       }
     },
     "configValidationMode": "warn",
@@ -1573,7 +1573,7 @@
     "artifact": "C:\\Users\\dasau\\meet\\auth-server\\.serverless\\auth-server.zip"
   },
   "package": {
-    "artifactDirectoryName": "serverless/auth-server/dev/1758474093644-2025-09-21T17:01:33.644Z",
+    "artifactDirectoryName": "serverless/auth-server/dev/1758477094205-2025-09-21T17:51:34.205Z",
     "artifact": "auth-server.zip"
   }
 }
