@@ -65,6 +65,32 @@ Meet App is an enterprise-grade Progressive Web Application demonstrating modern
 
 ---
 
+## 📱 Screenshots & Demo
+
+### Desktop Experience
+![Meet App Desktop - Main Interface](https://souravdas090300.github.io/meet/Screenshot%202025-09-21%20164131.png)
+*Main application interface showing event list with Google OAuth authentication*
+
+![Meet App Desktop - Data Visualization](https://souravdas090300.github.io/meet/Screenshot%202025-09-21%20164210.png)
+*Interactive data visualization with scatter plot and pie chart showing events by city and genre*
+
+### Mobile Experience  
+![Meet App Mobile - Responsive Design](https://souravdas090300.github.io/meet/Screenshot%202025-09-21%20164439.png)
+*Mobile-responsive interface with PWA install functionality*
+
+![Meet App Mobile - Event Details](https://souravdas090300.github.io/meet/Screenshot%202025-09-21%20164503.png)
+*Mobile event details view with touch-optimized interactions*
+
+### Key Features Highlighted:
+- ✅ **Google OAuth Integration** - Secure authentication with calendar access
+- ✅ **Real-time Event Data** - Live integration with Google Calendar API  
+- ✅ **Interactive Charts** - Scatter plot for city distribution, pie chart for genres
+- ✅ **Progressive Web App** - Install button for native app experience
+- ✅ **Responsive Design** - Optimized for desktop, tablet, and mobile devices
+- ✅ **Offline Support** - Service worker enables offline functionality
+
+---
+
 ## 🏗️ System Architecture
 
 ```
