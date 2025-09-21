@@ -127,7 +127,7 @@ const CityEventsChart = ({ allLocations, events }) => {
         Screen: {windowWidth}px | Mobile: {isMobile ? 'Yes' : 'No'} | Small: {isSmallMobile ? 'Yes' : 'No'} | Tablet: {isTablet ? 'Yes' : 'No'} | Data: {data?.length || 0} items | Init: {isInitialized ? 'Yes' : 'No'}
       </div>
       {!data || data.length === 0 ? (
-        <div style={{
+        <div data-testid="no-data" style={{
           textAlign: 'center',
           padding: '40px',
           color: '#666'
@@ -143,13 +143,14 @@ const CityEventsChart = ({ allLocations, events }) => {
           <p>Initializing chart...</p>
         </div>
       ) : (
-        <ResponsiveContainer 
-          width="100%" 
-          height={chartHeight}
-          minWidth={Math.max(320, isMobile ? 320 : 400)}
-          minHeight={300}
-          debounceMs={50}
-        >
+        <div data-testid="chart-container">
+          <ResponsiveContainer 
+            width="100%" 
+            height={chartHeight}
+            minWidth={Math.max(320, isMobile ? 320 : 400)}
+            minHeight={300}
+            debounceMs={50}
+          >
           <BarChart
             data={displayData}
             margin={{
@@ -188,6 +189,7 @@ const CityEventsChart = ({ allLocations, events }) => {
             <Bar name="Events" dataKey="count" fill="#8884d8" />
           </BarChart>
         </ResponsiveContainer>
+        </div>
       )}
     </div>
   );

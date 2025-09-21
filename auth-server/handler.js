@@ -28,7 +28,7 @@ module.exports.getAuthURL = async () => {
       'Access-Control-Allow-Origin': '*',
       'Access-Control-Allow-Headers': 'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token',
       'Access-Control-Allow-Methods': 'GET,HEAD,OPTIONS,POST,PUT',
-      'Access-Control-Allow-Credentials': true,
+      'Access-Control-Allow-Credentials': false,
     },
     body: JSON.stringify({
       authUrl,
@@ -48,7 +48,7 @@ module.exports.getAccessToken = async (event) => {
             'Access-Control-Allow-Origin': '*',
             'Access-Control-Allow-Headers': 'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token',
             'Access-Control-Allow-Methods': 'GET,HEAD,OPTIONS,POST,PUT',
-            'Access-Control-Allow-Credentials': true,
+            'Access-Control-Allow-Credentials': false,
           },
           body: JSON.stringify({
             error: "Failed to get access token",
@@ -63,7 +63,7 @@ module.exports.getAccessToken = async (event) => {
           'Access-Control-Allow-Origin': '*',
           'Access-Control-Allow-Headers': 'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token',
           'Access-Control-Allow-Methods': 'GET,HEAD,OPTIONS,POST,PUT',
-          'Access-Control-Allow-Credentials': true,
+          'Access-Control-Allow-Credentials': false,
         },
         body: JSON.stringify({
           access_token: token.access_token,
@@ -105,7 +105,9 @@ module.exports.getCalendarEvents = async (event) => {
       statusCode: 200,
       headers: {
         'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Credentials': true,
+        'Access-Control-Allow-Headers': 'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token',
+        'Access-Control-Allow-Methods': 'GET,HEAD,OPTIONS,POST,PUT',
+        'Access-Control-Allow-Credentials': false,
       },
       body: JSON.stringify({
         events,
@@ -117,7 +119,9 @@ module.exports.getCalendarEvents = async (event) => {
       statusCode: 500,
       headers: {
         'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Credentials': true,
+        'Access-Control-Allow-Headers': 'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token',
+        'Access-Control-Allow-Methods': 'GET,HEAD,OPTIONS,POST,PUT',
+        'Access-Control-Allow-Credentials': false,
       },
       body: JSON.stringify({
         error: "Failed to fetch calendar events",
@@ -138,7 +142,9 @@ module.exports.refreshAccessToken = async (event) => {
           statusCode: 400,
           headers: {
             'Access-Control-Allow-Origin': '*',
-            'Access-Control-Allow-Credentials': true,
+            'Access-Control-Allow-Headers': 'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token',
+            'Access-Control-Allow-Methods': 'GET,HEAD,OPTIONS,POST,PUT',
+            'Access-Control-Allow-Credentials': false,
           },
           body: JSON.stringify({
             error: "Failed to refresh access token",
@@ -151,7 +157,9 @@ module.exports.refreshAccessToken = async (event) => {
         statusCode: 200,
         headers: {
           'Access-Control-Allow-Origin': '*',
-          'Access-Control-Allow-Credentials': true,
+          'Access-Control-Allow-Headers': 'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token',
+          'Access-Control-Allow-Methods': 'GET,HEAD,OPTIONS,POST,PUT',
+          'Access-Control-Allow-Credentials': false,
         },
         body: JSON.stringify({
           access_token: tokens.access_token,
@@ -237,7 +245,21 @@ module.exports.options = async () => {
       'Access-Control-Allow-Origin': '*',
       'Access-Control-Allow-Headers': 'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token',
       'Access-Control-Allow-Methods': 'GET,HEAD,OPTIONS,POST,PUT',
-      'Access-Control-Allow-Credentials': true,
+      'Access-Control-Allow-Credentials': false,
+    },
+    body: '',
+  };
+};
+
+// Handle CORS preflight for all endpoints
+module.exports.corsHandler = async () => {
+  return {
+    statusCode: 200,
+    headers: {
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Headers': 'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent,Accept,Origin',
+      'Access-Control-Allow-Methods': 'GET,HEAD,OPTIONS,POST,PUT',
+      'Access-Control-Allow-Credentials': false,
     },
     body: '',
   };

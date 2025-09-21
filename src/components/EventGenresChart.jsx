@@ -53,24 +53,30 @@ const EventGenresChart = ({ events }) => {
   };
 
   return (
-    <div>
+    <div data-testid="event-genres-chart">
       <h4>Events by Genre</h4>
-      <ResponsiveContainer width="100%" height={isMobile ? 300 : 400}>
-        <PieChart>
-          <Pie
-            data={data}
-            dataKey="value"
-            fill="#8884d8"
-            labelLine={false}
-            label={renderCustomizedLabel}
-            outerRadius={isMobile ? 100 : 150}
-          >
-            {data.map((entry, index) => (
-              <Cell key={`cell-${index}`} fill={colors[index % colors.length]} />
-            ))}
-          </Pie>
-        </PieChart>
-      </ResponsiveContainer>
+      {data.length === 0 || data.every(item => item.value === 0) ? (
+        <div data-testid="no-data">No data available</div>
+      ) : (
+        <div data-testid="chart-container">
+          <ResponsiveContainer width="100%" height={isMobile ? 300 : 400}>
+            <PieChart>
+              <Pie
+                data={data}
+                dataKey="value"
+                fill="#8884d8"
+                labelLine={false}
+                label={renderCustomizedLabel}
+                outerRadius={isMobile ? 100 : 150}
+              >
+                {data.map((entry, index) => (
+                  <Cell key={`cell-${index}`} fill={colors[index % colors.length]} />
+                ))}
+              </Pie>
+            </PieChart>
+          </ResponsiveContainer>
+        </div>
+      )}
     </div>
   );
 };
