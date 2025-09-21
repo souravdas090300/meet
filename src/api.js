@@ -43,6 +43,12 @@ export const checkToken = async (accessToken) => {
 // Get OAuth access token
 export const getToken = async (code) => {
   try {
+    // Check if we're already processing this code
+    const processingCode = sessionStorage.getItem('processing_oauth_code');
+    if (processingCode === code) {
+      throw new Error('OAuth code is already being processed');
+    }
+    
     const encodeCode = encodeURIComponent(code);
     const url = `${AUTH_SERVER_URL}/api/token/${encodeCode}`;
     
@@ -61,20 +67,35 @@ export const getToken = async (code) => {
     
     if (!response.ok) {
       let errorMessage = `Failed to get access token: ${response.status}`;
+      let errorDetails = null;
+      
       try {
-        const errorData = await response.json();
-        console.error('Token error response:', errorData);
-        errorMessage += ` - ${JSON.stringify(errorData)}`;
+        errorDetails = await response.json();
+        console.error('Token error response:', errorDetails);
+        
+        // Provide more specific error messages
+        if (errorDetails.details && errorDetails.details.includes('invalid_grant')) {
+          errorMessage = 'Authorization code expired or already used. Please try logging in again.';
+        } else if (response.status === 400) {
+          errorMessage = 'Invalid authorization code. Please try logging in again.';
+        } else {
+          errorMessage += ` - ${JSON.stringify(errorDetails)}`;
+        }
       } catch (parseError) {
         console.error('Could not parse error response:', parseError);
       }
+      
       throw new Error(errorMessage);
     }
     
-    const { access_token } = await response.json();
+    const tokenData = await response.json();
+    const { access_token } = tokenData;
     
     if (access_token) {
       localStorage.setItem("access_token", access_token);
+      console.log('Successfully stored access token');
+    } else {
+      throw new Error('No access token received from server');
     }
     
     return access_token;
@@ -146,6 +167,18 @@ export const logout = () => {
   localStorage.removeItem("lastEvents");
   localStorage.removeItem("lastEventsTimestamp");
   localStorage.removeItem("lastOAuthRedirect");
+};
+
+// Clear OAuth state (useful for error recovery)
+export const clearOAuthState = () => {
+  try {
+    localStorage.removeItem('access_token');
+    sessionStorage.removeItem('processed_oauth_code');
+    sessionStorage.removeItem('processing_oauth_code');
+    console.log('OAuth state cleared');
+  } catch (error) {
+    console.error('Error clearing OAuth state:', error);
+  }
 };
 
 // Check if user is logged in

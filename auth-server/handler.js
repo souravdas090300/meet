@@ -60,20 +60,39 @@ module.exports.getAccessToken = async (event) => {
   };
 
   try {
+    console.log('getAccessToken called with event:', JSON.stringify(event, null, 2));
+    
     const code = decodeURIComponent(`${event.pathParameters.code}`);
+    console.log('Processing OAuth code:', code.substring(0, 20) + '...');
 
     return new Promise((resolve, reject) => {
       oAuth2Client.getToken(code, (err, token) => {
         if (err) {
+          console.error('OAuth2 getToken error:', err);
+          console.error('Error details:', {
+            message: err.message,
+            code: err.code,
+            status: err.status
+          });
+          
           return resolve({
             statusCode: 400,
             headers: corsHeaders,
             body: JSON.stringify({
               error: "Failed to get access token",
               details: err.message,
+              errorCode: err.code || 'unknown'
             }),
           });
         }
+
+        console.log('Successfully obtained token');
+        console.log('Token details:', {
+          hasAccessToken: !!token.access_token,
+          hasRefreshToken: !!token.refresh_token,
+          tokenType: token.token_type,
+          expiryDate: token.expiry_date
+        });
 
         resolve({
           statusCode: 200,
@@ -88,6 +107,7 @@ module.exports.getAccessToken = async (event) => {
       });
     });
   } catch (error) {
+    console.error('getAccessToken sync error:', error);
     // Catch any synchronous errors and return with CORS headers
     return {
       statusCode: 500,

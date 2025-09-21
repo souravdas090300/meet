@@ -5,7 +5,7 @@ import NumberOfEvents from './components/NumberOfEvents';
 import CityEventsChart from './components/CityEventsChart';
 import EventGenresChart from './components/EventGenresChart';
 import { InfoAlert, ErrorAlert, WarningAlert } from './components/Alert';
-import { getEvents, extractLocations, getAuthURL, logout, isLoggedIn, getToken, removeQuery } from './api';
+import { getEvents, extractLocations, getAuthURL, logout, isLoggedIn, getToken, removeQuery, clearOAuthState } from './api';
 import { logAtatusEvent } from './utils/atatus-helpers';
 import './App.css';
 
@@ -74,16 +74,47 @@ function App() {
       const code = urlParams.get('code');
       
       if (code) {
+        // Check if we've already processed this code
+        const processedCode = sessionStorage.getItem('processed_oauth_code');
+        if (processedCode === code) {
+          console.log('OAuth code already processed, skipping...');
+          removeQuery();
+          return;
+        }
+        
         try {
+          // Mark this code as being processed
+          sessionStorage.setItem('processing_oauth_code', code);
+          
           // Exchange authorization code for access token
           await getToken(code);
+          
+          // Mark as successfully processed
+          sessionStorage.setItem('processed_oauth_code', code);
+          sessionStorage.removeItem('processing_oauth_code');
+          
           setIsAuthenticated(true);
           setInfoAlert('Successfully logged in with Google!');
           // Remove the code from URL
           removeQuery();
         } catch (error) {
           console.error('OAuth token exchange failed:', error);
-          setErrorAlert('Login failed. Please try again.');
+          sessionStorage.removeItem('processing_oauth_code');
+          
+          // Clear OAuth state on errors
+          clearOAuthState();
+          
+          // Handle specific error cases
+          if (error.message.includes('invalid_grant')) {
+            setErrorAlert('Authorization code expired or invalid. Please try logging in again.');
+          } else if (error.message.includes('400')) {
+            setErrorAlert('Authentication failed. Please try again.');
+          } else {
+            setErrorAlert('Login failed. Please check your connection and try again.');
+          }
+          
+          // Remove the invalid code from URL
+          removeQuery();
         }
       } else {
         // Check existing authentication status
